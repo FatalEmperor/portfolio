@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Haseeb Zahid PSX Education</title>
+  <meta name="description" content="Privacy Policy for haseebzahid.com — how we collect, use, and protect your personal information.">
+  <meta name="author" content="Haseeb Zahid">
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #060d18;
+      --bg2:           #0a1628;
+      --bg3:           #0d1f3c;
+      --silver:        #94a3b8;
+      --silver-light:  #cbd5e1;
+      --silver-bright: #e2e8f0;
+      --blue:          #3b82f6;
+      --blue-light:    #60a5fa;
+      --border:        rgba(148,163,184,0.1);
+      --border-h:      rgba(148,163,184,0.28);
+      --glow:          rgba(59,130,246,0.22);
+      --text:          #e2e8f0;
+      --muted:         #4e6177;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+    ::selection { background: rgba(59,130,246,0.28); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.6rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.45s ease;
+      background: rgba(6,13,24,0.88);
+      backdrop-filter: blur(22px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--silver-bright); text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--blue-light); }
+    .nav-back {
+      background: transparent; border: 1px solid rgba(59,130,246,0.5);
+      color: var(--blue-light); padding: 0.48rem 1.3rem; border-radius: 4px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; text-decoration: none; cursor: pointer;
+      transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-back:hover { background: var(--blue); color: #fff; box-shadow: 0 0 22px var(--glow); border-color: var(--blue); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 10rem 3rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-hero-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--blue-light); background: rgba(59,130,246,0.07);
+      border: 1px solid rgba(59,130,246,0.18); padding: 0.3rem 0.9rem; border-radius: 20px;
+      margin-bottom: 1.6rem;
+    }
+    .page-hero-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue-light);
+      box-shadow: 0 0 8px var(--blue-light);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 700; line-height: 1.15;
+      color: var(--silver-bright);
+      margin-bottom: 1.2rem;
+    }
+    .page-hero h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-hero-sub {
+      font-size: 1rem; color: var(--silver); max-width: 520px; margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+    .page-hero-meta {
+      font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em;
+    }
+    .page-hero-divider {
+      width: 60px; height: 2px; margin: 2.5rem auto 0;
+      background: linear-gradient(90deg, transparent, var(--blue-light), transparent);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .policy-wrap {
+      max-width: 780px; margin: 0 auto;
+      padding: 4rem 3rem 6rem;
+    }
+
+    /* ── SECTION CARD ── */
+    .policy-section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.4rem 2.6rem;
+      margin-bottom: 1.6rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .policy-section::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .policy-section:hover {
+      border-color: var(--border-h);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+    .policy-section:hover::before { opacity: 1; }
+
+    .section-number {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--blue-light); margin-bottom: 0.7rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .section-number::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(59,130,246,0.15);
+    }
+
+    .policy-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--silver-bright); margin-bottom: 1.1rem;
+      line-height: 1.3;
+    }
+    .policy-section p {
+      font-size: 0.875rem; color: var(--silver); line-height: 1.8;
+      margin-bottom: 0.9rem;
+    }
+    .policy-section p:last-child { margin-bottom: 0; }
+
+    .policy-section ul {
+      list-style: none; padding: 0; margin: 0.6rem 0 0.9rem;
+    }
+    .policy-section ul li {
+      font-size: 0.875rem; color: var(--silver); line-height: 1.75;
+      padding: 0.4rem 0 0.4rem 1.4rem;
+      position: relative;
+    }
+    .policy-section ul li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--blue-light); font-size: 0.75rem; top: 0.5rem;
+    }
+    .policy-section ul li + li {
+      border-top: 1px solid rgba(148,163,184,0.06);
+    }
+
+    /* ── HIGHLIGHT BOX ── */
+    .policy-highlight {
+      background: rgba(59,130,246,0.05);
+      border: 1px solid rgba(59,130,246,0.18);
+      border-left: 3px solid var(--blue-light);
+      border-radius: 0 10px 10px 0;
+      padding: 1.1rem 1.4rem;
+      margin: 1rem 0;
+      font-size: 0.85rem; color: var(--silver-light); line-height: 1.75;
+    }
+    .policy-highlight strong { color: var(--blue-light); font-weight: 600; }
+
+    /* ── CONTACT CARD ── */
+    .contact-pill {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.6rem 1.1rem;
+      font-size: 0.8rem; color: var(--silver-light);
+      text-decoration: none; transition: all 0.3s ease;
+      margin: 0.3rem 0.3rem 0 0;
+    }
+    .contact-pill:hover {
+      background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.3);
+      color: var(--blue-light); transform: translateY(-1px);
+    }
+    .contact-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .contact-pills-wrap { display: flex; flex-wrap: wrap; gap: 0.1rem; margin-top: 0.8rem; }
+
+    /* ── BACK TO HOME BUTTON ── */
+    .back-home-wrap {
+      text-align: center;
+      padding: 2rem 0 1rem;
+    }
+    .back-home-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--blue); color: #fff;
+      padding: 0.85rem 2.2rem; border-radius: 6px;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(59,130,246,0.35);
+    }
+    .back-home-btn:hover {
+      background: var(--blue-light); transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(59,130,246,0.5);
+    }
+    .back-home-btn svg { width: 16px; height: 16px; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--bg2); border-top: 1px solid var(--border); }
+    .footer-top {
+      max-width: 1080px; margin: 0 auto; padding: 4rem 2rem 3rem;
+      display: grid; grid-template-columns: 1.6fr 1fr 1.4fr; gap: 4rem;
+    }
+    .f-brand { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--silver-bright); }
+    .f-brand span { color: var(--blue-light); }
+    .f-tag { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+    .f-about { font-size: 0.8rem; color: var(--muted); line-height: 1.75; margin: 0.6rem 0 1.4rem; max-width: 280px; }
+    .f-socials { display: flex; gap: 0.6rem; }
+    .f-social-btn {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: all 0.3s; text-decoration: none;
+    }
+    .f-social-btn svg { width: 16px; height: 16px; }
+    .f-social-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 18px var(--glow); }
+    .f-nav-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--silver); margin-bottom: 1.2rem; }
+    .f-nav-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .f-nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.3s, padding-left 0.25s; }
+    .f-nav-links a:hover { color: var(--silver-bright); padding-left: 4px; }
+    .f-contact-item { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; }
+    .f-ci-icon { font-size: 0.9rem; width: 20px; text-align: center; }
+    .f-contact-item a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+    .f-contact-item a:hover { color: var(--silver-bright); }
+    .f-company {
+      display: flex; align-items: center; gap: 0.65rem; margin-top: 1.2rem;
+      text-decoration: none; color: var(--muted); font-size: 0.78rem;
+      transition: color 0.3s;
+    }
+    .f-company img { width: 22px; height: 22px; border-radius: 4px; object-fit: contain; }
+    .f-company:hover { color: var(--silver-bright); }
+    .footer-bottom { border-top: 1px solid var(--border); }
+    .footer-bottom-in {
+      max-width: 1080px; margin: 0 auto; padding: 1.2rem 2rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;
+    }
+    .f-copy { font-size: 0.72rem; color: var(--muted); }
+    .f-copy a { color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .f-copy a:hover { color: var(--silver); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page-hero { padding: 8rem 1.5rem 3.5rem; }
+      .policy-wrap { padding: 2.5rem 1.5rem 5rem; }
+      .policy-section { padding: 1.8rem 1.5rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 520px) {
+      .page-hero h1 { font-size: 2rem; }
+      .policy-section { padding: 1.4rem 1.2rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem 2rem; }
+      .footer-bottom-in { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-label">Legal &amp; Transparency</div>
+  <h1>Privacy <em>Policy</em></h1>
+  <p class="page-hero-sub">How we handle your personal information on haseebzahid.com — clearly, honestly, and without the fine print.</p>
+  <div class="page-hero-meta">Last Updated: April 2026</div>
+  <div class="page-hero-divider"></div>
+</div>
+
+<!-- POLICY CONTENT -->
+<main class="policy-wrap">
+
+  <!-- 1. Introduction -->
+  <div class="policy-section">
+    <div class="section-number">Section 01</div>
+    <h2>Introduction</h2>
+    <p>
+      This Privacy Policy explains how Haseeb Zahid ("we", "our", "us") collects, uses, and protects the personal information of visitors and students on <strong style="color:var(--silver-bright)">haseebzahid.com</strong>.
+    </p>
+    <p>
+      By using this website, contacting us through any form, or submitting your details via any lead magnet, you agree to the practices described in this policy. We are committed to protecting your privacy and handling your data responsibly.
+    </p>
+    <div class="policy-highlight">
+      <strong>Our commitment:</strong> Your personal information is never sold, rented, or traded with third parties. We use it only to deliver educational value and respond to your inquiries.
+    </div>
+  </div>
+
+  <!-- 2. Information We Collect -->
+  <div class="policy-section">
+    <div class="section-number">Section 02</div>
+    <h2>Information We Collect</h2>
+    <p>We collect personal information that you voluntarily provide through the following channels on this website:</p>
+    <ul>
+      <li><strong style="color:var(--silver-bright)">Contact Form</strong> — Your name, email address, and WhatsApp number when you reach out with an inquiry.</li>
+      <li><strong style="color:var(--silver-bright)">Lead Magnet Popup</strong> — Your name, email address, and/or WhatsApp number when you request a free resource (e.g., cheat sheets, market guides).</li>
+      <li><strong style="color:var(--silver-bright)">Enrollment Inquiries</strong> — Any additional details you share when expressing interest in a course or mentorship package.</li>
+    </ul>
+    <p>We do not collect sensitive personal data such as financial information, national identity numbers, or payment card details directly on this website.</p>
+  </div>
+
+  <!-- 3. How We Use Your Information -->
+  <div class="policy-section">
+    <div class="section-number">Section 03</div>
+    <h2>How We Use Your Information</h2>
+    <p>The information you provide is used strictly for the following purposes:</p>
+    <ul>
+      <li>To respond to your inquiries and answer questions about our courses or services.</li>
+      <li>To send you course information, curriculum details, and enrollment guidance.</li>
+      <li>To deliver free resources (cheat sheets, guides, analyses) that you have requested.</li>
+      <li>To send PSX market updates, analysis, and educational content — <strong style="color:var(--silver-bright)">only if you have opted in</strong> to receive such communications.</li>
+      <li>To follow up on enrollment interest you have expressed on this website.</li>
+    </ul>
+    <div class="policy-highlight">
+      <strong>No spam.</strong> We will never send unsolicited promotional messages. Every communication you receive from us will be relevant to the interest you expressed when submitting your details.
+    </div>
+  </div>
+
+  <!-- 4. WhatsApp Communication -->
+  <div class="policy-section">
+    <div class="section-number">Section 04</div>
+    <h2>WhatsApp Communication</h2>
+    <p>
+      By providing your WhatsApp number on this website, you acknowledge that we may contact you via WhatsApp to discuss your enrollment inquiry, share course-related information, or deliver resources you requested.
+    </p>
+    <p>
+      WhatsApp messages will be sent only in the context of your expressed interest in our services. We will not add you to broadcast groups or mass-message lists without your explicit consent.
+    </p>
+    <div class="policy-highlight">
+      <strong>Opt-out anytime:</strong> If you no longer wish to receive WhatsApp messages from us, simply reply with the word <strong>STOP</strong> in any conversation. We will immediately honor your request and cease all WhatsApp communication.
+    </div>
+  </div>
+
+  <!-- 5. Data Storage & Security -->
+  <div class="policy-section">
+    <div class="section-number">Section 05</div>
+    <h2>Data Storage &amp; Security</h2>
+    <p>
+      All personal information you submit through this website is stored securely. We take reasonable technical and organisational measures to protect your data from unauthorised access, disclosure, alteration, or destruction.
+    </p>
+    <ul>
+      <li>Your data is <strong style="color:var(--silver-bright)">never sold</strong> to any third party, advertiser, or data broker.</li>
+      <li>Your data is <strong style="color:var(--silver-bright)">never shared</strong> with external organisations except as described in this policy.</li>
+      <li>We retain your data only for as long as necessary to fulfil the purpose for which it was collected, or as required by applicable law.</li>
+    </ul>
+    <p>
+      While we implement best practices to protect your information, no method of data transmission or storage is 100% secure. We encourage you to contact us immediately if you believe your information has been compromised.
+    </p>
+  </div>
+
+  <!-- 6. Cookies & Analytics -->
+  <div class="policy-section">
+    <div class="section-number">Section 06</div>
+    <h2>Cookies &amp; Analytics</h2>
+    <p>
+      This website uses cookies to improve your browsing experience and to help us understand how visitors interact with our content. Specifically, we use <strong style="color:var(--silver-bright)">Google Analytics</strong> to collect anonymised data about page views, session duration, traffic sources, and general visitor behaviour.
+    </p>
+    <ul>
+      <li>No personally identifiable information (PII) is collected through cookies or Google Analytics.</li>
+      <li>Analytics data is aggregated and used only to improve the quality and relevance of our website content.</li>
+      <li>You may opt out of Google Analytics tracking by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--blue-light);text-decoration:none;">Google Analytics Opt-out Browser Add-on</a>.</li>
+      <li>Most web browsers allow you to control cookies through their settings. Disabling cookies may affect some website functionality.</li>
+    </ul>
+  </div>
+
+  <!-- 7. Third-Party Links -->
+  <div class="policy-section">
+    <div class="section-number">Section 07</div>
+    <h2>Third-Party Links</h2>
+    <p>
+      This website contains links to third-party websites, including but not limited to <strong style="color:var(--silver-bright)">Floret Capitals</strong> (floretcapitals.com) and <strong style="color:var(--silver-bright)">LinkedIn</strong> (linkedin.com/in/1tshaseeb).
+    </p>
+    <p>
+      These links are provided for your convenience and reference. Once you leave haseebzahid.com and visit a third-party site, this Privacy Policy no longer applies. We are not responsible for the privacy practices, content, or security of any external websites.
+    </p>
+    <div class="policy-highlight">
+      We encourage you to review the privacy policy of any third-party website you visit through links on this site.
+    </div>
+  </div>
+
+  <!-- 8. Your Rights -->
+  <div class="policy-section">
+    <div class="section-number">Section 08</div>
+    <h2>Your Rights</h2>
+    <p>You have the following rights regarding your personal data held by us:</p>
+    <ul>
+      <li><strong style="color:var(--silver-bright)">Right to Access</strong> — You may request a copy of the personal information we hold about you.</li>
+      <li><strong style="color:var(--silver-bright)">Right to Deletion</strong> — You may request that we delete your personal data at any time. We will comply promptly unless we are required to retain it by law.</li>
+      <li><strong style="color:var(--silver-bright)">Right to Correction</strong> — You may request that we correct any inaccurate or outdated information we hold about you.</li>
+      <li><strong style="color:var(--silver-bright)">Right to Opt-Out</strong> — You may opt out of any communications from us at any time, via email or by replying STOP on WhatsApp.</li>
+    </ul>
+    <p>
+      To exercise any of these rights, please contact us at the email address below. We will respond to all data requests within a reasonable timeframe.
+    </p>
+  </div>
+
+  <!-- 9. Contact -->
+  <div class="policy-section">
+    <div class="section-number">Section 09</div>
+    <h2>Contact Us</h2>
+    <p>
+      If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please reach out through either of the channels below:
+    </p>
+    <div class="contact-pills-wrap">
+      <a href="mailto:zahidhaseeb800@gmail.com" class="contact-pill">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        zahidhaseeb800@gmail.com
+      </a>
+      <a href="tel:+923158674401" class="contact-pill">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        0315 8674401
+      </a>
+    </div>
+  </div>
+
+  <!-- Last Updated Note -->
+  <div style="text-align:center; padding: 1rem 0; font-size:0.75rem; color:var(--muted);">
+    This policy was last reviewed and updated in <strong style="color:var(--silver)">April 2026</strong>. We reserve the right to update this policy at any time. Continued use of this website after changes constitutes your acceptance of the revised policy.
+  </div>
+
+  <!-- Back to Home CTA -->
+  <div class="back-home-wrap">
+    <a href="index.html" class="back-home-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      Back to Home
+    </a>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="f-brand">Haseeb<span>.</span></div>
+      <div class="f-tag">Equity Trader &amp; PSX Market Analyst</div>
+      <p class="f-about">Teaching Technical &amp; Fundamental Analysis of the Pakistan Stock Exchange. Real trades. Real education.</p>
+      <div class="f-socials">
+        <a href="https://linkedin.com/in/1tshaseeb" target="_blank" rel="noopener" class="f-social-btn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://wa.me/923158674401" target="_blank" rel="noopener" class="f-social-btn" title="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:zahidhaseeb800@gmail.com" class="f-social-btn" title="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-nav-col">
+      <div class="f-nav-title">Navigation</div>
+      <ul class="f-nav-links">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li><a href="index.html#track-record">Track Record</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#how-it-works">How It Works</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact-col">
+      <div class="f-nav-title">Contact</div>
+      <div class="f-contact-item">
+        <span class="f-ci-icon">✉️</span>
+        <a href="mailto:zahidhaseeb800@gmail.com">zahidhaseeb800@gmail.com</a>
+      </div>
+      <div class="f-contact-item">
+        <span class="f-ci-icon">📞</span>
+        <a href="tel:+923158674401">0315 8674401</a>
+      </div>
+      <div class="f-contact-item">
+        <span class="f-ci-icon">💼</span>
+        <a href="https://linkedin.com/in/1tshaseeb" target="_blank">linkedin.com/in/1tshaseeb</a>
+      </div>
+      <a href="https://floretcapitals.com" target="_blank" rel="noopener" class="f-company">
+        <img src="https://floretcapitals.com/wp-content/uploads/2024/10/cropped-cropped-Floret-Icon.png" alt="Floret Capitals">
+        <span>Equity Trader · <strong>Floret Capitals PVT Ltd</strong></span>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-in">
+      <div class="f-copy">© 2026 Haseeb Zahid. All rights reserved.</div>
+      <div class="f-copy"><a href="privacy.html">Privacy Policy</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Subtle scroll animation for sections
+  const sections = document.querySelectorAll('.policy-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+
+  sections.forEach(s => {
+    s.style.opacity = '0';
+    s.style.transform = 'translateY(24px)';
+    s.style.transition = 'opacity 0.55s ease, transform 0.55s ease, border-color 0.3s ease, box-shadow 0.3s ease';
+    observer.observe(s);
+  });
+
+  // Also animate the back-home and last-updated blocks
+  const extras = document.querySelectorAll('.back-home-wrap, .policy-wrap > div[style*="text-align:center"]');
+  extras.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

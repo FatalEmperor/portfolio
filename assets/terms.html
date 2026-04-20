@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Conditions — Haseeb Zahid PSX Education</title>
+  <meta name="description" content="Terms and Conditions for Haseeb Zahid's PSX Education services including Technical Analysis, Fundamental Analysis courses, and mentorship plans.">
+  <meta name="author" content="Haseeb Zahid">
+  <meta name="robots" content="index, follow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #060d18;
+      --bg2:          #0a1628;
+      --bg3:          #0d1f3c;
+      --silver:       #94a3b8;
+      --silver-light: #cbd5e1;
+      --silver-bright:#e2e8f0;
+      --blue:         #3b82f6;
+      --blue-light:   #60a5fa;
+      --border:       rgba(148,163,184,0.1);
+      --border-h:     rgba(148,163,184,0.28);
+      --glow:         rgba(59,130,246,0.22);
+      --text:         #e2e8f0;
+      --muted:        #4e6177;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+    ::selection { background: rgba(59,130,246,0.28); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.6rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(6,13,24,0.88);
+      backdrop-filter: blur(22px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.45s ease;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--silver-bright); text-decoration: none; letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--blue-light); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--silver); text-decoration: none;
+      font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      position: relative; transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--blue-light);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--silver-bright); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: transparent; border: 1px solid rgba(59,130,246,0.5);
+      color: var(--blue-light); padding: 0.48rem 1.3rem; border-radius: 4px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; text-decoration: none; cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .nav-cta:hover { background: var(--blue); color: #fff; box-shadow: 0 0 22px var(--glow); border-color: var(--blue); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      position: relative;
+      padding: 10rem 3rem 5rem;
+      text-align: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-glow {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header-grid {
+      position: absolute; inset: 0; opacity: 0.025;
+      background-image:
+        linear-gradient(rgba(148,163,184,0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,0.5) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .page-tag {
+      display: inline-block;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--blue-light); background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.2); padding: 0.3rem 0.9rem;
+      border-radius: 20px; margin-bottom: 1.4rem;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--silver-bright);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .page-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--blue-light), var(--silver-bright));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-subtitle {
+      max-width: 560px; margin: 0 auto;
+      font-size: 0.95rem; color: var(--silver); line-height: 1.75;
+    }
+    .page-meta {
+      margin-top: 1.8rem;
+      font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em;
+    }
+    .page-meta span { color: var(--silver); }
+
+    /* ── MAIN CONTENT ── */
+    .terms-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 5rem 2rem 6rem;
+    }
+
+    /* Section */
+    .t-section {
+      margin-bottom: 3.5rem;
+      padding: 2.4rem 2.8rem;
+      background: rgba(10,22,40,0.55);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+    .t-section:hover {
+      border-color: rgba(59,130,246,0.22);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35), 0 0 30px rgba(59,130,246,0.05);
+    }
+
+    .t-section-num {
+      display: inline-block;
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--blue-light); background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.18); padding: 0.22rem 0.75rem;
+      border-radius: 20px; margin-bottom: 0.9rem;
+    }
+
+    .t-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--silver-bright);
+      margin-bottom: 1.2rem;
+      line-height: 1.3;
+    }
+
+    .t-section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px; height: 1.1em;
+      background: linear-gradient(180deg, var(--blue), var(--blue-light));
+      border-radius: 2px;
+      margin-right: 0.7rem;
+      vertical-align: middle;
+      position: relative; top: -1px;
+    }
+
+    .t-body {
+      font-size: 0.88rem;
+      color: var(--silver);
+      line-height: 1.85;
+    }
+
+    .t-body p { margin-bottom: 0.9rem; }
+    .t-body p:last-child { margin-bottom: 0; }
+
+    .t-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.6rem;
+      margin: 0.8rem 0;
+    }
+    .t-list li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      font-size: 0.87rem; color: var(--silver); line-height: 1.7;
+    }
+    .t-list li .t-bullet {
+      flex-shrink: 0; margin-top: 0.35rem;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue-light);
+      box-shadow: 0 0 6px rgba(96,165,250,0.5);
+    }
+    .t-list.numbered { counter-reset: t-counter; }
+    .t-list.numbered li { counter-increment: t-counter; }
+    .t-list.numbered li .t-num {
+      flex-shrink: 0;
+      width: 24px; height: 24px; border-radius: 6px;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 700; color: var(--blue-light);
+      font-family: 'Playfair Display', serif; margin-top: 0.1rem;
+    }
+
+    /* Price table */
+    .t-price-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    .t-price-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 1.1rem;
+      background: rgba(6,13,24,0.6); border: 1px solid var(--border);
+      border-radius: 10px;
+      gap: 0.75rem;
+      transition: border-color 0.3s;
+    }
+    .t-price-item:hover { border-color: rgba(59,130,246,0.25); }
+    .t-price-name { font-size: 0.82rem; color: var(--silver); font-weight: 500; }
+    .t-price-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.92rem; font-weight: 700; white-space: nowrap;
+      background: linear-gradient(135deg, var(--silver-bright), var(--blue-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* Highlight box */
+    .t-highlight {
+      margin-top: 1rem;
+      padding: 1rem 1.3rem;
+      background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.18);
+      border-radius: 10px;
+      font-size: 0.82rem; color: var(--silver); line-height: 1.75;
+    }
+    .t-highlight strong { color: var(--blue-light); }
+
+    /* Warning box */
+    .t-warning {
+      margin-top: 1rem;
+      padding: 1rem 1.3rem;
+      background: rgba(234,179,8,0.04); border: 1px solid rgba(234,179,8,0.18);
+      border-radius: 10px;
+      font-size: 0.82rem; color: var(--silver); line-height: 1.75;
+    }
+    .t-warning strong { color: #fbbf24; }
+
+    /* Contact info */
+    .t-contact-row {
+      display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .t-contact-item {
+      display: flex; align-items: center; gap: 0.55rem;
+      padding: 0.6rem 1rem;
+      background: rgba(6,13,24,0.6); border: 1px solid var(--border);
+      border-radius: 8px; text-decoration: none;
+      font-size: 0.82rem; color: var(--silver);
+      transition: all 0.3s;
+    }
+    .t-contact-item:hover { border-color: rgba(59,130,246,0.3); color: var(--silver-bright); }
+    .t-contact-icon { font-size: 0.9rem; }
+
+    /* Back button */
+    .back-home-wrap {
+      text-align: center;
+      padding: 0 2rem 5rem;
+    }
+    .back-home-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem;
+      background: transparent; border: 1px solid rgba(59,130,246,0.4);
+      color: var(--blue-light); border-radius: 8px;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .back-home-btn:hover {
+      background: var(--blue); color: #fff; border-color: var(--blue);
+      box-shadow: 0 8px 28px rgba(59,130,246,0.4); transform: translateY(-2px);
+    }
+    .back-home-btn svg { width: 16px; height: 16px; transition: transform 0.3s; }
+    .back-home-btn:hover svg { transform: translateX(-3px); }
+
+    /* Divider */
+    .t-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(59,130,246,0.2) 30%, rgba(59,130,246,0.2) 70%, transparent);
+      margin: 1rem 0 1.4rem;
+    }
+
+    /* ── FOOTER ── */
+    footer { background: var(--bg2); border-top: 1px solid var(--border); }
+    .footer-top {
+      max-width: 1080px; margin: 0 auto; padding: 4rem 2rem 3rem;
+      display: grid; grid-template-columns: 1.6fr 1fr 1.4fr; gap: 4rem;
+    }
+    .f-brand { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--silver-bright); }
+    .f-brand span { color: var(--blue-light); }
+    .f-tag { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+    .f-about { font-size: 0.8rem; color: var(--muted); line-height: 1.75; margin: 0.6rem 0 1.4rem; max-width: 280px; }
+    .f-socials { display: flex; gap: 0.6rem; }
+    .f-social-btn {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: all 0.3s; text-decoration: none;
+    }
+    .f-social-btn svg { width: 16px; height: 16px; }
+    .f-social-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 18px var(--glow); }
+    .f-nav-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--silver); margin-bottom: 1.2rem; }
+    .f-nav-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .f-nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.3s, padding-left 0.25s; }
+    .f-nav-links a:hover { color: var(--silver-bright); padding-left: 4px; }
+    .f-contact-item { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; }
+    .f-ci-icon { font-size: 0.9rem; width: 20px; text-align: center; }
+    .f-contact-item a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+    .f-contact-item a:hover { color: var(--silver-bright); }
+    .f-company {
+      display: flex; align-items: center; gap: 0.65rem; margin-top: 1.2rem;
+      text-decoration: none; color: var(--muted); font-size: 0.78rem; transition: color 0.3s;
+    }
+    .f-company img { width: 22px; height: 22px; border-radius: 4px; opacity: 0.75; }
+    .f-company strong { color: var(--silver); }
+    .f-company:hover { color: var(--silver-bright); }
+    .footer-bottom { border-top: 1px solid var(--border); }
+    .footer-bottom-in {
+      max-width: 1080px; margin: 0 auto; padding: 1.2rem 2rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;
+    }
+    .f-copy { font-size: 0.72rem; color: var(--muted); }
+
+    /* ── WHATSAPP ── */
+    .wa-btn {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      display: flex; align-items: center; gap: 0.7rem;
+      background: #25d366; color: #fff; text-decoration: none;
+      padding: 0.75rem 1.3rem 0.75rem 1rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em;
+      box-shadow: 0 6px 28px rgba(37,211,102,0.45);
+      transition: all 0.3s ease; overflow: hidden;
+    }
+    .wa-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .wa-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 40px rgba(37,211,102,0.6); }
+    .wa-pulse {
+      position: absolute; inset: 0; border-radius: 50px;
+      background: rgba(255,255,255,0.15);
+      animation: waPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes waPulse { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:1;transform:scale(1.06)} }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 768px) {
+      nav { padding: 1.1rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-header { padding: 8rem 1.5rem 3.5rem; }
+      .terms-wrap { padding: 3rem 1.2rem 4rem; }
+      .t-section { padding: 1.8rem 1.5rem; }
+      .t-price-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.5rem 2rem; }
+      .footer-bottom-in { flex-direction: column; text-align: center; }
+      .back-home-wrap { padding: 0 1.5rem 4rem; }
+    }
+    @media(max-width: 520px) {
+      .wa-label { display: none; }
+      .wa-btn { padding: 0.85rem; border-radius: 50%; bottom: 1.5rem; right: 1.5rem; }
+      .wa-btn svg { width: 26px; height: 26px; }
+      .t-contact-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="index.html#track-record">Track Record</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Enroll Now</a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-glow"></div>
+  <div class="page-header-grid"></div>
+  <div class="page-tag">Legal Document</div>
+  <h1 class="page-title">Terms &amp; <em>Conditions</em></h1>
+  <p class="page-subtitle">Please read these terms carefully before enrolling in any course or service offered by Haseeb Zahid.</p>
+  <p class="page-meta">Last Updated: <span>April 2026</span></p>
+</div>
+
+<!-- TERMS CONTENT -->
+<main class="terms-wrap">
+
+  <!-- 1. Introduction -->
+  <div class="t-section">
+    <div class="t-section-num">Section 01</div>
+    <h2 class="t-section-title">Introduction</h2>
+    <div class="t-body">
+      <p>Welcome to Haseeb Zahid's PSX Education platform. By enrolling in any course, mentorship plan, or service offered by Haseeb Zahid, you acknowledge that you have read, understood, and agree to be bound by these Terms &amp; Conditions.</p>
+      <p>These terms apply to all students, prospective students, and visitors who access or use any of the educational services, digital materials, or communication channels associated with this platform.</p>
+      <p>If you do not agree to these terms, please refrain from enrolling in or accessing any course or service. Haseeb Zahid reserves the right to update these terms at any time, with changes communicated to enrolled students.</p>
+    </div>
+  </div>
+
+  <!-- 2. Services Offered -->
+  <div class="t-section">
+    <div class="t-section-num">Section 02</div>
+    <h2 class="t-section-title">Services Offered</h2>
+    <div class="t-body">
+      <p>The following educational products and services are currently offered:</p>
+      <div class="t-price-grid">
+        <div class="t-price-item">
+          <span class="t-price-name">Technical Analysis Course</span>
+          <span class="t-price-val">PKR 20,000</span>
+        </div>
+        <div class="t-price-item">
+          <span class="t-price-name">Fundamental Analysis Course</span>
+          <span class="t-price-val">PKR 30,000</span>
+        </div>
+        <div class="t-price-item">
+          <span class="t-price-name">Complete Bundle (Both Courses)</span>
+          <span class="t-price-val">PKR 45,000</span>
+        </div>
+        <div class="t-price-item">
+          <span class="t-price-name">Monthly Mentorship Plans</span>
+          <span class="t-price-val">PKR 2,000–8,000/mo</span>
+        </div>
+      </div>
+      <ul class="t-list" style="margin-top: 1rem;">
+        <li><span class="t-bullet"></span><span><strong style="color:var(--silver-bright);">Weekly PSX Reports</strong> — Curated Pakistan Stock Exchange analysis delivered weekly to enrolled students and subscribers.</span></li>
+        <li><span class="t-bullet"></span><span>Pricing and availability of services may be updated from time to time. Current pricing will always be communicated prior to enrollment.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Payment Terms -->
+  <div class="t-section">
+    <div class="t-section-num">Section 03</div>
+    <h2 class="t-section-title">Payment Terms</h2>
+    <div class="t-body">
+      <p>Full payment, or a mutually agreed instalment plan, is required before course commencement. Access to course materials, sessions, and resources will only be granted upon confirmation of payment.</p>
+      <ul class="t-list numbered">
+        <li><span class="t-num">1</span><span>Payment must be completed in full, or the first instalment must be received, prior to the first scheduled session.</span></li>
+        <li><span class="t-num">2</span><span>Instalment arrangements must be agreed upon in writing (WhatsApp or email) before enrollment is confirmed.</span></li>
+        <li><span class="t-num">3</span><span>Late payments on an instalment plan may result in a temporary suspension of access until the outstanding balance is settled.</span></li>
+        <li><span class="t-num">4</span><span>For monthly mentorship plans, payment is due at the beginning of each billing cycle.</span></li>
+      </ul>
+      <div class="t-divider"></div>
+      <p style="margin-bottom: 0.5rem; font-weight: 600; color: var(--silver-bright);">Accepted Payment Methods</p>
+      <ul class="t-list">
+        <li><span class="t-bullet"></span><span>JazzCash</span></li>
+        <li><span class="t-bullet"></span><span>Easypaisa</span></li>
+        <li><span class="t-bullet"></span><span>Bank Transfer (account details provided upon enrollment)</span></li>
+        <li><span class="t-bullet"></span><span>Cash — available in Karachi only, by prior arrangement</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. Refund Policy -->
+  <div class="t-section">
+    <div class="t-section-num">Section 04</div>
+    <h2 class="t-section-title">Refund Policy</h2>
+    <div class="t-body">
+      <p>Student satisfaction is a priority. The following refund terms apply to all courses and plans:</p>
+      <ul class="t-list numbered">
+        <li><span class="t-num">1</span><span><strong style="color:var(--silver-bright);">Full Refund Window:</strong> A full refund is available within 48 hours of the first session, if the student is not satisfied with the course content or delivery.</span></li>
+        <li><span class="t-num">2</span><span><strong style="color:var(--silver-bright);">No Refund After Second Session:</strong> Once the second session has been conducted, no refund will be issued for that enrollment period.</span></li>
+        <li><span class="t-num">3</span><span><strong style="color:var(--silver-bright);">Monthly Mentorship Plans:</strong> Monthly plans may be cancelled before the start of the next billing cycle. Cancellation requests submitted after the next cycle has begun will take effect the following month.</span></li>
+        <li><span class="t-num">4</span><span><strong style="color:var(--silver-bright);">Weekly PSX Reports:</strong> Digital report subscriptions are non-refundable once the report has been delivered.</span></li>
+      </ul>
+      <div class="t-highlight">
+        <strong>To request a refund,</strong> contact Haseeb Zahid directly via WhatsApp at 0315 8674401 or email at zahidhaseeb800@gmail.com within the applicable window. Refunds will be processed within 3–5 business days via the original payment method.
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Course Delivery -->
+  <div class="t-section">
+    <div class="t-section-num">Section 05</div>
+    <h2 class="t-section-title">Course Delivery</h2>
+    <div class="t-body">
+      <ul class="t-list">
+        <li><span class="t-bullet"></span><span>All sessions are conducted <strong style="color:var(--silver-bright);">live online</strong> via Zoom or Google Meet.</span></li>
+        <li><span class="t-bullet"></span><span>Sessions are <strong style="color:var(--silver-bright);">recorded</strong> and made available to enrolled students for review and revision purposes.</span></li>
+        <li><span class="t-bullet"></span><span>Session scheduling is <strong style="color:var(--silver-bright);">flexible and agreed upon mutually</strong> between the student and Haseeb Zahid to accommodate different time zones and schedules.</span></li>
+        <li><span class="t-bullet"></span><span>In the event a session needs to be rescheduled due to an emergency, 24 hours' notice will be provided wherever possible.</span></li>
+        <li><span class="t-bullet"></span><span>Students are expected to join sessions on time with a stable internet connection. Missed sessions due to the student's absence are not automatically rescheduled unless prior arrangement is made.</span></li>
+        <li><span class="t-bullet"></span><span>Course materials, including charts, PDFs, and reference documents, will be shared via WhatsApp or Google Drive as applicable.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6. Intellectual Property -->
+  <div class="t-section">
+    <div class="t-section-num">Section 06</div>
+    <h2 class="t-section-title">Intellectual Property</h2>
+    <div class="t-body">
+      <p>All course materials, charts, analysis, written content, recorded sessions, and educational resources produced and shared by Haseeb Zahid are the exclusive intellectual property of Haseeb Zahid.</p>
+      <ul class="t-list numbered">
+        <li><span class="t-num">1</span><span>Students may access and use materials for their own personal learning only.</span></li>
+        <li><span class="t-num">2</span><span>Redistribution, resale, public sharing, or reproduction of any course material — in whole or in part — is strictly prohibited without prior written consent.</span></li>
+        <li><span class="t-num">3</span><span>Sharing session recordings, PDFs, charts, or reports with non-enrolled individuals constitutes a breach of these terms.</span></li>
+        <li><span class="t-num">4</span><span>Violations may result in immediate termination of enrollment without refund, and may be subject to legal action under applicable Pakistani law.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. Disclaimer -->
+  <div class="t-section">
+    <div class="t-section-num">Section 07</div>
+    <h2 class="t-section-title">Disclaimer</h2>
+    <div class="t-body">
+      <p>All analysis, commentary, charts, and educational content shared through this platform is provided strictly for <strong style="color:var(--silver-bright);">educational and informational purposes only</strong>.</p>
+      <ul class="t-list">
+        <li><span class="t-bullet"></span><span>Nothing shared in any course, session, report, WhatsApp group, or communication constitutes financial advice, investment advice, or a solicitation to buy or sell any security.</span></li>
+        <li><span class="t-bullet"></span><span>Past performance, including the verified +32% trading return, does not guarantee or predict future results.</span></li>
+        <li><span class="t-bullet"></span><span>All investments and trading activity involve risk, including the potential loss of capital. Students are solely responsible for their own trading decisions.</span></li>
+        <li><span class="t-bullet"></span><span>Haseeb Zahid is not liable for any financial losses incurred by students as a result of applying course content to their own trading activity.</span></li>
+      </ul>
+      <div class="t-warning">
+        <strong>Important:</strong> Always conduct your own due diligence before making any investment decisions. Consider consulting a licensed financial advisor for personalised advice.
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Referral Program -->
+  <div class="t-section">
+    <div class="t-section-num">Section 08</div>
+    <h2 class="t-section-title">Referral Program</h2>
+    <div class="t-body">
+      <p>Enrolled students are eligible to participate in the referral program under the following terms:</p>
+      <ul class="t-list numbered">
+        <li><span class="t-num">1</span><span>Students who successfully refer a new enrollee receive a <strong style="color:var(--silver-bright);">PKR 2,000 discount</strong> applied to their next plan or renewal.</span></li>
+        <li><span class="t-num">2</span><span>The referral discount is valid for <strong style="color:var(--silver-bright);">one discount per new enrollment</strong> — referring the same individual multiple times does not generate additional discounts.</span></li>
+        <li><span class="t-num">3</span><span>The referred student must complete payment and commence their first session for the referral discount to be applied.</span></li>
+        <li><span class="t-num">4</span><span>Referral discounts are non-transferable and have no cash value.</span></li>
+        <li><span class="t-num">5</span><span>Haseeb Zahid reserves the right to modify or discontinue the referral program at any time, with notice to enrolled students.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. Student Conduct -->
+  <div class="t-section">
+    <div class="t-section-num">Section 09</div>
+    <h2 class="t-section-title">Student Conduct</h2>
+    <div class="t-body">
+      <p>A respectful and professional learning environment is expected at all times. All students must adhere to the following standards of conduct:</p>
+      <ul class="t-list">
+        <li><span class="t-bullet"></span><span>Treat fellow students and Haseeb Zahid with courtesy and professionalism in all sessions, WhatsApp groups, and communications.</span></li>
+        <li><span class="t-bullet"></span><span>Refrain from posting spam, offensive content, or off-topic discussions in any group or channel associated with this platform.</span></li>
+        <li><span class="t-bullet"></span><span>Do not solicit or promote competing services within course communities.</span></li>
+        <li><span class="t-bullet"></span><span>Respect the privacy of other students and do not share their personal information without their consent.</span></li>
+      </ul>
+      <div class="t-highlight">
+        <strong>Termination Clause:</strong> Haseeb Zahid reserves the right to terminate any student's enrollment, without refund, in cases of misconduct, abuse, harassment, intellectual property violations, or any behaviour deemed detrimental to the learning community.
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. Governing Law -->
+  <div class="t-section">
+    <div class="t-section-num">Section 10</div>
+    <h2 class="t-section-title">Governing Law</h2>
+    <div class="t-body">
+      <p>These Terms &amp; Conditions are governed by and construed in accordance with the <strong style="color:var(--silver-bright);">laws of the Islamic Republic of Pakistan</strong>.</p>
+      <p>Any disputes arising out of or in connection with these terms shall be subject to the exclusive jurisdiction of the competent courts of Pakistan. By enrolling in any service, students agree to submit to this jurisdiction.</p>
+    </div>
+  </div>
+
+  <!-- 11. Contact -->
+  <div class="t-section">
+    <div class="t-section-num">Section 11</div>
+    <h2 class="t-section-title">Contact Information</h2>
+    <div class="t-body">
+      <p>For any questions, clarifications, or concerns regarding these Terms &amp; Conditions, or any aspect of the services offered, please reach out directly:</p>
+      <div class="t-contact-row">
+        <a href="mailto:zahidhaseeb800@gmail.com" class="t-contact-item">
+          <span class="t-contact-icon">✉️</span>
+          <span>zahidhaseeb800@gmail.com</span>
+        </a>
+        <a href="tel:+923158674401" class="t-contact-item">
+          <span class="t-contact-icon">📞</span>
+          <span>0315 8674401</span>
+        </a>
+        <a href="https://wa.me/923158674401" target="_blank" rel="noopener" class="t-contact-item">
+          <span class="t-contact-icon">💬</span>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Last Updated Note -->
+  <p style="text-align:center; font-size:0.75rem; color:var(--muted); margin-top:1rem;">
+    These terms were last reviewed and updated in <span style="color:var(--silver);">April 2026</span>.
+  </p>
+
+</main>
+
+<!-- BACK TO HOME -->
+<div class="back-home-wrap">
+  <a href="index.html" class="back-home-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Home
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="f-brand">Haseeb<span>.</span></div>
+      <div class="f-tag">Equity Trader &amp; PSX Market Analyst</div>
+      <p class="f-about">Teaching Technical &amp; Fundamental Analysis of the Pakistan Stock Exchange. Real trades. Real education.</p>
+      <div class="f-socials">
+        <a href="https://linkedin.com/in/1tshaseeb" target="_blank" rel="noopener" class="f-social-btn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://wa.me/923158674401" target="_blank" rel="noopener" class="f-social-btn" title="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a href="mailto:zahidhaseeb800@gmail.com" class="f-social-btn" title="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-nav-col">
+      <div class="f-nav-title">Navigation</div>
+      <ul class="f-nav-links">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li><a href="index.html#track-record">Track Record</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#how-it-works">How It Works</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact-col">
+      <div class="f-nav-title">Contact</div>
+      <div class="f-contact-item">
+        <span class="f-ci-icon">✉️</span>
+        <a href="mailto:zahidhaseeb800@gmail.com">zahidhaseeb800@gmail.com</a>
+      </div>
+      <div class="f-contact-item">
+        <span class="f-ci-icon">📞</span>
+        <a href="tel:+923158674401">0315 8674401</a>
+      </div>
+      <div class="f-contact-item">
+        <span class="f-ci-icon">💼</span>
+        <a href="https://linkedin.com/in/1tshaseeb" target="_blank" rel="noopener">linkedin.com/in/1tshaseeb</a>
+      </div>
+      <a href="https://floretcapitals.com" target="_blank" rel="noopener" class="f-company">
+        <img src="https://floretcapitals.com/wp-content/uploads/2024/10/cropped-cropped-Floret-Icon.png" alt="Floret Capitals">
+        <span>Equity Trader · <strong>Floret Capitals PVT Ltd</strong></span>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-in">
+      <div class="f-copy">© 2026 Haseeb Zahid. All rights reserved.</div>
+      <div class="f-copy">Designed for PSX Education &amp; Market Analysis</div>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/923158674401" class="wa-btn" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <span class="wa-pulse"></span>
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-label">Chat on WhatsApp</span>
+</a>
+
+</body>
+</html>
