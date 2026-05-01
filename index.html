@@ -98,7 +98,7 @@
   }
   </script>
 
-  <!-- Google Analytics GA4 — replace G-XXXXXXXXXX with your real ID from analytics.google.com -->
+  <!-- Google Analytics GA4 / Plausible — [ACTION REQUIRED] Replace G-XXXXXXXXXX with your real tracking ID -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -166,35 +166,41 @@
   </div>
 </section>
 
-<!-- PSX TICKER STRIP -->
-<div id="kse-ticker-wrap">
-  <div class="kse-ticker-label"><span class="kse-dot"></span>PSX &nbsp;<span id="tickerTime" style="color:var(--muted);font-weight:400;font-size:0.55rem">LIVE</span></div>
-  <div class="kse-ticker-scroll">
-    <div class="kse-ticker-track" id="kseTicker">
-      <span class="kt-item"><span class="kt-sym">KSE-100</span><span class="kt-val kt-neu" id="t-kse">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">OGDC</span><span class="kt-val kt-neu" id="t-ogdc">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">PPL</span><span class="kt-val kt-neu" id="t-ppl">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">HBL</span><span class="kt-val kt-neu" id="t-hbl">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">ENGROH</span><span class="kt-val kt-neu" id="t-engro">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">MCB</span><span class="kt-val kt-neu" id="t-mcb">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">UBL</span><span class="kt-val kt-neu" id="t-ubl">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">LUCK</span><span class="kt-val kt-neu" id="t-luck">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">FFC</span><span class="kt-val kt-neu" id="t-ffc">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-item"><span class="kt-sym">PSO</span><span class="kt-val kt-neu" id="t-pso">—</span></span>
-      <span class="kt-sep">·</span>
-      <span class="kt-sep">·</span>
-      <span class="kt-sep">·</span>
-    </div>
-  </div>
+<!-- TRADINGVIEW WIDGET -->
+<div class="tradingview-widget-container" style="border-bottom: 1px solid var(--border);">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {
+  "symbols": [
+    {
+      "description": "KSE-100",
+      "proName": "PSX:KSE100"
+    },
+    {
+      "description": "OGDC",
+      "proName": "PSX:OGDC"
+    },
+    {
+      "description": "PPL",
+      "proName": "PSX:PPL"
+    },
+    {
+      "description": "ENGRO",
+      "proName": "PSX:ENGRO"
+    },
+    {
+      "description": "HBL",
+      "proName": "PSX:HBL"
+    }
+  ],
+  "showSymbolLogo": false,
+  "isTransparent": true,
+  "displayMode": "adaptive",
+  "colorTheme": "dark",
+  "locale": "en"
+}
+  </script>
+</div>
 </div>
 
 <!-- SERVICES -->
@@ -344,37 +350,37 @@
     <div class="tr-stats" id="trStats">
       <div class="tr-stat-card positive">
         <div class="tr-stat-icon">📈</div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="32" data-dec="1" data-prefix="+" data-suffix="%">0%</span></div>
+        <div class="tr-stat-num"><span class="tr-cnt" data-t="32" data-dec="1" data-prefix="+" data-suffix="%">+32.0%</span></div>
         <div class="tr-stat-lbl">Trading Return</div>
         <div class="tr-stat-sub">Feb 2025 – Feb 2026</div>
       </div>
       <div class="tr-stat-card positive">
         <div class="tr-stat-icon">💰</div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="34" data-dec="1" data-prefix="+" data-suffix="%">0%</span></div>
+        <div class="tr-stat-num"><span class="tr-cnt" data-t="34" data-dec="1" data-prefix="+" data-suffix="%">+34.0%</span></div>
         <div class="tr-stat-lbl">Return incl. Dividend</div>
         <div class="tr-stat-sub">Total portfolio gain</div>
       </div>
       <div class="tr-stat-card neutral">
         <div class="tr-stat-icon">🎯</div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="64" data-dec="1" data-prefix="" data-suffix="%">0%</span></div>
+        <div class="tr-stat-num"><span class="tr-cnt" data-t="64" data-dec="1" data-prefix="" data-suffix="%">64.0%</span></div>
         <div class="tr-stat-lbl">Win Rate</div>
         <div class="tr-stat-sub">334 wins / 184 losses</div>
       </div>
       <div class="tr-stat-card neutral">
         <div class="tr-stat-icon">🔄</div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="518" data-dec="0" data-prefix="" data-suffix="">0</span></div>
+        <div class="tr-stat-num"><span class="tr-cnt" data-t="518" data-dec="0" data-prefix="" data-suffix="">518</span></div>
         <div class="tr-stat-lbl">Total Trades</div>
         <div class="tr-stat-sub">87 symbols traded</div>
       </div>
       <div class="tr-stat-card positive">
         <div class="tr-stat-icon">✅</div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="7" data-dec="1" data-prefix="+" data-suffix="%">0%</span></div>
+        <div class="tr-stat-num"><span class="tr-cnt" data-t="7" data-dec="1" data-prefix="+" data-suffix="%">+7.0%</span></div>
         <div class="tr-stat-lbl">Avg Win / Trade</div>
         <div class="tr-stat-sub">Per winning position</div>
       </div>
       <div class="tr-stat-card negative">
         <div class="tr-stat-icon">🛡️</div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="3" data-dec="1" data-prefix="-" data-suffix="%">0%</span></div>
+        <div class="tr-stat-num"><span class="tr-cnt" data-t="3" data-dec="1" data-prefix="-" data-suffix="%">-3.0%</span></div>
         <div class="tr-stat-lbl">Max Drawdown</div>
         <div class="tr-stat-sub">Capital protection</div>
       </div>
@@ -689,7 +695,7 @@
         <div class="pay-method"><span class="pay-dot jazz"></span>JazzCash</div>
         <div class="pay-method"><span class="pay-dot easy"></span>Easypaisa</div>
         <div class="pay-method"><span class="pay-dot bank"></span>Bank Transfer</div>
-        <div class="pay-method"><span class="pay-dot cash"></span>Cash (Karachi)</div>
+        <div class="pay-method"><span class="pay-dot cash"></span>In-person · Islamabad / Rawalpindi</div>
       </div>
       <span style="font-size:0.7rem;color:var(--muted);margin-left:auto">📞 Contact for payment details</span>
     </div>
@@ -797,46 +803,7 @@
         <a href="#contact" class="btn-primary" style="display:inline-block;margin-top:1.8rem;">Claim Your Spot →</a>
       </div>
 
-      <div class="tst-placeholder-row">
-        <div class="tst-placeholder">
-          <div class="tsp-top">
-            <div class="tsp-avatar">?</div>
-            <div>
-              <div class="tsp-name">Your Name Here</div>
-              <div class="tsp-role">Future Student</div>
-            </div>
-            <div class="tsp-stars">★★★★★</div>
-          </div>
-          <div class="tsp-quote">"This spot is reserved for you. Be among the first to learn PSX analysis from an active equity trader."</div>
-          <div class="tsp-tag">Founding Student</div>
-        </div>
-        <div class="tst-placeholder">
-          <div class="tsp-top">
-            <div class="tsp-avatar">?</div>
-            <div>
-              <div class="tsp-name">Your Name Here</div>
-              <div class="tsp-role">Future Student</div>
-            </div>
-            <div class="tsp-stars">★★★★★</div>
-          </div>
-          <div class="tsp-quote">"Join the founding batch and get personalised coaching that won't be available once the course scales."</div>
-          <div class="tsp-tag">Founding Student</div>
-        </div>
-        <div class="tst-placeholder">
-          <div class="tsp-top">
-            <div class="tsp-avatar">?</div>
-            <div>
-              <div class="tsp-name">Your Name Here</div>
-              <div class="tsp-role">Future Student</div>
-            </div>
-            <div class="tsp-stars">★★★★★</div>
-          </div>
-          <div class="tsp-quote">"Seats are limited. Real trading track record. Real PSX education. This is where serious learners start."</div>
-          <div class="tsp-tag">Founding Student</div>
-        </div>
       </div>
-    </div>
-  </div>
 </section>
 
 <!-- LEAD MAGNET POPUP -->
@@ -958,7 +925,7 @@
     <h2 class="s-title">Free PSX Analysis &<br>Educational Articles</h2>
     <p class="s-sub">Practical, no-fluff insights on the Pakistan Stock Exchange — the same kind of thinking you'll learn in the courses.</p>
     <div class="blog-grid" id="blogGrid">
-      <a href="#contact" class="blog-card">
+      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div>📐</div>
         <div class="blog-body">
           <div class="blog-cat">Technical Analysis</div>
@@ -967,7 +934,7 @@
           <div class="blog-footer"><span class="blog-date">April 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="#contact" class="blog-card">
+      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div>💱</div>
         <div class="blog-body">
           <div class="blog-cat">Fundamental Analysis</div>
@@ -976,7 +943,7 @@
           <div class="blog-footer"><span class="blog-date">April 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="#contact" class="blog-card">
+      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div>🏦</div>
         <div class="blog-body">
           <div class="blog-cat">Macro Economics</div>
@@ -985,7 +952,7 @@
           <div class="blog-footer"><span class="blog-date">March 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="#contact" class="blog-card">
+      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div>📊</div>
         <div class="blog-body">
           <div class="blog-cat">Price Action</div>
@@ -994,7 +961,7 @@
           <div class="blog-footer"><span class="blog-date">March 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="#contact" class="blog-card">
+      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div>⚖️</div>
         <div class="blog-body">
           <div class="blog-cat">Fundamental Analysis</div>
@@ -1003,7 +970,7 @@
           <div class="blog-footer"><span class="blog-date">February 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="#contact" class="blog-card">
+      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div>🛡️</div>
         <div class="blog-body">
           <div class="blog-cat">Risk Management</div>

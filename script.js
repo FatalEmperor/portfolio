@@ -151,6 +151,10 @@ ScrollTrigger.create({
       const dec     = parseInt(el.dataset.dec);
       const prefix  = el.dataset.prefix || '';
       const suffix  = el.dataset.suffix || '';
+      
+      // Start from 0
+      el.textContent = prefix + (0).toFixed(dec) + suffix;
+      
       let current   = 0;
       const steps   = 60;
       const inc     = target / steps;
@@ -165,104 +169,6 @@ ScrollTrigger.create({
     });
   }
 });
-
-/* ── LIGHTBOX ── */
-/* ── COUNTDOWN TIMER ── */
-(function() {
-  const stored = localStorage.getItem('pkgDeadline');
-  let deadline;
-  if (stored) {
-    deadline = new Date(stored);
-  } else {
-    deadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    localStorage.setItem('pkgDeadline', deadline.toISOString());
-  }
-  function tick() {
-    const diff = deadline - Date.now();
-    if (diff <= 0) {
-      ['tDays','tHours','tMins','tSecs'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '00'; });
-      return;
-    }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    const fmt = n => String(n).padStart(2,'0');
-    const dEl = document.getElementById('tDays');   if(dEl) dEl.textContent = fmt(d);
-    const hEl = document.getElementById('tHours');  if(hEl) hEl.textContent = fmt(h);
-    const mEl = document.getElementById('tMins');   if(mEl) mEl.textContent = fmt(m);
-    const sEl = document.getElementById('tSecs');   if(sEl) sEl.textContent = fmt(s);
-  }
-  tick(); setInterval(tick, 1000);
-})();
-
-/* ── FAQ ACCORDION ── */
-function toggleFaq(btn) {
-  const item = btn.closest('.faq-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(el => {
-    el.classList.remove('open');
-    el.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
-  });
-  if (!isOpen) {
-    item.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');
-  }
-}
-
-/* ── LEAD MAGNET POPUP ── */
-function closePopup() {
-  document.getElementById('leadPopup').classList.remove('open');
-  document.body.style.overflow = '';
-  sessionStorage.setItem('popupSeen', '1');
-}
-function submitPopup() {
-  const phone = document.getElementById('popupPhone').value.trim();
-  if (!phone) { document.getElementById('popupPhone').style.borderColor = '#ef4444'; return; }
-  const msg = encodeURIComponent('Hi Haseeb! I want the free PSX Starter Guide. My number: ' + phone);
-  window.open('https://wa.me/923158674401?text=' + msg, '_blank');
-  closePopup();
-}
-// Show popup after 45 seconds OR on exit-intent, whichever comes first
-if (!sessionStorage.getItem('popupSeen')) {
-  let popupShown = false;
-  function showPopup() {
-    if (popupShown) return;
-    popupShown = true;
-    document.getElementById('leadPopup').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  // Timed trigger — 45 seconds
-  setTimeout(showPopup, 45000);
-  // Exit-intent trigger — mouse leaves toward top of viewport
-  document.addEventListener('mouseleave', function onExitIntent(e) {
-    if (e.clientY <= 10) {
-      showPopup();
-      document.removeEventListener('mouseleave', onExitIntent);
-    }
-  });
-}
-// Close popup on overlay click
-document.getElementById('leadPopup').addEventListener('click', function(e) {
-  if (e.target === this) closePopup();
-});
-
-/* ── PRICING ANIMATIONS ── */
-gsap.set('#pkgGrid .pkg-card', { opacity:0, y:35 });
-gsap.set('#mentorCard', { opacity:0, y:25 });
-gsap.set('.payment-strip', { opacity:0, y:20 });
-ScrollTrigger.create({
-  trigger:'#pricing', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('#pkgGrid .pkg-card', { opacity:1, y:0, duration:.75, stagger:.15, ease:'power3.out' });
-    gsap.to('#mentorCard',  { opacity:1, y:0, duration:.7, delay:.5, ease:'power3.out' });
-    gsap.to('.payment-strip', { opacity:1, y:0, duration:.6, delay:.7, ease:'power3.out' });
-    // Seat bars animate
-    document.querySelectorAll('.seats-fill').forEach(b => {
-      const w = b.style.width;
-      b.style.width = '0%';
-      gsap.to(b, { width: w, duration:1.2, delay:.8, ease:'power2.out' });
-    });
   }
 });
 
@@ -274,69 +180,6 @@ ScrollTrigger.create({
     gsap.to('#faqGrid .faq-item', { opacity:1, y:0, duration:.55, stagger:.07, ease:'power3.out' });
   }
 });
-
-/* ── PSX TICKER DATA ── */
-(function initTicker() {
-
-  // Symbol → element-id map
-  const SYM_ID = {
-    'KSE-100':'t-kse', 'OGDC':'t-ogdc', 'PPL':'t-ppl', 'HBL':'t-hbl',
-    'ENGROH':'t-engro', 'MCB':'t-mcb', 'UBL':'t-ubl', 'LUCK':'t-luck',
-    'FFC':'t-ffc', 'PSO':'t-pso'
-  };
-
-  function setStock(sym, price, pct) {
-    const id = SYM_ID[sym];
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (!el) return;
-    const pctNum = parseFloat(pct);
-    const arrow  = isNaN(pctNum) ? '' : (pctNum >= 0 ? ' ▲' : ' ▼');
-    const pctStr = isNaN(pctNum) ? '' : ` (${pctNum >= 0 ? '+' : ''}${pctNum.toFixed(2)}%)`;
-    el.textContent = price + pctStr + arrow;
-    el.className   = 'kt-val ' + (isNaN(pctNum) ? 'kt-neu' : (pctNum >= 0 ? 'kt-pos' : 'kt-neg'));
-  }
-
-  // Apply static fallback immediately so ticker never shows blank
-  const FALLBACK = {
-    'KSE-100':['165,634',''], 'OGDC':['299.63',''], 'PPL':['218.70',''],
-    'HBL':['301.16',''],  'ENGROH':['279.07',''], 'MCB':['405.62',''],
-    'UBL':['355.93',''],  'LUCK':['434.36',''],   'FFC':['526.99',''],
-    'PSO':['362.22','']
-  };
-  Object.entries(FALLBACK).forEach(([sym, [p, c]]) => setStock(sym, p, c));
-
-  // Duplicate ticker items for seamless CSS loop
-  const track = document.getElementById('kseTicker');
-  if (track && !track.dataset.duped) {
-    track.innerHTML += track.innerHTML;
-    track.dataset.duped = '1';
-  }
-
-  async function refresh() {
-    // ── 1. PSX stocks via local PHP proxy (live) ─────────────────────────
-    try {
-      const r = await fetch('assets/ticker.php', { cache: 'no-store' });
-      if (r.ok) {
-        const j = await r.json();
-        const d = j.data || {};
-        Object.entries(d).forEach(([sym, arr]) => {
-          if (arr && arr[0]) setStock(sym, arr[0], arr[1] || '');
-        });
-        const ts = document.getElementById('tickerTime');
-        if (ts) {
-          const t = new Date();
-          ts.textContent = t.toLocaleTimeString('en-PK', { hour:'2-digit', minute:'2-digit' });
-        }
-        return; // success — skip Yahoo fallback
-      }
-    } catch(e) { /* PHP proxy not available — fall through */ }
-
-  }
-
-  refresh();
-  setInterval(refresh, 5 * 60 * 1000); // auto-refresh every 5 min
-})();
 
 // Sample Analysis
 gsap.set('#saGrid .sa-card', { opacity:0, y:30 });
