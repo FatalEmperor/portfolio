@@ -186,6 +186,12 @@
     }
     .nav-cta:hover { background: var(--blue); color: #fff; box-shadow: 0 0 22px var(--glow); border-color: var(--blue); }
 
+    /* Hamburger */
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; }
+    .hamburger .bar { width: 24px; height: 2px; background: var(--silver-bright); transition: all 0.3s ease; }
+    .mobile-only-cta { display: none; }
+
 
     /* ── HERO ── */
     #hero {
@@ -1318,16 +1324,29 @@
     @media(max-width:768px) {
       nav { padding: 1rem 1.2rem; }
       nav.scrolled { padding: 0.7rem 1.2rem; }
-      .nav-links { gap: 1.2rem; }
-      .nav-links a { font-size: 0.7rem; letter-spacing: 0.06em; }
-      .nav-cta { padding: 0.38rem 0.9rem; font-size: 0.7rem; }
+      
+      .hamburger { display: flex; }
+      .nav-links {
+        position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+        background: rgba(6,13,24,0.98); backdrop-filter: blur(20px);
+        flex-direction: column; justify-content: center; align-items: center;
+        gap: 2.5rem; transition: right 0.4s ease; border-left: 1px solid var(--border);
+        margin: 0; padding: 0; z-index: 1000;
+      }
+      .nav-links.active { right: 0; }
+      .nav-links a { font-size: 1rem; letter-spacing: 0.1em; }
+      .mobile-only-cta { display: block; margin-top: 1rem; }
+      .nav-cta { display: none; }
+      
+      .hamburger.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .hamburger.active .bar:nth-child(2) { opacity: 0; }
+      .hamburger.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
       section { padding: 5rem 1.5rem; }
       footer { padding: 2.5rem 1.5rem; }
     }
     @media(max-width:420px) {
-      .nav-cta { display: none; }
-      .nav-links { gap: 1rem; }
-      .nav-links a { font-size: 0.65rem; }
+      .nav-links { width: 100%; border-left: none; }
     }
     @media(max-width:520px) {
       .svc-sub { grid-template-columns: 1fr; }
@@ -1347,15 +1366,23 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#hero" class="nav-logo">Haseeb<span>.</span></a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#services">Services</a></li>
     <li><a href="#curriculum">Curriculum</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#track-record">Track Record</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li class="mobile-only-cta"><a href="#contact" class="btn-primary" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Hire Me</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Hire Me</a>
+  <div class="nav-right">
+    <a href="#contact" class="nav-cta">Hire Me</a>
+    <div class="hamburger" id="hamburger">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -2929,6 +2956,22 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 76, behavior:'smooth' });
   });
 });
+
+/* ── MOBILE MENU ── */
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('active');
+    });
+  });
+}
 
 /* ── CUSTOM CURSOR ── */
 const cDot  = document.getElementById('cDot');
