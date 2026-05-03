@@ -62,99 +62,146 @@ function loop() {
 }
 loop();
 
+/* ── SMOOTH SCROLL (LENIS) ── */
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  direction: 'vertical',
+  gestureDirection: 'vertical',
+  smooth: true,
+  mouseMultiplier: 1,
+  smoothTouch: false,
+  touchMultiplier: 2,
+  infinite: false,
+})
+
+function raf(time) {
+  lenis.raf(time)
+  requestAnimationFrame(raf)
+}
+requestAnimationFrame(raf)
+
 /* ── GSAP ── */
 gsap.registerPlugin(ScrollTrigger);
 
-// Set initial states
-gsap.set('.hero-eyebrow,.hero-sub,.hero-desc,.hero-btns,.scroll-hint', { opacity:0, y:28 });
-gsap.set('.hero-name .word', { opacity:0, y:45 });
-gsap.set('.stat-item', { opacity:0, y:24 });
-gsap.set('#svc-lbl,#svc-ttl,#svc-sub,.card-main,.card-sub', { opacity:0, y:28 });
-gsap.set('#aImg', { opacity:0, x:-38 });
-gsap.set('#aTxt', { opacity:0, x:38 });
-gsap.set('#cInfo', { opacity:0, y:30 });
-gsap.set('#cForm', { opacity:0, y:30 });
+// Sync Lenis with GSAP ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update)
+gsap.ticker.add((time)=>{
+  lenis.raf(time * 1000)
+})
+gsap.ticker.lagSmoothing(0)
 
-// Hero timeline
-const htl = gsap.timeline({ defaults:{ ease:'power3.out' } });
-htl.to('.hero-eyebrow',     { opacity:1, y:0, duration:.75, delay:.25 })
-   .to('.hero-name .word',  { opacity:1, y:0, duration:.8, stagger:.18 }, '-=.35')
-   .to('.hero-sub',         { opacity:1, y:0, duration:.7 }, '-=.35')
-   .to('.hero-desc',        { opacity:1, y:0, duration:.7 }, '-=.5')
-   .to('.hero-btns',        { opacity:1, y:0, duration:.7 }, '-=.45')
-   .to('.scroll-hint',      { opacity:1, y:0, duration:.6 }, '-=.2');
+// Initial states for scrub animations
+gsap.set('.hero-eyebrow,.hero-sub,.hero-desc,.hero-btns,.scroll-hint', { opacity:0, y:30 });
+gsap.set('.hero-name .word', { opacity:0, y:50 });
 
-// Nav scroll
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
+// Hero timeline (Entrance)
+const htl = gsap.timeline({ defaults:{ ease:'power4.out' } });
+htl.to('.hero-eyebrow',     { opacity:1, y:0, duration:1, delay:0.2 })
+   .to('.hero-name .word',  { opacity:1, y:0, duration:1.2, stagger:0.15 }, '-=0.6')
+   .to('.hero-sub',         { opacity:1, y:0, duration:1 }, '-=0.8')
+   .to('.hero-desc',        { opacity:1, y:0, duration:1 }, '-=0.8')
+   .to('.hero-btns',        { opacity:1, y:0, duration:1 }, '-=0.8')
+   .to('.scroll-hint',      { opacity:1, y:0, duration:1 }, '-=0.5');
+
+// Hero Scrub (Parallax Out)
+gsap.to('.hero-content', {
+  y: -150,
+  opacity: 0,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#hero',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 1
+  }
 });
-
-// Stats
-ScrollTrigger.create({
-  trigger:'#stats', start:'top 82%', once:true,
-  onEnter() {
-    gsap.to('.stat-item', { opacity:1, y:0, duration:.6, stagger:.14, ease:'power3.out' });
-    document.querySelectorAll('.cnt').forEach(el => {
-      const t = +el.dataset.t; let c = 0; const s = t / 55;
-      const id = setInterval(() => {
-        c += s; if (c >= t) { el.textContent = t; clearInterval(id); return; }
-        el.textContent = Math.floor(c);
-      }, 22);
-    });
+gsap.to('#hero-canvas', {
+  y: 100,
+  opacity: 0.2,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#hero',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 1
   }
 });
 
-// Services
-ScrollTrigger.create({
-  trigger:'#services', start:'top 80%', once:true,
-  onEnter() {
-    gsap.to('#svc-lbl',    { opacity:1, y:0, duration:.6, ease:'power3.out' });
-    gsap.to('#svc-ttl',    { opacity:1, y:0, duration:.6, delay:.1, ease:'power3.out' });
-    gsap.to('#svc-sub',    { opacity:1, y:0, duration:.6, delay:.18, ease:'power3.out' });
-    gsap.to('.card-main',  { opacity:1, y:0, duration:.75, stagger:.16, delay:.28, ease:'power3.out' });
-    gsap.to('.card-sub',   { opacity:1, y:0, duration:.6,  stagger:.1,  delay:.5,  ease:'power3.out' });
+// Services Scrub Parallax
+gsap.from('.card-main', {
+  y: 100,
+  opacity: 0,
+  stagger: 0.2,
+  ease: 'power2.out',
+  scrollTrigger: {
+    trigger: '#services',
+    start: 'top 85%',
+    end: 'top 20%',
+    scrub: 1
+  }
+});
+gsap.from('.card-sub', {
+  y: 50,
+  opacity: 0,
+  stagger: 0.1,
+  ease: 'power2.out',
+  scrollTrigger: {
+    trigger: '.svc-sub',
+    start: 'top 90%',
+    end: 'top 50%',
+    scrub: 1
   }
 });
 
-// About
-ScrollTrigger.create({
-  trigger:'#about', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('#aImg', { opacity:1, x:0, duration:.95, ease:'power3.out' });
-    gsap.to('#aTxt', { opacity:1, x:0, duration:.95, delay:.18, ease:'power3.out' });
-    document.querySelectorAll('.sk-fill').forEach(b => {
-      gsap.to(b, { width: b.dataset.w + '%', duration:1.3, delay:.55, ease:'power2.out' });
-    });
+// About Image Scrub Scale
+gsap.fromTo('#aImg img', 
+  { scale: 1.3, filter: 'brightness(0.6)' },
+  { scale: 1, filter: 'brightness(1)', ease: 'none',
+    scrollTrigger: {
+      trigger: '#about',
+      start: 'top bottom',
+      end: 'center center',
+      scrub: 1
+    }
+  }
+);
+gsap.from('.about-txt', {
+  x: 50,
+  opacity: 0,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#about',
+    start: 'top 80%',
+    end: 'center center',
+    scrub: 1
   }
 });
 
-// Contact
-ScrollTrigger.create({
-  trigger:'#contact', start:'top 80%', once:true,
-  onEnter() {
-    gsap.to('#cInfo', { opacity:1, y:0, duration:.75, ease:'power3.out' });
-    gsap.to('#cForm', { opacity:1, y:0, duration:.75, delay:.2, ease:'power3.out' });
+// Track Record Pin & Scrub
+const trTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: '#track-record',
+    start: 'top top',
+    end: '+=800', // Pin for 800px of scrolling
+    pin: true,
+    scrub: 1
   }
 });
+trTl.from('.tr-header', { opacity: 0, y: 50, duration: 1 })
+    .from('.tr-stat-card', { opacity: 0, y: 100, scale: 0.8, stagger: 0.2, duration: 2 }, '-=0.5')
+    .from('.tr-charts', { opacity: 0, y: 50, duration: 2 }, '-=1');
 
-// Track Record
-gsap.set('#trStats .tr-stat-card', { opacity:0, y:30 });
-gsap.set('#trCharts .tr-chart-card', { opacity:0, y:30 });
+// Animated counters on normal enter
 ScrollTrigger.create({
-  trigger:'#track-record', start:'top 78%', once:true,
+  trigger:'#track-record', start:'top 80%', once:true,
   onEnter() {
-    gsap.to('#trStats .tr-stat-card', { opacity:1, y:0, duration:.6, stagger:.08, ease:'power3.out' });
-    gsap.to('#trCharts .tr-chart-card', { opacity:1, y:0, duration:.75, stagger:.15, delay:.4, ease:'power3.out' });
-    // Animated counters
     document.querySelectorAll('.tr-cnt').forEach(el => {
       const target  = parseFloat(el.dataset.t);
       const dec     = parseInt(el.dataset.dec);
       const prefix  = el.dataset.prefix || '';
       const suffix  = el.dataset.suffix || '';
-      
-      // Start from 0
       el.textContent = prefix + (0).toFixed(dec) + suffix;
-      
       let current   = 0;
       const steps   = 60;
       const inc     = target / steps;
@@ -169,91 +216,37 @@ ScrollTrigger.create({
     });
   }
 });
-  }
+
+// Curriculum Scrub Overlap
+gsap.from('#curTA', {
+  y: 100, opacity: 0, rotation: -2, ease: 'none',
+  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', end: 'top 30%', scrub: 1 }
+});
+gsap.from('#curFA', {
+  y: 150, opacity: 0, rotation: 2, ease: 'none',
+  scrollTrigger: { trigger: '#curriculum', start: 'top 70%', end: 'top 20%', scrub: 1 }
 });
 
-/* ── FAQ ANIMATIONS ── */
-gsap.set('#faqGrid .faq-item', { opacity:0, y:22 });
-ScrollTrigger.create({
-  trigger:'#faq', start:'top 80%', once:true,
-  onEnter() {
-    gsap.to('#faqGrid .faq-item', { opacity:1, y:0, duration:.55, stagger:.07, ease:'power3.out' });
-  }
+// Pricing Scrub
+gsap.from('.pkg-card', {
+  y: 100, opacity: 0, stagger: 0.15, ease: 'none',
+  scrollTrigger: { trigger: '#pricing', start: 'top 85%', end: 'top 30%', scrub: 1 }
 });
 
-// Sample Analysis
-gsap.set('#saGrid .sa-card', { opacity:0, y:30 });
-ScrollTrigger.create({ trigger:'#sample-analysis', start:'top 78%', once:true,
-  onEnter() { gsap.to('#saGrid .sa-card', { opacity:1, y:0, duration:.75, stagger:.15, ease:'power3.out' }); }
-});
-
-// Before/After
-gsap.set('#baGrid .ba-col', { opacity:0, x:0, y:30 });
-gsap.set('#baGrid .ba-arrow', { opacity:0, scale:0.5 });
-ScrollTrigger.create({ trigger:'#before-after', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('#baGrid .ba-col', { opacity:1, y:0, duration:.8, stagger:.2, ease:'power3.out' });
-    gsap.to('#baGrid .ba-arrow', { opacity:1, scale:1, duration:.6, delay:.3, ease:'back.out(1.5)' });
-  }
-});
-
-// Blog
-gsap.set('#blogGrid .blog-card', { opacity:0, y:30 });
-ScrollTrigger.create({ trigger:'#blog', start:'top 78%', once:true,
-  onEnter() { gsap.to('#blogGrid .blog-card', { opacity:1, y:0, duration:.6, stagger:.08, ease:'power3.out' }); }
-});
-
-// Referral
-gsap.set('#refBox', { opacity:0, y:30 });
-ScrollTrigger.create({ trigger:'#referral', start:'top 78%', once:true,
-  onEnter() { gsap.to('#refBox', { opacity:1, y:0, duration:.85, ease:'power3.out' }); }
-});
-
-// Certificate
-gsap.set('#certWrap .cert-frame', { opacity:0, x:-40 });
-gsap.set('#certWrap .cert-txt',   { opacity:0, x:40 });
-ScrollTrigger.create({ trigger:'#certificate', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('#certWrap .cert-frame', { opacity:1, x:0, duration:.9, ease:'power3.out' });
-    gsap.to('#certWrap .cert-txt',   { opacity:1, x:0, duration:.9, delay:.18, ease:'power3.out' });
-  }
-});
-
-// How It Works
-gsap.set('#hiwS1, #hiwS2, #hiwS3, #hiwS4', { opacity:0, y:35 });
-ScrollTrigger.create({
-  trigger:'#how-it-works', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('#hiwS1, #hiwS2, #hiwS3, #hiwS4', {
-      opacity:1, y:0, duration:.7, stagger:.14, ease:'power3.out'
-    });
-  }
-});
-
-// Curriculum
-gsap.set('#curTA, #curFA', { opacity:0, y:35 });
-ScrollTrigger.create({
-  trigger:'#curriculum', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('#curTA', { opacity:1, y:0, duration:.8, ease:'power3.out' });
-    gsap.to('#curFA', { opacity:1, y:0, duration:.8, delay:.18, ease:'power3.out' });
-  }
-});
-
-// Testimonials
-gsap.set('.founding-badge', { opacity:0, y:30 });
-gsap.set('.tst-placeholder', { opacity:0, y:25 });
-ScrollTrigger.create({
-  trigger:'#testimonials', start:'top 78%', once:true,
-  onEnter() {
-    gsap.to('.founding-badge', { opacity:1, y:0, duration:.85, ease:'power3.out' });
-    gsap.to('.tst-placeholder', { opacity:1, y:0, duration:.65, stagger:.12, delay:.35, ease:'power3.out' });
-  }
+// Testimonials Scrub
+gsap.from('.founding-badge', {
+  scale: 0.8, opacity: 0, y: 50, ease: 'none',
+  scrollTrigger: { trigger: '#testimonials', start: 'top 90%', end: 'top 40%', scrub: 1 }
 });
 
 // WhatsApp button entrance
 gsap.set('.wa-btn', { opacity:0, y:20, scale:0.85 });
-gsap.to('.wa-btn', { opacity:1, y:0, scale:1, duration:.7, delay:1.8, ease:'back.out(1.5)' });
+gsap.to('.wa-btn', { opacity:1, y:0, scale:1, duration:0.7, delay:1.8, ease:'back.out(1.5)' });
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
+});
 
 function openLightbox(src, caption) {
   document.getElementById('lbImg').src = src;
