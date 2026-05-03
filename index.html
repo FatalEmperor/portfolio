@@ -166,41 +166,18 @@
   </div>
 </section>
 
-<!-- TRADINGVIEW WIDGET -->
-<div class="tradingview-widget-container" style="border-bottom: 1px solid var(--border);">
-  <div class="tradingview-widget-container__widget"></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-  {
-  "symbols": [
-    {
-      "description": "KSE-100",
-      "proName": "PSX:KSE100"
-    },
-    {
-      "description": "OGDC",
-      "proName": "PSX:OGDC"
-    },
-    {
-      "description": "PPL",
-      "proName": "PSX:PPL"
-    },
-    {
-      "description": "ENGRO",
-      "proName": "PSX:ENGRO"
-    },
-    {
-      "description": "HBL",
-      "proName": "PSX:HBL"
-    }
-  ],
-  "showSymbolLogo": false,
-  "isTransparent": true,
-  "displayMode": "adaptive",
-  "colorTheme": "dark",
-  "locale": "en"
-}
-  </script>
-</div>
+<!-- PSX LIVE TICKER -->
+<div id="kse-ticker-wrap">
+  <div class="kse-ticker-label">
+    <div class="kse-dot"></div>
+    LIVE PSX
+  </div>
+  <div class="kse-ticker-scroll">
+    <div class="kse-ticker-track" id="ticker-track">
+      <!-- Live items injected via script.js -->
+      <span class="kt-item" style="opacity:0.5">Fetching live market data...</span>
+    </div>
+  </div>
 </div>
 
 <!-- SERVICES -->

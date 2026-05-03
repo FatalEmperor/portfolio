@@ -439,3 +439,44 @@ if (hamburger) {
     hamburger.setAttribute('aria-expanded', !isExpanded);
   });
 }
+
+/* ── PSX TICKER FETCH ── */
+async function fetchTickerData() {
+  const track = document.getElementById('ticker-track');
+  if (!track) return;
+  
+  try {
+    const response = await fetch('assets/ticker.php');
+    const result = await response.json();
+    
+    if (result.data) {
+      let html = '';
+      // Double the items for seamless infinite scroll loop
+      const symbols = Object.keys(result.data);
+      const displayData = [...symbols, ...symbols]; 
+      
+      displayData.forEach(sym => {
+        const [price, change] = result.data[sym];
+        const isPos = parseFloat(change) >= 0;
+        const colorClass = isPos ? 'kt-pos' : 'kt-neg';
+        const sign = isPos ? '+' : '';
+        
+        html += `
+          <div class="kt-item">
+            <span class="kt-sym">${sym}</span>
+            <span class="kt-val">${price}</span>
+            <span class="kt-val ${colorClass}">${sign}${change}</span>
+            <span class="kt-sep">|</span>
+          </div>
+        `;
+      });
+      track.innerHTML = html;
+    }
+  } catch (err) {
+    console.error('Ticker Error:', err);
+    track.innerHTML = '<span class="kt-item" style="color:#f87171">Market data currently unavailable</span>';
+  }
+}
+
+fetchTickerData();
+setInterval(fetchTickerData, 60000); // Refresh every minute
