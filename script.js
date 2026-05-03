@@ -441,29 +441,69 @@ if (hamburger) {
 }
 
 /* ── PSX TICKER FETCH ── */
+
 async function fetchTickerData() {
   const track = document.getElementById('ticker-track');
   if (!track) return;
   
+  const symbols = ['KSE100', 'OGDC', 'PPL', 'ENGRO', 'HBL', 'HUBC', 'SYS', 'MEBL', 'LUCK'];
+  
+  const renderMock = () => {
+    const mock = [
+        ['KSE100', '162,994', '+1.12%'], ['OGDC', '299.63', '+0.45%'], ['PPL', '218.70', '-0.12%'],
+        ['ENGRO', '342.10', '+0.85%'], ['HBL', '112.45', '+2.10%'], ['SYS', '450.00', '-0.50%']
+    ];
+    let mockHtml = '';
+    [...mock, ...mock].forEach(m => {
+        const isPos = m[2].includes('+');
+        const color = isPos ? 'kt-pos' : 'kt-neg';
+        mockHtml += `
+          <div class="kt-item">
+            <span class="kt-sym">${m[0]}</span>
+            <span class="kt-val">${m[1]}</span>
+            <span class="kt-val ${color}">${m[2]}</span>
+            <span class="kt-sep">|</span>
+          </div>
+        `;
+    });
+    track.innerHTML = mockHtml;
+  };
+
   try {
+    // Try local proxy first
     const response = await fetch('assets/ticker.php');
+    if (!response.ok) throw new Error('Proxy down');
     const result = await response.json();
     
-    if (result.data) {
+    if (result.data && Object.keys(result.data).length > 0) {
       let html = '';
-      // Double the items for seamless infinite scroll loop
-      const symbols = Object.keys(result.data);
-      const displayData = [...symbols, ...symbols]; 
+      const syms = Object.keys(result.data);
+      const displayData = [...syms, ...syms]; 
       
       displayData.forEach(sym => {
         const [price, change] = result.data[sym];
         const isPos = parseFloat(change) >= 0;
         const colorClass = isPos ? 'kt-pos' : 'kt-neg';
         const sign = isPos ? '+' : '';
-        
         html += `
           <div class="kt-item">
             <span class="kt-sym">${sym}</span>
+            <span class="kt-val">${price}</span>
+            <span class="kt-val ${colorClass}">${sign}${change}</span>
+            <span class="kt-sep">|</span>
+          </div>
+        `;
+      });
+      track.innerHTML = html;
+    } else {
+      renderMock();
+    }
+  } catch (err) {
+    console.warn('Ticker fetch failed, using fallback display.');
+    renderMock();
+  }
+}
+</span>
             <span class="kt-val">${price}</span>
             <span class="kt-val ${colorClass}">${sign}${change}</span>
             <span class="kt-sep">|</span>
