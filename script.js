@@ -227,10 +227,10 @@ gsap.from('#curFA', {
   scrollTrigger: { trigger: '#curriculum', start: 'top 70%', end: 'top 20%', scrub: 1 }
 });
 
-// Pricing Scrub
+// Pricing
 gsap.from('.pkg-card', {
-  y: 100, opacity: 0, stagger: 0.15, ease: 'none',
-  scrollTrigger: { trigger: '#pricing', start: 'top 85%', end: 'top 30%', scrub: 1 }
+  y: 60, opacity: 0, stagger: 0.15, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '#pricing', start: 'top 80%', toggleActions: 'play none none none' }
 });
 
 // Testimonials Scrub
