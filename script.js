@@ -128,30 +128,14 @@ gsap.to('#hero-canvas', {
   }
 });
 
-// Services Scrub Parallax
+// Services
 gsap.from('.card-main', {
-  y: 100,
-  opacity: 0,
-  stagger: 0.2,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: '#services',
-    start: 'top 85%',
-    end: 'top 20%',
-    scrub: 1
-  }
+  y: 60, opacity: 0, stagger: 0.15, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '#services', start: 'top 80%', toggleActions: 'play none none none' }
 });
 gsap.from('.card-sub', {
-  y: 50,
-  opacity: 0,
-  stagger: 0.1,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: '.svc-sub',
-    start: 'top 90%',
-    end: 'top 50%',
-    scrub: 1
-  }
+  y: 40, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
+  scrollTrigger: { trigger: '.svc-sub', start: 'top 85%', toggleActions: 'play none none none' }
 });
 
 // About Image Scrub Scale
@@ -167,64 +151,19 @@ gsap.fromTo('#aImg img',
   }
 );
 gsap.from('.about-txt', {
-  x: 50,
-  opacity: 0,
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '#about',
-    start: 'top 80%',
-    end: 'center center',
-    scrub: 1
-  }
+  x: 50, opacity: 0, duration: 0.8, ease: 'power2.out',
+  scrollTrigger: { trigger: '#about', start: 'top 80%', toggleActions: 'play none none none' }
 });
 
-// Track Record Pin & Scrub
-const trTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: '#track-record',
-    start: 'top top',
-    end: '+=800', // Pin for 800px of scrolling
-    pin: true,
-    scrub: 1
-  }
-});
-trTl.from('.tr-header', { opacity: 0, y: 50, duration: 1 })
-    .from('.tr-stat-card', { opacity: 0, y: 100, scale: 0.8, stagger: 0.2, duration: 2 }, '-=0.5')
-    .from('.tr-charts', { opacity: 0, y: 50, duration: 2 }, '-=1');
 
-// Animated counters on normal enter
-ScrollTrigger.create({
-  trigger:'#track-record', start:'top 80%', once:true,
-  onEnter() {
-    document.querySelectorAll('.tr-cnt').forEach(el => {
-      const target  = parseFloat(el.dataset.t);
-      const dec     = parseInt(el.dataset.dec);
-      const prefix  = el.dataset.prefix || '';
-      const suffix  = el.dataset.suffix || '';
-      el.textContent = prefix + (0).toFixed(dec) + suffix;
-      let current   = 0;
-      const steps   = 60;
-      const inc     = target / steps;
-      const id = setInterval(() => {
-        current += inc;
-        if (current >= target) {
-          el.textContent = prefix + target.toFixed(dec) + suffix;
-          clearInterval(id); return;
-        }
-        el.textContent = prefix + current.toFixed(dec) + suffix;
-      }, 20);
-    });
-  }
-});
-
-// Curriculum Scrub Overlap
+// Curriculum
 gsap.from('#curTA', {
-  y: 100, opacity: 0, rotation: -2, ease: 'none',
-  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', end: 'top 30%', scrub: 1 }
+  y: 60, opacity: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', toggleActions: 'play none none none' }
 });
 gsap.from('#curFA', {
-  y: 150, opacity: 0, rotation: 2, ease: 'none',
-  scrollTrigger: { trigger: '#curriculum', start: 'top 70%', end: 'top 20%', scrub: 1 }
+  y: 60, opacity: 0, duration: 0.7, delay: 0.15, ease: 'power2.out',
+  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', toggleActions: 'play none none none' }
 });
 
 // Pricing
@@ -233,10 +172,10 @@ gsap.from('.pkg-card', {
   scrollTrigger: { trigger: '#pricing', start: 'top 80%', toggleActions: 'play none none none' }
 });
 
-// Testimonials Scrub
+// Testimonials
 gsap.from('.founding-badge', {
-  scale: 0.8, opacity: 0, y: 50, ease: 'none',
-  scrollTrigger: { trigger: '#testimonials', start: 'top 90%', end: 'top 40%', scrub: 1 }
+  scale: 0.8, opacity: 0, y: 50, duration: 0.6, ease: 'power2.out',
+  scrollTrigger: { trigger: '#testimonials', start: 'top 85%', toggleActions: 'play none none none' }
 });
 
 // WhatsApp button entrance
