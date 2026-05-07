@@ -8,9 +8,10 @@ const crypto = require('crypto');
 const PORT    = 3000;
 const SYMBOLS = ['KSE100', 'OGDC', 'PPL', 'ENGRO', 'HBL', 'HUBC', 'SYS', 'MEBL', 'LUCK'];
 
-const DATA_DIR  = path.join(__dirname, 'data');
-const USERS_DB  = path.join(DATA_DIR, 'users.json');
-const SECRET_FN = path.join(DATA_DIR, '.jwt-secret');
+const DATA_DIR     = path.join(__dirname, 'data');
+const USERS_DB     = path.join(DATA_DIR, 'users.json');
+const SECRET_FN    = path.join(DATA_DIR, '.jwt-secret');
+const ARTICLES_FN  = path.join(__dirname, 'articles.json');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(USERS_DB)) fs.writeFileSync(USERS_DB, '{}');
@@ -234,6 +235,42 @@ async function handleSignin(req, res) {
   sendJson(res, 200, { token, user: { name: user.name, email: user.email, phone: user.phone } });
 }
 
+/* ────────────────────── ARTICLES ────────────────────── */
+
+let _articlesCache = null;
+let _articlesMtime = 0;
+function readArticles() {
+  try {
+    const stat = fs.statSync(ARTICLES_FN);
+    if (_articlesCache && stat.mtimeMs === _articlesMtime) return _articlesCache;
+    _articlesCache = JSON.parse(fs.readFileSync(ARTICLES_FN, 'utf8'));
+    _articlesMtime = stat.mtimeMs;
+    return _articlesCache;
+  } catch { return {}; }
+}
+
+function handleArticleList(res) {
+  const all = readArticles();
+  const list = Object.values(all).map(a => ({
+    slug: a.slug,
+    title: a.title,
+    category: a.category,
+    date: a.date,
+    readTime: a.readTime,
+    excerpt: (a.intro || '').slice(0, 220) + (a.intro && a.intro.length > 220 ? '…' : '')
+  }));
+  sendJson(res, 200, { articles: list });
+}
+
+function handleArticleSingle(res, slug) {
+  const all = readArticles();
+  const a = all[slug];
+  if (!a) return sendJson(res, 404, { error: 'Article not found.' });
+  sendJson(res, 200, { article: a });
+}
+
+/* ────────────────────── AUTH ────────────────────── */
+
 function handleMe(req, res) {
   const token = getBearer(req);
   const claims = verifyToken(token);
@@ -281,6 +318,9 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/auth/signup' && req.method === 'POST') return handleSignup(req, res);
   if (pathname === '/api/auth/signin' && req.method === 'POST') return handleSignin(req, res);
   if (pathname === '/api/auth/me'     && req.method === 'GET')  return handleMe(req, res);
+  if (pathname === '/api/articles'    && req.method === 'GET')  return handleArticleList(res);
+  const articleMatch = pathname.match(/^\/api\/articles\/([a-z0-9-]+)$/);
+  if (articleMatch && req.method === 'GET') return handleArticleSingle(res, articleMatch[1]);
 
   // Static
   staticHandler(req, res);

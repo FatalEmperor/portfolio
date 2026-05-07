@@ -1,0 +1,159 @@
+{
+  "chart-patterns-psx": {
+    "slug": "chart-patterns-psx",
+    "title": "5 Chart Patterns That Work Best on PSX Stocks",
+    "category": "Technical Analysis",
+    "date": "April 2026",
+    "readTime": "5 min read",
+    "intro": "Chart patterns are repeating shapes that price draws on a chart over time. They reflect the collective behaviour of buyers and sellers — fear, greed, and indecision — leaving a visual fingerprint. Most patterns taught online are calibrated for US markets where liquidity, volatility, and trading hours differ wildly from Karachi. On the PSX, only a handful of formations show up cleanly enough to act on.",
+    "sections": [
+      {
+        "heading": "1. Head & Shoulders",
+        "body": "A reversal pattern that forms at the top of an uptrend. Three peaks: a higher one in the middle (the head) flanked by two lower ones (the shoulders). When the neckline drawn beneath the two troughs breaks, the trend is considered exhausted. Inverse Head & Shoulders is the bottom-of-downtrend mirror image. Reliable on KSE-100 large-caps with adequate volume."
+      },
+      {
+        "heading": "2. Double Top / Double Bottom",
+        "body": "Price tests a level twice and fails to break through. Two peaks at roughly the same price (Double Top) signal that buyers are exhausted; two troughs (Double Bottom) signal that sellers are. Simple to spot, frequently appearing on PSX index-heavy stocks at psychological round numbers."
+      },
+      {
+        "heading": "3. Triangles (Symmetrical, Ascending, Descending)",
+        "body": "Continuation patterns where price compresses into a narrowing range. Ascending triangles (flat top, rising bottom) lean bullish; descending (flat bottom, falling top) lean bearish; symmetrical is direction-neutral until breakout. PSX stocks consolidate often during low-volume sessions — triangles are common."
+      },
+      {
+        "heading": "4. Flag & Pennant",
+        "body": "Short consolidations that follow a sharp move (the flagpole). The flag itself is a small parallelogram, the pennant a small symmetrical triangle. Both signal that the prior move has more room to run after a brief pause. Useful on PSX during result-season rallies."
+      },
+      {
+        "heading": "5. Cup & Handle",
+        "body": "A long, rounded bottom (the cup) followed by a smaller pullback (the handle), then a breakout to new highs. Slower-forming but high-quality when it appears on KSE-100 leaders coming out of multi-month bases."
+      }
+    ],
+    "teaser": "Recognising a pattern is step one. Knowing when to enter, where to place a stop, how to use volume to confirm or reject, and which patterns to ignore on which timeframes — that's where most retail traders fail. The full PSX-specific entry/exit playbook with real KSE-100 examples is covered in the Technical Analysis course.",
+    "courseSlug": "technical"
+  },
+
+  "pkr-usd-psx": {
+    "slug": "pkr-usd-psx",
+    "title": "Why the PKR/USD Rate is the Most Powerful PSX Indicator",
+    "category": "Fundamental Analysis",
+    "date": "April 2026",
+    "readTime": "4 min read",
+    "intro": "Pakistan imports more than it exports. That single fact makes the rupee-dollar exchange rate one of the most consequential numbers in the country's financial life — and a direct, measurable driver of the KSE-100. If you understand how a moving rupee redistributes profits across PSX sectors, you've already cleared the biggest hurdle most retail investors never get over.",
+    "sections": [
+      {
+        "heading": "Weak Rupee = Winners and Losers",
+        "body": "When the rupee depreciates, Pakistani exporters (textiles, IT, surgical, leather) collect dollars and convert to more rupees — their reported earnings rise. Importers (auto assemblers, pharma, chemicals, oil marketing) pay more rupees for the same dollar invoice — their margins compress. The market reprices both sides quickly, which is why FX-day moves on PSX can be sharp."
+      },
+      {
+        "heading": "Strong Rupee Flips the Script",
+        "body": "Rupee appreciation does the reverse. Importer-heavy sectors get a tailwind from cheaper landed cost; exporters take a hit. Banks sit somewhere in between, sensitive to capital flows and SBP positioning."
+      },
+      {
+        "heading": "Why Most Retail Investors Miss This",
+        "body": "Daily news headlines about the rupee usually focus on the political angle, not the equity angle. Most retail traders react to a falling rupee with panic, not with sector rotation. The traders who routinely outperform on PSX are the ones who treat every meaningful rupee move as a re-pricing event across listed companies."
+      }
+    ],
+    "teaser": "Understanding direction is the easy part. Sizing the move, identifying the lead-lag between FX and stock prices, separating real currency-driven moves from political noise, and pairing FX signals with technical entries — that requires structured training. The full framework with PSX sector mapping is covered in the Fundamental Analysis course.",
+    "courseSlug": "fundamental"
+  },
+
+  "sbp-interest-rates": {
+    "slug": "sbp-interest-rates",
+    "title": "How SBP Interest Rate Decisions Move the Stock Market",
+    "category": "Macro Economics",
+    "date": "March 2026",
+    "readTime": "4 min read",
+    "intro": "Every Monetary Policy Committee meeting at the State Bank of Pakistan reshuffles the equity market. A 100 basis point cut isn't a single news event — it's a chain reaction that moves through banks, leveraged sectors, and consumer-facing businesses on a predictable order. Knowing the chain is what separates positioning from chasing.",
+    "sections": [
+      {
+        "heading": "What Interest Rates Actually Do",
+        "body": "The policy rate is the price of borrowing money in the economy. When SBP cuts the rate, loans become cheaper for businesses and consumers, demand picks up, and the discount rate used to value future earnings drops — pushing stock valuations higher. When SBP hikes, the reverse: borrowing slows, demand softens, valuations compress."
+      },
+      {
+        "heading": "The First-Order Effects",
+        "body": "Banks see margin pressure when rates fall (they earn less spread on loans) but also benefit from improving asset quality and rising loan demand. Cement, steel, autos, and real estate — all leveraged, capital-intensive businesses — typically benefit most from a rate-cutting cycle. Power, fertiliser, and fixed-cost incumbents are less rate-sensitive."
+      },
+      {
+        "heading": "Why Timing Matters More Than Direction",
+        "body": "By the time a rate decision is announced, much of the move is already priced in. The skill is reading the SBP's tone, the inflation trajectory, and the bond market signals beforehand — and positioning in front of the move, not after. This is where most traders give back their gains."
+      }
+    ],
+    "teaser": "Knowing that rates matter is common. Knowing which PSX sector leads, which lags, when consensus is wrong about the next decision, and how to combine the rate view with technical setups — that's the part you don't get from financial news. Covered in depth in the Fundamental & Macro course modules.",
+    "courseSlug": "fundamental"
+  },
+
+  "dow-theory-kse": {
+    "slug": "dow-theory-kse",
+    "title": "Dow Theory Applied to KSE-100: A Practical Guide",
+    "category": "Price Action",
+    "date": "March 2026",
+    "readTime": "5 min read",
+    "intro": "Charles Dow died in 1902, but the framework his writings produced still describes how markets move better than most modern indicators. Dow Theory is the foundation of technical analysis — and on the KSE-100, where retail behaviour is loud and institutional flow is concentrated, it works remarkably well as a high-level filter.",
+    "sections": [
+      {
+        "heading": "The Three Trends",
+        "body": "Every market moves in three timeframes simultaneously. The primary trend lasts months to years (the tide). The secondary trend lasts weeks to a couple of months and corrects against the primary (the wave). The minor trend is the day-to-day noise (the ripple). Most retail traders trade the ripples thinking they're trading the tide — and lose."
+      },
+      {
+        "heading": "Three Phases of a Primary Trend",
+        "body": "A bull market unfolds in three phases: accumulation (smart money buys quietly, sentiment is poor), public participation (trend becomes obvious, broader market joins, biggest gains here), and distribution (smart money sells into euphoria). A bear market mirrors the same three phases in reverse."
+      },
+      {
+        "heading": "Confirmation",
+        "body": "Dow's original work demanded that two indices confirm each other before declaring a trend change. On the PSX you can adapt this: the KSE-100 should be confirmed by sector breadth and volume. A move in the index without breadth is a warning, not a signal."
+      }
+    ],
+    "teaser": "The theory is straightforward. Applying it without fooling yourself — reading volume correctly, distinguishing a real reversal from a deep correction, and resisting the urge to call tops and bottoms early — takes practice and structure. The full applied framework for KSE-100 is taught in the Technical Analysis course.",
+    "courseSlug": "technical"
+  },
+
+  "balance-of-trade": {
+    "slug": "balance-of-trade",
+    "title": "Reading Pakistan's Balance of Trade for Stock Opportunities",
+    "category": "Fundamental Analysis",
+    "date": "February 2026",
+    "readTime": "4 min read",
+    "intro": "Pakistan's monthly trade data is one of the most under-read documents in retail investing. Released by the Pakistan Bureau of Statistics, it tells you what the country is buying from the world, what it's selling, and which way the gap is moving. Buried inside is a sector-level signal that most retail investors never extract.",
+    "sections": [
+      {
+        "heading": "What the Number Actually Means",
+        "body": "Trade balance = exports minus imports. Pakistan typically runs a deficit, meaning it imports more than it exports. The size of that deficit, and its trajectory, drives FX reserve adequacy, the rupee, and ultimately equity valuations. A widening deficit is a warning; a narrowing one is a tailwind."
+      },
+      {
+        "heading": "Sector Mapping",
+        "body": "Strong export months are good news for textile, IT, and surgical-instrument exporters — companies that earn dollars. Heavy import months can be good for retailers and importers but warn of FX pressure ahead. Energy imports (oil, LNG) are the biggest single line item — when they spike, OMCs and refineries see margin pressure shortly after."
+      },
+      {
+        "heading": "Reading the Trend, Not the Headline",
+        "body": "A single month's trade number is noisy. The signal is in the rolling three-month trend and the year-on-year comparison — that's what FX dealers and serious analysts actually watch. Headline reports rarely make this distinction, which is why most retail traders react to the wrong data."
+      }
+    ],
+    "teaser": "Beyond the basic read: how to combine trade data with FX reserves, REER, remittance flows, and SBP positioning to anticipate which PSX sectors are about to move — that's the Fundamental & Macro course in full. The shortcuts and the data sources I use weekly are taught directly.",
+    "courseSlug": "fundamental"
+  },
+
+  "position-sizing": {
+    "slug": "position-sizing",
+    "title": "The Position Sizing Formula That Kept My Max Drawdown at -3.3%",
+    "category": "Risk Management",
+    "date": "February 2026",
+    "readTime": "4 min read",
+    "intro": "Across 518 trades over twelve months, my maximum drawdown was -3.3%. Not because I picked stocks better than everyone else — because I sized positions correctly. Position sizing is the most under-taught and most decisive variable in trading. You can be right 60% of the time and still blow up an account if you size wrong.",
+    "sections": [
+      {
+        "heading": "What Position Sizing Actually Is",
+        "body": "Position sizing answers one question: how much of your capital should you risk on a single trade? Not how many shares to buy — how much you can afford to lose on this one idea before it's no longer compatible with staying in the game next month."
+      },
+      {
+        "heading": "The Starting Rule: Risk Per Trade",
+        "body": "A reasonable starting principle for most retail traders is to risk no more than 1–2% of total trading capital on any single position. If you have PKR 1,000,000 and risk 1%, that's PKR 10,000 of pain you can absorb if the stop is hit. Position size is then derived from the gap between entry and stop, not from how confident you feel."
+      },
+      {
+        "heading": "Why Most Traders Skip This",
+        "body": "Position sizing feels like a brake when you're excited about a trade. It's the discipline that pays off precisely when you don't want it to — during the loss you weren't expecting. The traders who survive long-term are the ones who internalised this before their first big drawdown, not after."
+      }
+    ],
+    "teaser": "The full sizing methodology — how to scale up after wins, scale down after drawdowns, set portfolio-level limits, account for correlated PSX positions, and dynamically size around volatility — is covered in the Technical Analysis course's Risk module. The actual formula and the spreadsheet are walked through in session.",
+    "courseSlug": "technical"
+  }
+}

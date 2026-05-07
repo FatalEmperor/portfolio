@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading… — Haseeb Zahid</title>
+  <meta name="description" content="PSX market analysis & educational articles by Haseeb Zahid.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .article-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 8rem 1.5rem 4rem;
+    }
+    .article-back {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      color: var(--silver); font-size: 0.78rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none; margin-bottom: 2rem;
+      transition: color 0.25s ease;
+    }
+    .article-back:hover { color: var(--blue-light); }
+    .article-meta {
+      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+      font-size: 0.75rem; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .article-meta .article-cat { color: var(--blue-light); font-weight: 600; }
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.2; color: var(--silver-bright);
+      font-weight: 700; margin-bottom: 1.5rem;
+    }
+    .article-intro {
+      font-size: 1.05rem; line-height: 1.85;
+      color: var(--silver-light);
+      padding: 1.6rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    .article-section { margin-bottom: 2.4rem; }
+    .article-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--silver-bright);
+      margin-bottom: 0.9rem; font-weight: 600;
+    }
+    .article-section p {
+      font-size: 0.98rem; line-height: 1.85;
+      color: var(--silver-light);
+    }
+    .article-teaser {
+      margin-top: 3rem; padding: 2rem;
+      background: linear-gradient(140deg, rgba(13,31,60,0.6), rgba(6,13,24,0.4));
+      border: 1px solid rgba(249,115,22,0.25);
+      border-radius: 10px;
+    }
+    .article-teaser .s-label { margin-bottom: 0.7rem; }
+    .article-teaser h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; color: var(--silver-bright);
+      margin-bottom: 0.8rem; font-weight: 600;
+    }
+    .article-teaser p {
+      color: var(--silver-light); font-size: 0.92rem; line-height: 1.8;
+      margin-bottom: 1.4rem;
+    }
+    .article-teaser .btn-primary { display: inline-block; }
+    .article-loading, .article-error {
+      text-align: center; padding: 4rem 1rem;
+      color: var(--muted); font-size: 0.95rem;
+    }
+    .article-error a { color: var(--blue-light); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="index.html#blog">Insights</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main class="article-page">
+  <a href="index.html#blog" class="article-back">← Back to all articles</a>
+  <div id="articleRoot">
+    <div class="article-loading">Loading article…</div>
+  </div>
+</main>
+
+<script>
+(function() {
+  const params = new URLSearchParams(location.search);
+  const slug = (params.get('slug') || '').toLowerCase();
+  const root = document.getElementById('articleRoot');
+  const navScroll = () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+  window.addEventListener('scroll', navScroll); navScroll();
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  function renderError(msg) {
+    root.innerHTML = `<div class="article-error">
+      <p>${escapeHtml(msg)}</p>
+      <p style="margin-top:1rem"><a href="index.html#blog">← Back to all articles</a></p>
+    </div>`;
+  }
+
+  function render(a) {
+    document.title = a.title + ' — Haseeb Zahid';
+    const courseAnchor = a.courseSlug === 'fundamental' ? '#pricing' : '#pricing';
+    const sections = (a.sections || []).map(s => `
+      <div class="article-section">
+        <h2>${escapeHtml(s.heading)}</h2>
+        <p>${escapeHtml(s.body)}</p>
+      </div>
+    `).join('');
+    root.innerHTML = `
+      <div class="article-meta">
+        <span class="article-cat">${escapeHtml(a.category)}</span>
+        <span>${escapeHtml(a.date)}</span>
+        ${a.readTime ? `<span>· ${escapeHtml(a.readTime)}</span>` : ''}
+      </div>
+      <h1 class="article-title">${escapeHtml(a.title)}</h1>
+      <p class="article-intro">${escapeHtml(a.intro)}</p>
+      ${sections}
+      <div class="article-teaser">
+        <p class="s-label">Want the full picture?</p>
+        <h3>This is just the surface.</h3>
+        <p>${escapeHtml(a.teaser || '')}</p>
+        <a href="index.html${courseAnchor}" class="btn-primary">Explore the Course →</a>
+      </div>
+    `;
+  }
+
+  if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+    return renderError('No article specified.');
+  }
+
+  // Try API; fall back to static articles.json (works on static hosts)
+  fetch('/api/articles/' + slug)
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => render(data.article))
+    .catch(() => {
+      fetch('articles.json')
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(all => {
+          const a = all[slug];
+          if (!a) return renderError('Article not found.');
+          render(a);
+        })
+        .catch(() => renderError('Could not load article. Please try again.'));
+    });
+})();
+</script>
+
+</body>
+</html>
