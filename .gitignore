@@ -1,0 +1,5 @@
+# Server runtime data — user accounts, JWT secret. Never commit.
+data/
+*.log
+node_modules/
+.DS_Store

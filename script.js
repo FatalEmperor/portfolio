@@ -162,18 +162,8 @@ gsap.to('#hero-canvas', {
   }
 });
 
-// Services
-gsap.from('.card-main', {
-  y: 60, opacity: 0, stagger: 0.15, duration: 0.7, ease: 'power2.out',
-  scrollTrigger: { trigger: '#services', start: 'top 80%', toggleActions: 'play none none none' }
-});
-gsap.from('.card-sub', {
-  y: 40, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
-  scrollTrigger: { trigger: '.svc-sub', start: 'top 85%', toggleActions: 'play none none none' }
-});
-
 // About Image Scrub Scale
-gsap.fromTo('#aImg img', 
+gsap.fromTo('#aImg img',
   { scale: 1.3, filter: 'brightness(0.6)' },
   { scale: 1, filter: 'brightness(1)', ease: 'none',
     scrollTrigger: {
@@ -184,40 +174,39 @@ gsap.fromTo('#aImg img',
     }
   }
 );
-gsap.from('.about-txt', {
-  x: 50, opacity: 0, duration: 0.8, ease: 'power2.out',
-  scrollTrigger: { trigger: '#about', start: 'top 80%', toggleActions: 'play none none none' }
+
+/* ── CARD REVEALS (CSS-driven via IntersectionObserver — never gets stuck) ── */
+const REVEAL_SELECTORS = [
+  '.card-main', '.card-sub', '.about-txt',
+  '#curTA', '#curFA', '.pkg-card', '.founding-badge'
+];
+const revealEls = document.querySelectorAll(REVEAL_SELECTORS.join(','));
+revealEls.forEach((el, i) => {
+  el.classList.add('reveal');
+  // Stagger via inline delay (cap at 6 to avoid huge waits)
+  el.style.transitionDelay = Math.min(i % 4, 5) * 90 + 'ms';
 });
 
-
-// Curriculum
-gsap.from('#curTA', {
-  y: 60, opacity: 0, duration: 0.7, ease: 'power2.out',
-  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', toggleActions: 'play none none none' }
-});
-gsap.from('#curFA', {
-  y: 60, opacity: 0, duration: 0.7, delay: 0.15, ease: 'power2.out',
-  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', toggleActions: 'play none none none' }
-});
-
-// Pricing
-gsap.from('.pkg-card', {
-  y: 60, opacity: 0, stagger: 0.15, duration: 0.7, ease: 'power2.out',
-  scrollTrigger: { trigger: '#pricing', start: 'top 80%', toggleActions: 'play none none none' }
-});
-
-// Testimonials
-gsap.from('.founding-badge', {
-  scale: 0.8, opacity: 0, y: 50, duration: 0.6, ease: 'power2.out',
-  scrollTrigger: { trigger: '#testimonials', start: 'top 85%', toggleActions: 'play none none none' }
-});
+if (REDUCE_MOTION || !('IntersectionObserver' in window)) {
+  revealEls.forEach(el => el.classList.add('in'));
+} else {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+  revealEls.forEach(el => io.observe(el));
+  // Hard fallback: anything still hidden after 4s gets shown
+  setTimeout(() => revealEls.forEach(el => el.classList.add('in')), 4000);
+}
 
 // WhatsApp button entrance
 gsap.set('.wa-btn', { opacity:0, y:20, scale:0.85 });
 gsap.to('.wa-btn', { opacity:1, y:0, scale:1, duration:0.7, delay:1.8, ease:'back.out(1.5)' });
 
-// Safety nets — force visible if scroll triggers misfire
-['.card-main', '.card-sub', '.about-txt', '#curTA', '#curFA', '.pkg-card', '.founding-badge'].forEach(safetyShow);
 
 /* ── NAV SCROLL ── */
 window.addEventListener('scroll', () => {
@@ -480,12 +469,14 @@ async function fetchTickerData() {
 fetchTickerData();
 setInterval(fetchTickerData, 60000); // Refresh every minute
 
-/* ── STUDENT AUTH (localStorage — frontend-only) ──
-   NOTE: this is client-side only for demo/UX. For real student accounts,
-   wire submit handlers to a backend API (e.g. server.js + bcrypt + JWT). */
+/* ── STUDENT AUTH ──
+   Primary: backend API (/api/auth/*) — PBKDF2 hashing, HMAC-signed tokens.
+   Fallback: localStorage (used when backend unreachable, e.g. static hosting). */
 (function authModule() {
-  const USERS_KEY    = 'hz_users';
+  const TOKEN_KEY    = 'hz_token';
   const SESSION_KEY  = 'hz_session';
+  const USERS_KEY    = 'hz_users';     // localStorage fallback only
+  const API_BASE     = '/api/auth';
 
   const $ = (s, r=document) => r.querySelector(s);
   const overlay   = $('#authOverlay');
@@ -502,24 +493,76 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
   const navAccountName = $('#navAccountName');
   const navLogout = $('#navLogoutBtn');
 
+  let backendAvailable = null; // unknown; probed lazily
+
+  async function probeBackend() {
+    if (backendAvailable !== null) return backendAvailable;
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 1500);
+      const res = await fetch(API_BASE + '/me', {
+        method: 'GET',
+        signal: ctrl.signal,
+        headers: { 'Authorization': 'Bearer probe' }
+      });
+      clearTimeout(timer);
+      // Any HTTP response (even 401) means backend is up
+      backendAvailable = res.status >= 200 && res.status < 600;
+    } catch { backendAvailable = false; }
+    return backendAvailable;
+  }
+
+  /* localStorage fallback helpers */
   function readUsers() {
     try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
     catch { return {}; }
   }
   function writeUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-  function readSession() {
-    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
-    catch { return null; }
-  }
-
-  // Lightweight client-side hash (NOT cryptographically secure — placeholder until backend)
-  async function hash(str) {
+  async function shaHash(str) {
     if (window.crypto && crypto.subtle) {
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
     let h = 0; for (let i=0;i<str.length;i++) { h = ((h<<5)-h) + str.charCodeAt(i); h |= 0; }
     return String(h);
+  }
+  function readSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+    catch { return null; }
+  }
+  function writeSession(s) { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+  }
+
+  /* API calls */
+  async function apiSignup(payload) {
+    const res = await fetch(API_BASE + '/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Signup failed.');
+    return data;
+  }
+  async function apiSignin(payload) {
+    const res = await fetch(API_BASE + '/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Sign-in failed.');
+    return data;
+  }
+  async function apiMe(token) {
+    const res = await fetch(API_BASE + '/me', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return null;
+    return res.json();
   }
 
   function showOverlay(tab='signin') {
@@ -554,6 +597,20 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     }
   }
 
+  // On load: if we have a backend token, validate it
+  async function rehydrate() {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return;
+    if (!(await probeBackend())) return; // backend down — keep localStorage session as-is
+    const me = await apiMe(token);
+    if (me && me.user) {
+      writeSession({ email: me.user.email, name: me.user.name, loginAt: Date.now() });
+    } else {
+      clearSession();
+    }
+    refreshNav();
+  }
+
   // Event wiring
   navSignin?.addEventListener('click', e => { e.preventDefault(); showOverlay('signin'); });
   document.getElementById('mobileSignin')?.addEventListener('click', e => {
@@ -564,7 +621,7 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
   });
   navLogout?.addEventListener('click', e => {
     e.preventDefault();
-    localStorage.removeItem(SESSION_KEY);
+    clearSession();
     refreshNav();
   });
   $('#authClose')?.addEventListener('click', hideOverlay);
@@ -574,6 +631,19 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
   tabSignup.addEventListener('click', () => setTab('signup'));
   $('#authToSignup')?.addEventListener('click', e => { e.preventDefault(); setTab('signup'); });
   $('#authToSignin')?.addEventListener('click', e => { e.preventDefault(); setTab('signin'); });
+
+  function setBusy(form, busy) {
+    const btn = form.querySelector('.auth-submit');
+    if (!btn) return;
+    if (busy) {
+      btn.dataset.label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Please wait…';
+    } else {
+      btn.disabled = false;
+      btn.textContent = btn.dataset.label || btn.textContent;
+    }
+  }
 
   formSignup.addEventListener('submit', async e => {
     e.preventDefault();
@@ -593,16 +663,28 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     const termsBox = formSignup.querySelector('.auth-check input[type="checkbox"]');
     if (termsBox && !termsBox.checked)             return errSignup.textContent = 'Please accept Terms & Privacy.';
 
-    const users = readUsers();
-    if (users[email]) return errSignup.textContent = 'An account with this email already exists.';
-
-    const ph = await hash(pw);
-    users[email] = { name, email, phone, ph, createdAt: Date.now() };
-    writeUsers(users);
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ email, name, loginAt: Date.now() }));
-    refreshNav();
-    hideOverlay();
-    alert('Account created. Welcome, ' + name + '!');
+    setBusy(formSignup, true);
+    try {
+      if (await probeBackend()) {
+        const data = await apiSignup({ name, email, phone, password: pw });
+        localStorage.setItem(TOKEN_KEY, data.token);
+        writeSession({ email: data.user.email, name: data.user.name, loginAt: Date.now() });
+      } else {
+        // localStorage fallback
+        const users = readUsers();
+        if (users[email]) throw new Error('An account with this email already exists.');
+        const ph = await shaHash(pw);
+        users[email] = { name, email, phone, ph, createdAt: Date.now() };
+        writeUsers(users);
+        writeSession({ email, name, loginAt: Date.now() });
+      }
+      refreshNav();
+      hideOverlay();
+    } catch (err) {
+      errSignup.textContent = err.message || 'Signup failed.';
+    } finally {
+      setBusy(formSignup, false);
+    }
   });
 
   formSignin.addEventListener('submit', async e => {
@@ -612,16 +694,31 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     const email = (fd.get('email')||'').toString().trim().toLowerCase();
     const pw    = (fd.get('password')||'').toString();
     if (!email || !pw) return errSignin.textContent = 'Email and password required.';
-    const users = readUsers();
-    const user = users[email];
-    if (!user) return errSignin.textContent = 'No account with that email.';
-    const ph = await hash(pw);
-    if (ph !== user.ph) return errSignin.textContent = 'Incorrect password.';
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ email, name: user.name, loginAt: Date.now() }));
-    refreshNav();
-    hideOverlay();
+
+    setBusy(formSignin, true);
+    try {
+      if (await probeBackend()) {
+        const data = await apiSignin({ email, password: pw });
+        localStorage.setItem(TOKEN_KEY, data.token);
+        writeSession({ email: data.user.email, name: data.user.name, loginAt: Date.now() });
+      } else {
+        const users = readUsers();
+        const user = users[email];
+        if (!user) throw new Error('No account with that email.');
+        const ph = await shaHash(pw);
+        if (ph !== user.ph) throw new Error('Incorrect password.');
+        writeSession({ email, name: user.name, loginAt: Date.now() });
+      }
+      refreshNav();
+      hideOverlay();
+    } catch (err) {
+      errSignin.textContent = err.message || 'Sign-in failed.';
+    } finally {
+      setBusy(formSignin, false);
+    }
   });
 
   refreshNav();
+  rehydrate();
   window.HZAuth = { showOverlay, hideOverlay, refreshNav, readSession };
 })();
