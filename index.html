@@ -127,9 +127,15 @@
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li class="mobile-only-cta"><a href="#" id="mobileSignin" class="btn-ghost" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Sign In / Sign Up</a></li>
     <li class="mobile-only-cta"><a href="#contact" class="btn-primary" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Hire Me</a></li>
   </ul>
   <div class="nav-right">
+    <a href="#" class="nav-cta nav-signin" id="navSigninBtn">Sign In</a>
+    <div class="nav-account hidden" id="navAccount">
+      <span class="nav-account-name" id="navAccountName">Student</span>
+      <a href="#" class="nav-logout" id="navLogoutBtn" title="Log out">Logout</a>
+    </div>
     <a href="#contact" class="nav-cta">Hire Me</a>
     <div class="hamburger" id="hamburger">
       <div class="bar"></div>
@@ -1075,6 +1081,67 @@
     </div>
   </div>
 </footer>
+
+<!-- AUTH MODAL (Sign In / Sign Up) -->
+<div class="auth-overlay" id="authOverlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-box">
+    <button class="auth-close" id="authClose" aria-label="Close">✕</button>
+    <div class="auth-brand">
+      <div class="auth-logo">Haseeb<span>.</span></div>
+      <p class="auth-sub" id="authTitle">Student Portal</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="authTabSignin" type="button">Sign In</button>
+      <button class="auth-tab" id="authTabSignup" type="button">Sign Up</button>
+    </div>
+
+    <form class="auth-form" id="authFormSignin" autocomplete="on" novalidate>
+      <div class="fg">
+        <label for="siEmail">Email</label>
+        <input id="siEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="fg">
+        <label for="siPassword">Password</label>
+        <input id="siPassword" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+      </div>
+      <div class="auth-err" id="authErrSignin" role="alert"></div>
+      <button type="submit" class="auth-submit">Sign In →</button>
+      <p class="auth-switch">New here? <a href="#" id="authToSignup">Create an account</a></p>
+    </form>
+
+    <form class="auth-form hidden" id="authFormSignup" autocomplete="on" novalidate>
+      <div class="fg">
+        <label for="suName">Full Name</label>
+        <input id="suName" name="name" type="text" autocomplete="name" placeholder="John Doe" required>
+      </div>
+      <div class="fg">
+        <label for="suEmail">Email</label>
+        <input id="suEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="fg">
+        <label for="suPhone">WhatsApp Number <span class="auth-opt">(optional)</span></label>
+        <input id="suPhone" name="phone" type="tel" autocomplete="tel" placeholder="03XX XXXXXXX">
+      </div>
+      <div class="form-row">
+        <div class="fg">
+          <label for="suPassword">Password</label>
+          <input id="suPassword" name="password" type="password" autocomplete="new-password" placeholder="Min 8 chars" required minlength="8">
+        </div>
+        <div class="fg">
+          <label for="suPassword2">Confirm</label>
+          <input id="suPassword2" name="password2" type="password" autocomplete="new-password" placeholder="Repeat password" required minlength="8">
+        </div>
+      </div>
+      <label class="auth-check">
+        <input type="checkbox" required>
+        <span>I agree to the <a href="assets/terms.html" target="_blank">Terms</a> &amp; <a href="assets/privacy.html" target="_blank">Privacy Policy</a>.</span>
+      </label>
+      <div class="auth-err" id="authErrSignup" role="alert"></div>
+      <button type="submit" class="auth-submit">Create Account →</button>
+      <p class="auth-switch">Already a student? <a href="#" id="authToSignin">Sign in</a></p>
+    </form>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" onerror="window.gsap={to:()=>{},set:()=>{},from:()=>{}};window.ScrollTrigger={create:()=>{},refresh:()=>{}};console.warn('GSAP failed to load — animations disabled')"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" onerror="window.ScrollTrigger=window.ScrollTrigger||{create:()=>{},refresh:()=>{}}"></script>

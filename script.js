@@ -84,25 +84,59 @@ requestAnimationFrame(raf)
 /* ── GSAP ── */
 gsap.registerPlugin(ScrollTrigger);
 
-// Sync Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update)
-gsap.ticker.add((time)=>{
-  lenis.raf(time * 1000)
-})
-gsap.ticker.lagSmoothing(0)
+const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Sync Lenis with GSAP ScrollTrigger via scrollerProxy (prevents stuck-invisible elements)
+ScrollTrigger.scrollerProxy(document.body, {
+  scrollTop(value) {
+    return arguments.length ? lenis.scrollTo(value, { immediate: true }) : window.scrollY;
+  },
+  getBoundingClientRect() {
+    return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+  },
+  pinType: document.body.style.transform ? "transform" : "fixed"
+});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time)=>{ lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// Refresh ScrollTrigger after layout settles (prevents misfires on slow connections)
+window.addEventListener('load', () => { ScrollTrigger.refresh(); });
+setTimeout(() => ScrollTrigger.refresh(), 600);
+
+// Safety net: any element targeted by an animation that ends up stuck invisible after 3s gets forced visible
+function safetyShow(selector) {
+  setTimeout(() => {
+    document.querySelectorAll(selector).forEach(el => {
+      const cs = getComputedStyle(el);
+      if (parseFloat(cs.opacity) < 0.05 && el.offsetParent !== null) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      }
+    });
+  }, 3000);
+}
 
 // Initial states for scrub animations
 gsap.set('.hero-eyebrow,.hero-sub,.hero-desc,.hero-btns,.scroll-hint', { opacity:0, y:30 });
 gsap.set('.hero-name .word', { opacity:0, y:50 });
 
-// Hero timeline (Entrance)
-const htl = gsap.timeline({ defaults:{ ease:'power4.out' } });
-htl.to('.hero-eyebrow',     { opacity:1, y:0, duration:1, delay:0.2 })
-   .to('.hero-name .word',  { opacity:1, y:0, duration:1.2, stagger:0.15 }, '-=0.6')
-   .to('.hero-sub',         { opacity:1, y:0, duration:1 }, '-=0.8')
-   .to('.hero-desc',        { opacity:1, y:0, duration:1 }, '-=0.8')
-   .to('.hero-btns',        { opacity:1, y:0, duration:1 }, '-=0.8')
-   .to('.scroll-hint',      { opacity:1, y:0, duration:1 }, '-=0.5');
+if (REDUCE_MOTION) {
+  // Skip all entrance/scrub animations — show everything immediately
+  gsap.set('.hero-eyebrow,.hero-sub,.hero-desc,.hero-btns,.scroll-hint,.hero-name .word,.hero-badge,.orb,.wa-btn',
+    { opacity:1, y:0, scale:1, clearProps: 'transform' });
+}
+
+// Hero timeline (Entrance) — skipped if reduced motion
+if (!REDUCE_MOTION) {
+  const htl = gsap.timeline({ defaults:{ ease:'power4.out' } });
+  htl.to('.hero-eyebrow',     { opacity:1, y:0, duration:1, delay:0.2 })
+     .to('.hero-name .word',  { opacity:1, y:0, duration:1.2, stagger:0.15 }, '-=0.6')
+     .to('.hero-sub',         { opacity:1, y:0, duration:1 }, '-=0.8')
+     .to('.hero-desc',        { opacity:1, y:0, duration:1 }, '-=0.8')
+     .to('.hero-btns',        { opacity:1, y:0, duration:1 }, '-=0.8')
+     .to('.scroll-hint',      { opacity:1, y:0, duration:1 }, '-=0.5');
+}
 
 // Hero Scrub (Parallax Out)
 gsap.to('.hero-content', {
@@ -182,6 +216,9 @@ gsap.from('.founding-badge', {
 gsap.set('.wa-btn', { opacity:0, y:20, scale:0.85 });
 gsap.to('.wa-btn', { opacity:1, y:0, scale:1, duration:0.7, delay:1.8, ease:'back.out(1.5)' });
 
+// Safety nets — force visible if scroll triggers misfire
+['.card-main', '.card-sub', '.about-txt', '#curTA', '#curFA', '.pkg-card', '.founding-badge'].forEach(safetyShow);
+
 /* ── NAV SCROLL ── */
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
@@ -214,9 +251,13 @@ document.querySelectorAll('.card-main').forEach(card => {
 // Smooth anchor scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (!href || href === '#' || href.length < 2) return; // ignore bare # (used by buttons)
+    let t = null;
+    try { t = document.querySelector(href); } catch { return; }
+    if (!t) return;
     e.preventDefault();
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 76, behavior:'smooth' });
+    window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 76, behavior:'smooth' });
   });
 });
 
@@ -340,7 +381,7 @@ document.querySelectorAll('.s-title').forEach(el => {
 /* -- BACK TO TOP -- */
 const backToTop = document.createElement('button');
 backToTop.id = 'backToTop';
-backToTop.innerHTML = '?';
+backToTop.innerHTML = '↑';
 backToTop.setAttribute('aria-label', 'Back to top');
 document.body.appendChild(backToTop);
 
@@ -438,3 +479,149 @@ async function fetchTickerData() {
 
 fetchTickerData();
 setInterval(fetchTickerData, 60000); // Refresh every minute
+
+/* ── STUDENT AUTH (localStorage — frontend-only) ──
+   NOTE: this is client-side only for demo/UX. For real student accounts,
+   wire submit handlers to a backend API (e.g. server.js + bcrypt + JWT). */
+(function authModule() {
+  const USERS_KEY    = 'hz_users';
+  const SESSION_KEY  = 'hz_session';
+
+  const $ = (s, r=document) => r.querySelector(s);
+  const overlay   = $('#authOverlay');
+  if (!overlay) return;
+
+  const tabSignin = $('#authTabSignin');
+  const tabSignup = $('#authTabSignup');
+  const formSignin= $('#authFormSignin');
+  const formSignup= $('#authFormSignup');
+  const errSignin = $('#authErrSignin');
+  const errSignup = $('#authErrSignup');
+  const navSignin = $('#navSigninBtn');
+  const navAccount= $('#navAccount');
+  const navAccountName = $('#navAccountName');
+  const navLogout = $('#navLogoutBtn');
+
+  function readUsers() {
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function writeUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+  function readSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+    catch { return null; }
+  }
+
+  // Lightweight client-side hash (NOT cryptographically secure — placeholder until backend)
+  async function hash(str) {
+    if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+    let h = 0; for (let i=0;i<str.length;i++) { h = ((h<<5)-h) + str.charCodeAt(i); h |= 0; }
+    return String(h);
+  }
+
+  function showOverlay(tab='signin') {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTab(tab);
+    setTimeout(() => $('#'+(tab==='signup'?'suEmail':'siEmail'))?.focus(), 80);
+  }
+  function hideOverlay() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    errSignin.textContent = ''; errSignup.textContent = '';
+    formSignin.reset(); formSignup.reset();
+  }
+  function setTab(tab) {
+    const isSignup = tab === 'signup';
+    tabSignin.classList.toggle('active', !isSignup);
+    tabSignup.classList.toggle('active',  isSignup);
+    formSignin.classList.toggle('hidden',  isSignup);
+    formSignup.classList.toggle('hidden', !isSignup);
+  }
+
+  function refreshNav() {
+    const sess = readSession();
+    if (sess && sess.email) {
+      navSignin?.classList.add('hidden');
+      navAccount?.classList.remove('hidden');
+      navAccountName.textContent = sess.name || sess.email.split('@')[0];
+    } else {
+      navSignin?.classList.remove('hidden');
+      navAccount?.classList.add('hidden');
+    }
+  }
+
+  // Event wiring
+  navSignin?.addEventListener('click', e => { e.preventDefault(); showOverlay('signin'); });
+  document.getElementById('mobileSignin')?.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('hamburger')?.classList.remove('active');
+    document.getElementById('navLinks')?.classList.remove('active');
+    showOverlay('signin');
+  });
+  navLogout?.addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem(SESSION_KEY);
+    refreshNav();
+  });
+  $('#authClose')?.addEventListener('click', hideOverlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) hideOverlay(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) hideOverlay(); });
+  tabSignin.addEventListener('click', () => setTab('signin'));
+  tabSignup.addEventListener('click', () => setTab('signup'));
+  $('#authToSignup')?.addEventListener('click', e => { e.preventDefault(); setTab('signup'); });
+  $('#authToSignin')?.addEventListener('click', e => { e.preventDefault(); setTab('signin'); });
+
+  formSignup.addEventListener('submit', async e => {
+    e.preventDefault();
+    errSignup.textContent = '';
+    const fd = new FormData(formSignup);
+    const name  = (fd.get('name')||'').toString().trim();
+    const email = (fd.get('email')||'').toString().trim().toLowerCase();
+    const phone = (fd.get('phone')||'').toString().trim();
+    const pw    = (fd.get('password')||'').toString();
+    const pw2   = (fd.get('password2')||'').toString();
+
+    if (name.length < 2)                          return errSignup.textContent = 'Enter your full name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return errSignup.textContent = 'Enter a valid email.';
+    if (phone && !/^[\d\s+()-]{7,}$/.test(phone)) return errSignup.textContent = 'Enter a valid phone number.';
+    if (pw.length < 8)                             return errSignup.textContent = 'Password must be 8+ characters.';
+    if (pw !== pw2)                                return errSignup.textContent = 'Passwords do not match.';
+    const termsBox = formSignup.querySelector('.auth-check input[type="checkbox"]');
+    if (termsBox && !termsBox.checked)             return errSignup.textContent = 'Please accept Terms & Privacy.';
+
+    const users = readUsers();
+    if (users[email]) return errSignup.textContent = 'An account with this email already exists.';
+
+    const ph = await hash(pw);
+    users[email] = { name, email, phone, ph, createdAt: Date.now() };
+    writeUsers(users);
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ email, name, loginAt: Date.now() }));
+    refreshNav();
+    hideOverlay();
+    alert('Account created. Welcome, ' + name + '!');
+  });
+
+  formSignin.addEventListener('submit', async e => {
+    e.preventDefault();
+    errSignin.textContent = '';
+    const fd = new FormData(formSignin);
+    const email = (fd.get('email')||'').toString().trim().toLowerCase();
+    const pw    = (fd.get('password')||'').toString();
+    if (!email || !pw) return errSignin.textContent = 'Email and password required.';
+    const users = readUsers();
+    const user = users[email];
+    if (!user) return errSignin.textContent = 'No account with that email.';
+    const ph = await hash(pw);
+    if (ph !== user.ph) return errSignin.textContent = 'Incorrect password.';
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ email, name: user.name, loginAt: Date.now() }));
+    refreshNav();
+    hideOverlay();
+  });
+
+  refreshNav();
+  window.HZAuth = { showOverlay, hideOverlay, refreshNav, readSession };
+})();
