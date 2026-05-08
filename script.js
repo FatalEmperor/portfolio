@@ -89,43 +89,51 @@ document.addEventListener('visibilitychange', () => {
 
 startLoop();
 
-/* ── SMOOTH SCROLL (LENIS) ── */
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  direction: 'vertical',
-  gestureDirection: 'vertical',
-  smooth: true,
-  mouseMultiplier: 1,
-  smoothTouch: false,
-  touchMultiplier: 2,
-  infinite: false,
-})
+/* ── SMOOTH SCROLL (LENIS) ──
+   Desktop only. iOS Safari already has best-in-class native momentum
+   scroll, and Lenis hooking touch/wheel events on top of it makes the
+   page feel unresponsive. Touch devices get native scroll. */
+let lenis = null;
+if (!IS_TOUCH && typeof Lenis !== 'undefined') {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+    infinite: false,
+  });
 
-function raf(time) {
-  lenis.raf(time)
-  requestAnimationFrame(raf)
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
 }
-requestAnimationFrame(raf)
 
 /* ── GSAP ── */
 gsap.registerPlugin(ScrollTrigger);
 
 const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Sync Lenis with GSAP ScrollTrigger via scrollerProxy (prevents stuck-invisible elements)
-ScrollTrigger.scrollerProxy(document.body, {
-  scrollTop(value) {
-    return arguments.length ? lenis.scrollTo(value, { immediate: true }) : window.scrollY;
-  },
-  getBoundingClientRect() {
-    return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
-  },
-  pinType: document.body.style.transform ? "transform" : "fixed"
-});
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time)=>{ lenis.raf(time * 1000); });
-gsap.ticker.lagSmoothing(0);
+if (lenis) {
+  // Sync Lenis with GSAP ScrollTrigger via scrollerProxy (prevents stuck-invisible elements)
+  ScrollTrigger.scrollerProxy(document.body, {
+    scrollTop(value) {
+      return arguments.length ? lenis.scrollTo(value, { immediate: true }) : window.scrollY;
+    },
+    getBoundingClientRect() {
+      return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+    },
+    pinType: document.body.style.transform ? "transform" : "fixed"
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+}
 
 // Refresh ScrollTrigger after layout settles (prevents misfires on slow connections)
 window.addEventListener('load', () => { ScrollTrigger.refresh(); });

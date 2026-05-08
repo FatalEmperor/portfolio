@@ -3,6 +3,9 @@
 (function () {
   if (typeof Lenis === 'undefined') return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Skip on touch devices — iOS native momentum scroll is better than Lenis,
+  // and Lenis hooks make the page feel unresponsive on iPhone/Android.
+  if (window.matchMedia('(pointer: coarse)').matches) return;
 
   const lenis = new Lenis({
     duration: 1.1,

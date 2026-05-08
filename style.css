@@ -177,7 +177,9 @@ input, select, textarea, button { font-family: inherit; }
 
     /* ── HERO ── */
     #hero {
-      position: relative; min-height: 100vh;
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh; /* iOS Safari: small viewport height excludes URL bar — prevents the hero re-flowing as the bar shows/hides */
       display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
     #hero-canvas { position: absolute; inset: 0; z-index: 0; }
@@ -712,7 +714,7 @@ input, select, textarea, button { font-family: inherit; }
       opacity: 0; pointer-events: none;
       transition: opacity 0.35s ease;
     }
-    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox.open { opacity: 1; pointer-events: auto; }
     .lb-inner {
       position: relative; max-width: 94vw; max-height: 90vh;
       border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
@@ -942,7 +944,7 @@ input, select, textarea, button { font-family: inherit; }
       opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
       padding: 1rem;
     }
-    .popup-overlay.open { opacity: 1; pointer-events: all; }
+    .popup-overlay.open { opacity: 1; pointer-events: auto; }
     .popup-box {
       background: var(--bg2); border: 1px solid rgba(249,115,22,0.25);
       border-radius: 20px; max-width: 520px; width: 100%;
