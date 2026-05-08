@@ -290,29 +290,39 @@
           </div>
         </div>
 
-        <button type="button" class="calc-fee-toggle" id="plFeeToggle">▸ Adjust brokerage &amp; fees</button>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="plBrok">Broker commission per side <span class="calc-hint">— typical retail: 0.15%</span></label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="plBrok" type="number" inputmode="decimal" min="0" max="5" step="0.01" value="0.15" required>
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="plBrokMin">Min commission per trade <span class="calc-hint">— PKR, optional</span></label>
+            <div class="calc-input-wrap has-prefix">
+              <span class="calc-prefix">PKR</span>
+              <input id="plBrokMin" type="number" inputmode="decimal" min="0" step="any" value="0">
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="calc-fee-toggle" id="plFeeToggle">▸ Adjust government &amp; exchange fees</button>
         <div class="calc-fees" id="plFees">
           <div class="calc-row">
             <div class="calc-fg">
-              <label for="plBrok">Brokerage per side</label>
-              <div class="calc-input-wrap has-suffix">
-                <input id="plBrok" type="number" inputmode="decimal" min="0" max="5" step="0.01" value="0.15">
-                <span class="calc-suffix">%</span>
-              </div>
-            </div>
-            <div class="calc-fg">
-              <label for="plFed">FED on brokerage</label>
+              <label for="plFed">FED on commission</label>
               <div class="calc-input-wrap has-suffix">
                 <input id="plFed" type="number" inputmode="decimal" min="0" max="100" step="1" value="16">
                 <span class="calc-suffix">%</span>
               </div>
             </div>
-          </div>
-          <div class="calc-fg" style="margin-top:0.6rem">
-            <label for="plSecp">SECP / CDC charges per side <span class="calc-hint">— typically negligible</span></label>
-            <div class="calc-input-wrap has-suffix">
-              <input id="plSecp" type="number" inputmode="decimal" min="0" max="1" step="0.0001" value="0.0001">
-              <span class="calc-suffix">%</span>
+            <div class="calc-fg">
+              <label for="plSecp">SECP / CDC per side <span class="calc-hint">— negligible</span></label>
+              <div class="calc-input-wrap has-suffix">
+                <input id="plSecp" type="number" inputmode="decimal" min="0" max="1" step="0.0001" value="0.0001">
+                <span class="calc-suffix">%</span>
+              </div>
             </div>
           </div>
         </div>
@@ -320,7 +330,8 @@
 
       <div class="calc-results" id="plResults" aria-live="polite">
         <div class="calc-result-row"><span class="calc-result-label">Gross P&amp;L</span><span class="calc-result-value" id="plGross">—</span></div>
-        <div class="calc-result-row"><span class="calc-result-label">Total brokerage + FED</span><span class="calc-result-value" id="plBrokTotal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Broker commission (both sides)</span><span class="calc-result-value" id="plBrokOnly">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">FED on commission</span><span class="calc-result-value" id="plFedTotal">—</span></div>
         <div class="calc-result-row"><span class="calc-result-label">SECP / CDC fees</span><span class="calc-result-value" id="plSecpTotal">—</span></div>
         <div class="calc-result-row"><span class="calc-result-label">Capital Gains Tax</span><span class="calc-result-value" id="plCgt">—</span></div>
         <div class="calc-result-row"><span class="calc-result-label">Effective return on capital</span><span class="calc-result-value" id="plReturn">—</span></div>
@@ -392,38 +403,42 @@
     const sh     = num('plShares');
     const cgtPct = parseFloat(document.getElementById('plFiler').value);
     const brok   = num('plBrok');
+    const brokMin = num('plBrokMin');
     const fedPct = num('plFed');
     const secp   = num('plSecp');
 
     if (![buy, sell, sh, cgtPct, brok, fedPct, secp].every(Number.isFinite) || buy <= 0 || sell <= 0 || sh <= 0) {
-      ['plGross','plBrokTotal','plSecpTotal','plCgt','plReturn','plNet'].forEach(id => setText(id, '—'));
+      ['plGross','plBrokOnly','plFedTotal','plSecpTotal','plCgt','plReturn','plNet'].forEach(id => setText(id, '—'));
       return;
     }
+
+    const minComm = Number.isFinite(brokMin) && brokMin > 0 ? brokMin : 0;
 
     const buyValue   = buy  * sh;
     const sellValue  = sell * sh;
     const gross      = sellValue - buyValue;
 
-    // Brokerage applies on each side (% of trade value), FED applies on top of brokerage.
-    const brokBuy    = buyValue  * (brok / 100);
-    const brokSell   = sellValue * (brok / 100);
+    // Broker commission per side: max(% of trade value, per-trade minimum).
+    const brokBuy    = Math.max(buyValue  * (brok / 100), minComm);
+    const brokSell   = Math.max(sellValue * (brok / 100), minComm);
     const brokTotal  = brokBuy + brokSell;
     const fedTotal   = brokTotal * (fedPct / 100);
     const secpTotal  = (buyValue + sellValue) * (secp / 100);
 
-    // CGT applies on net gain only (after brokerage, FED, SECP). No CGT on losses.
+    // CGT applies on net gain only (after costs). No CGT on losses.
     const taxableGain = gross - brokTotal - fedTotal - secpTotal;
     const cgt = taxableGain > 0 ? taxableGain * (cgtPct / 100) : 0;
 
     const net = gross - brokTotal - fedTotal - secpTotal - cgt;
     const ret = (net / buyValue) * 100;
 
-    setVal('plGross',     PKR(gross),               { pos: gross > 0, neg: gross < 0 });
-    setText('plBrokTotal', PKR(brokTotal + fedTotal));
+    setVal('plGross',     PKR(gross),            { pos: gross > 0, neg: gross < 0 });
+    setText('plBrokOnly',  PKR(brokTotal));
+    setText('plFedTotal',  PKR(fedTotal));
     setText('plSecpTotal', PKR(secpTotal));
     setText('plCgt',       PKR(cgt));
-    setVal('plReturn',     ret.toFixed(2) + '%',    { pos: ret > 0, neg: ret < 0 });
-    setVal('plNet',        PKR(net),                { pos: net > 0, neg: net < 0 });
+    setVal('plReturn',     ret.toFixed(2) + '%', { pos: ret > 0, neg: ret < 0 });
+    setVal('plNet',        PKR(net),             { pos: net > 0, neg: net < 0 });
   }
   document.getElementById('plForm').addEventListener('input', calcPL);
   calcPL();
