@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIP Calculator — Monthly Investment Growth | Haseeb Zahid</title>
+  <meta name="description" content="Calculate the future value of a Systematic Investment Plan (SIP). Monthly contribution + expected annual return → final portfolio value, total invested, and total gain.">
+  <link rel="canonical" href="https://haseebzahid.com/calc-sip.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calc.css">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li class="has-dropdown">
+      <a href="calculators.html">Calculators</a>
+      <ul class="nav-dropdown">
+        <li><a href="calc-position-size.html">Position Size <small>Risk-based share count</small></a></li>
+        <li><a href="calc-pnl.html">P&amp;L with Charges <small>After brokerage, FED, CGT</small></a></li>
+        <li><a href="calc-compound.html">Compound Growth <small>Lump-sum projection</small></a></li>
+        <li><a href="calc-sip.html">SIP Calculator <small>Monthly investment growth</small></a></li>
+        <li><a href="calc-zakat.html">Zakat Calculator <small>2.5% on net assets</small></a></li>
+        <li><a href="calc-dividend.html">Dividend Yield <small>Yield &amp; income</small></a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <a href="calculators.html" class="calc-back">← All calculators</a>
+  <div class="calc-hero">
+    <p class="s-label">04 · Long-Term Investing</p>
+    <h1>SIP Calculator</h1>
+    <p>Project the future value of a monthly Systematic Investment Plan. Useful for planning regular PSX, mutual fund, or savings contributions over years.</p>
+  </div>
+
+  <div class="calc-single">
+    <section class="calc-card" aria-labelledby="sipTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">Inputs</div>
+        <h2 id="sipTitle">Plan your monthly investment</h2>
+      </div>
+      <form class="calc-form" id="sipForm" autocomplete="off" novalidate>
+        <div class="calc-fg">
+          <label for="sipMonthly">Monthly contribution</label>
+          <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+            <input id="sipMonthly" type="number" inputmode="decimal" min="0" step="any" value="25000" required></div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="sipRate">Expected annual return</label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="sipRate" type="number" inputmode="decimal" min="-50" max="200" step="0.1" value="18" required>
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="sipYears">Investment period</label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="sipYears" type="number" inputmode="numeric" min="1" max="60" step="1" value="15" required>
+              <span class="calc-suffix">yrs</span>
+            </div>
+          </div>
+        </div>
+        <div class="calc-fg">
+          <label for="sipStepUp">Annual step-up <span class="calc-hint">— optional, raise contribution each year</span></label>
+          <div class="calc-input-wrap has-suffix">
+            <input id="sipStepUp" type="number" inputmode="decimal" min="0" max="100" step="0.5" value="0">
+            <span class="calc-suffix">%</span>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="sipResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Total invested</span><span class="calc-result-value" id="sipInvested">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Total gain</span><span class="calc-result-value" id="sipGain">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Effective multiple</span><span class="calc-result-value" id="sipMultiple">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Future value</span>
+          <span class="calc-result-value" id="sipFuture">—</span>
+        </div>
+      </div>
+
+      <div class="calc-table-wrap" id="sipTableWrap" hidden>
+        <table class="calc-table" id="sipTable">
+          <thead><tr><th>Year</th><th>Invested (cum.)</th><th>End balance</th><th>Gain</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <p class="calc-disclaimer">
+    Future value of a SIP = PMT × [((1+i)<sup>n</sup> − 1) / i] × (1+i), where i is the monthly rate and n is months. Step-up adjusts the monthly contribution upward each year. Past returns are not indicative of future performance.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR0 = (n) => 'PKR ' + Math.round(n).toLocaleString('en-PK');
+  const num  = (id) => parseFloat(document.getElementById(id).value);
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  function calc() {
+    const PMT0 = num('sipMonthly');
+    const annualRate = num('sipRate') / 100;
+    const years = Math.floor(num('sipYears'));
+    const stepUp = (num('sipStepUp') || 0) / 100;
+
+    if (![PMT0, annualRate, years].every(Number.isFinite) || PMT0 < 0 || years <= 0) {
+      ['sipInvested','sipGain','sipMultiple','sipFuture'].forEach(id => setText(id, '—'));
+      document.querySelector('#sipTable tbody').innerHTML = '';
+      document.getElementById('sipTableWrap').hidden = true;
+      return;
+    }
+
+    const i = annualRate / 12;
+    let balance = 0;
+    let invested = 0;
+    let monthly = PMT0;
+    let rows = '';
+
+    for (let y = 1; y <= years; y++) {
+      for (let m = 0; m < 12; m++) {
+        balance = balance * (1 + i) + monthly;
+        invested += monthly;
+      }
+      rows += `<tr><td>${y}</td><td>${PKR0(invested)}</td><td>${PKR0(balance)}</td><td>${PKR0(balance - invested)}</td></tr>`;
+      monthly *= (1 + stepUp);
+    }
+
+    setText('sipInvested', PKR0(invested));
+    setText('sipGain', PKR0(balance - invested));
+    setText('sipMultiple', invested > 0 ? (balance / invested).toFixed(2) + 'x' : '—');
+    setText('sipFuture', PKR0(balance));
+    document.querySelector('#sipTable tbody').innerHTML = rows;
+    document.getElementById('sipTableWrap').hidden = years < 1;
+  }
+  document.getElementById('sipForm').addEventListener('input', calc);
+  calc();
+})();
+</script>
+
+</body>
+</html>

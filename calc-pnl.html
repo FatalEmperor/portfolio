@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P&amp;L with PSX Charges Calculator | Haseeb Zahid</title>
+  <meta name="description" content="Calculate real take-home P&L on PSX trades after broker commission, FED, SECP/CDC fees, and Capital Gains Tax. Filer or non-filer toggle.">
+  <link rel="canonical" href="https://haseebzahid.com/calc-pnl.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calc.css">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li class="has-dropdown">
+      <a href="calculators.html">Calculators</a>
+      <ul class="nav-dropdown">
+        <li><a href="calc-position-size.html">Position Size <small>Risk-based share count</small></a></li>
+        <li><a href="calc-pnl.html">P&amp;L with Charges <small>After brokerage, FED, CGT</small></a></li>
+        <li><a href="calc-compound.html">Compound Growth <small>Lump-sum projection</small></a></li>
+        <li><a href="calc-sip.html">SIP Calculator <small>Monthly investment growth</small></a></li>
+        <li><a href="calc-zakat.html">Zakat Calculator <small>2.5% on net assets</small></a></li>
+        <li><a href="calc-dividend.html">Dividend Yield <small>Yield &amp; income</small></a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <a href="calculators.html" class="calc-back">← All calculators</a>
+  <div class="calc-hero">
+    <p class="s-label">02 · After-Cost P&amp;L</p>
+    <h1>P&amp;L with PSX<br>Charges Calculator</h1>
+    <p>Your real take-home after broker commission, FED, exchange fees, and Capital Gains Tax — the way honest trade reviews should look.</p>
+  </div>
+
+  <div class="calc-single">
+    <section class="calc-card" aria-labelledby="plTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">Inputs</div>
+        <h2 id="plTitle">Calculate your net trade outcome</h2>
+      </div>
+      <form class="calc-form" id="plForm" autocomplete="off" novalidate>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="plBuy">Buy price</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="plBuy" type="number" inputmode="decimal" min="0" step="any" value="100" required></div>
+          </div>
+          <div class="calc-fg">
+            <label for="plSell">Sell price</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="plSell" type="number" inputmode="decimal" min="0" step="any" value="115" required></div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="plShares">Number of shares</label>
+            <div class="calc-input-wrap"><input id="plShares" type="number" inputmode="numeric" min="1" step="1" value="500" required></div>
+          </div>
+          <div class="calc-fg">
+            <label for="plFiler">Tax status (CGT)</label>
+            <div class="calc-input-wrap">
+              <select id="plFiler">
+                <option value="15">Filer (15%)</option>
+                <option value="30">Non-filer (30%)</option>
+                <option value="0">Skip CGT</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="plBrok">Broker commission per side <span class="calc-hint">— typical retail: 0.15%</span></label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="plBrok" type="number" inputmode="decimal" min="0" max="5" step="0.01" value="0.15" required>
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="plBrokMin">Min commission per trade <span class="calc-hint">— PKR, optional</span></label>
+            <div class="calc-input-wrap has-prefix">
+              <span class="calc-prefix">PKR</span>
+              <input id="plBrokMin" type="number" inputmode="decimal" min="0" step="any" value="0">
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="calc-fee-toggle" id="plFeeToggle">▸ Adjust government &amp; exchange fees</button>
+        <div class="calc-fees" id="plFees">
+          <div class="calc-row">
+            <div class="calc-fg">
+              <label for="plFed">FED on commission</label>
+              <div class="calc-input-wrap has-suffix">
+                <input id="plFed" type="number" inputmode="decimal" min="0" max="100" step="1" value="16">
+                <span class="calc-suffix">%</span>
+              </div>
+            </div>
+            <div class="calc-fg">
+              <label for="plSecp">SECP / CDC per side</label>
+              <div class="calc-input-wrap has-suffix">
+                <input id="plSecp" type="number" inputmode="decimal" min="0" max="1" step="0.0001" value="0.0001">
+                <span class="calc-suffix">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="plResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Gross P&amp;L</span><span class="calc-result-value" id="plGross">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Broker commission (both sides)</span><span class="calc-result-value" id="plBrokOnly">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">FED on commission</span><span class="calc-result-value" id="plFedTotal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">SECP / CDC fees</span><span class="calc-result-value" id="plSecpTotal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Capital Gains Tax</span><span class="calc-result-value" id="plCgt">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Effective return on capital</span><span class="calc-result-value" id="plReturn">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Net P&amp;L</span>
+          <span class="calc-result-value" id="plNet">—</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="calc-disclaimer">
+    Estimates only. PSX brokerage and tax rates change over time and vary by broker, asset type, and holding period. CGT applied to net gains after costs; no CGT on losses. Confirm with your broker statement and consult a qualified tax advisor.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR = (n) => 'PKR ' + (Math.round(n * 100) / 100).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num = (id) => parseFloat(document.getElementById(id).value);
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const setVal = (id, v, opts = {}) => {
+    const el = document.getElementById(id); if (!el) return;
+    el.textContent = v;
+    el.classList.toggle('calc-pos', !!opts.pos);
+    el.classList.toggle('calc-neg', !!opts.neg);
+  };
+
+  document.getElementById('plFeeToggle').addEventListener('click', () => {
+    const fees = document.getElementById('plFees');
+    const btn  = document.getElementById('plFeeToggle');
+    const open = fees.classList.toggle('show');
+    btn.textContent = (open ? '▾' : '▸') + ' Adjust government & exchange fees';
+  });
+
+  function calc() {
+    const buy = num('plBuy'), sell = num('plSell'), sh = num('plShares');
+    const cgtPct = parseFloat(document.getElementById('plFiler').value);
+    const brok = num('plBrok'), brokMin = num('plBrokMin'), fedPct = num('plFed'), secp = num('plSecp');
+
+    if (![buy, sell, sh, cgtPct, brok, fedPct, secp].every(Number.isFinite) || buy <= 0 || sell <= 0 || sh <= 0) {
+      ['plGross','plBrokOnly','plFedTotal','plSecpTotal','plCgt','plReturn','plNet'].forEach(id => setText(id, '—'));
+      return;
+    }
+    const minComm = Number.isFinite(brokMin) && brokMin > 0 ? brokMin : 0;
+    const buyValue = buy * sh, sellValue = sell * sh, gross = sellValue - buyValue;
+    const brokBuy  = Math.max(buyValue * (brok / 100), minComm);
+    const brokSell = Math.max(sellValue * (brok / 100), minComm);
+    const brokTotal = brokBuy + brokSell;
+    const fedTotal  = brokTotal * (fedPct / 100);
+    const secpTotal = (buyValue + sellValue) * (secp / 100);
+    const taxableGain = gross - brokTotal - fedTotal - secpTotal;
+    const cgt = taxableGain > 0 ? taxableGain * (cgtPct / 100) : 0;
+    const net = gross - brokTotal - fedTotal - secpTotal - cgt;
+    const ret = (net / buyValue) * 100;
+
+    setVal('plGross',     PKR(gross), { pos: gross > 0, neg: gross < 0 });
+    setText('plBrokOnly',  PKR(brokTotal));
+    setText('plFedTotal',  PKR(fedTotal));
+    setText('plSecpTotal', PKR(secpTotal));
+    setText('plCgt',       PKR(cgt));
+    setVal('plReturn',     ret.toFixed(2) + '%', { pos: ret > 0, neg: ret < 0 });
+    setVal('plNet',        PKR(net),  { pos: net > 0, neg: net < 0 });
+  }
+  document.getElementById('plForm').addEventListener('input', calc);
+  calc();
+})();
+</script>
+
+</body>
+</html>

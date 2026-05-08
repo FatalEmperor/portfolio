@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zakat Calculator — On Stocks, Cash &amp; Assets | Haseeb Zahid</title>
+  <meta name="description" content="Calculate Zakat on your cash, gold, silver, PSX stock holdings, mutual funds, and business assets. Compares to Nisab (silver standard) and computes 2.5%.">
+  <link rel="canonical" href="https://haseebzahid.com/calc-zakat.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calc.css">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li class="has-dropdown">
+      <a href="calculators.html">Calculators</a>
+      <ul class="nav-dropdown">
+        <li><a href="calc-position-size.html">Position Size <small>Risk-based share count</small></a></li>
+        <li><a href="calc-pnl.html">P&amp;L with Charges <small>After brokerage, FED, CGT</small></a></li>
+        <li><a href="calc-compound.html">Compound Growth <small>Lump-sum projection</small></a></li>
+        <li><a href="calc-sip.html">SIP Calculator <small>Monthly investment growth</small></a></li>
+        <li><a href="calc-zakat.html">Zakat Calculator <small>2.5% on net assets</small></a></li>
+        <li><a href="calc-dividend.html">Dividend Yield <small>Yield &amp; income</small></a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <a href="calculators.html" class="calc-back">← All calculators</a>
+  <div class="calc-hero">
+    <p class="s-label">05 · Zakat</p>
+    <h1>Zakat Calculator</h1>
+    <p>Sum your Zakatable assets — including PSX holdings — subtract your liabilities, compare to the Nisab threshold, and compute the 2.5% due.</p>
+  </div>
+
+  <div class="calc-single">
+    <section class="calc-card" aria-labelledby="zkTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">Inputs</div>
+        <h2 id="zkTitle">Calculate your Zakat</h2>
+        <p class="calc-card-sub">All values in PKR. Use the most recent fair-market value of each asset.</p>
+      </div>
+      <form class="calc-form" id="zkForm" autocomplete="off" novalidate>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="zkCash">Cash &amp; bank balance</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="zkCash" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+          </div>
+          <div class="calc-fg">
+            <label for="zkGold">Gold value <span class="calc-hint">— 22k+, current PKR price</span></label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="zkGold" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="zkSilver">Silver value</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="zkSilver" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+          </div>
+          <div class="calc-fg">
+            <label for="zkStocks">PSX stock holdings <span class="calc-hint">— current market value</span></label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="zkStocks" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="zkFunds">Mutual funds &amp; investments</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="zkFunds" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+          </div>
+          <div class="calc-fg">
+            <label for="zkBusiness">Business inventory &amp; receivables</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="zkBusiness" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+          </div>
+        </div>
+        <div class="calc-fg">
+          <label for="zkLiabilities">Debts &amp; short-term liabilities <span class="calc-hint">— amounts you owe within the year</span></label>
+          <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+            <input id="zkLiabilities" type="number" inputmode="decimal" min="0" step="any" value="0"></div>
+        </div>
+
+        <button type="button" class="calc-fee-toggle" id="zkNisabToggle">▸ Adjust Nisab threshold</button>
+        <div class="calc-fees" id="zkNisab">
+          <div class="calc-row">
+            <div class="calc-fg">
+              <label for="zkNisabType">Nisab basis</label>
+              <div class="calc-input-wrap">
+                <select id="zkNisabType">
+                  <option value="silver" selected>Silver (612.36g — recommended)</option>
+                  <option value="gold">Gold (87.48g)</option>
+                  <option value="custom">Custom PKR value</option>
+                </select>
+              </div>
+            </div>
+            <div class="calc-fg">
+              <label for="zkNisabPrice">Per-gram price <span class="calc-hint">— or full custom Nisab</span></label>
+              <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+                <input id="zkNisabPrice" type="number" inputmode="decimal" min="0" step="any" value="350"></div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="zkResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Total Zakatable assets</span><span class="calc-result-value" id="zkTotalAssets">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Less: liabilities</span><span class="calc-result-value" id="zkTotalLiab">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Net wealth</span><span class="calc-result-value" id="zkNet">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Nisab threshold</span><span class="calc-result-value" id="zkNisabValue">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Status</span><span class="calc-result-value" id="zkStatus">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Zakat due (2.5%)</span>
+          <span class="calc-result-value" id="zkDue">—</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="calc-disclaimer">
+    Zakat is due on net wealth held for one lunar year (Hawl) at or above Nisab. Silver-Nisab (612.36g) is generally preferred as it benefits more recipients. Per-gram price defaults are estimates — set your local market rate. This tool is educational; consult a qualified scholar for personal rulings.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR0 = (n) => 'PKR ' + Math.round(n).toLocaleString('en-PK');
+  const num  = (id) => parseFloat(document.getElementById(id).value) || 0;
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const setVal = (id, v, opts = {}) => {
+    const el = document.getElementById(id); if (!el) return;
+    el.textContent = v;
+    el.classList.toggle('calc-pos', !!opts.pos);
+    el.classList.toggle('calc-neg', !!opts.neg);
+  };
+
+  document.getElementById('zkNisabToggle').addEventListener('click', () => {
+    const fees = document.getElementById('zkNisab');
+    const btn  = document.getElementById('zkNisabToggle');
+    const open = fees.classList.toggle('show');
+    btn.textContent = (open ? '▾' : '▸') + ' Adjust Nisab threshold';
+  });
+
+  function calc() {
+    const cash = num('zkCash'), gold = num('zkGold'), silver = num('zkSilver'),
+          stocks = num('zkStocks'), funds = num('zkFunds'), business = num('zkBusiness'),
+          liab = num('zkLiabilities');
+    const nisabType = document.getElementById('zkNisabType').value;
+    const nisabPrice = num('zkNisabPrice');
+
+    const totalAssets = cash + gold + silver + stocks + funds + business;
+    const net = totalAssets - liab;
+
+    let nisab;
+    if (nisabType === 'silver')      nisab = nisabPrice * 612.36;
+    else if (nisabType === 'gold')   nisab = nisabPrice * 87.48;
+    else /* custom */                nisab = nisabPrice;
+
+    const dueAbove = net >= nisab;
+    const zakat = dueAbove ? net * 0.025 : 0;
+
+    setText('zkTotalAssets', PKR0(totalAssets));
+    setText('zkTotalLiab',   PKR0(liab));
+    setText('zkNet',         PKR0(net));
+    setText('zkNisabValue',  PKR0(nisab));
+    setVal('zkStatus',
+      dueAbove ? 'Above Nisab — Zakat due' : 'Below Nisab — no Zakat due',
+      { pos: dueAbove, neg: !dueAbove });
+    setText('zkDue', PKR0(zakat));
+  }
+  document.getElementById('zkForm').addEventListener('input', calc);
+  document.getElementById('zkForm').addEventListener('change', calc);
+  calc();
+})();
+</script>
+
+</body>
+</html>

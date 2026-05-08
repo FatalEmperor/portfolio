@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dividend Yield Calculator — PSX Stocks | Haseeb Zahid</title>
+  <meta name="description" content="Calculate dividend yield, expected annual income, after-tax income, and break-even years from stock price and annual dividend per share. Built for Pakistani investors.">
+  <link rel="canonical" href="https://haseebzahid.com/calc-dividend.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calc.css">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li class="has-dropdown">
+      <a href="calculators.html">Calculators</a>
+      <ul class="nav-dropdown">
+        <li><a href="calc-position-size.html">Position Size <small>Risk-based share count</small></a></li>
+        <li><a href="calc-pnl.html">P&amp;L with Charges <small>After brokerage, FED, CGT</small></a></li>
+        <li><a href="calc-compound.html">Compound Growth <small>Lump-sum projection</small></a></li>
+        <li><a href="calc-sip.html">SIP Calculator <small>Monthly investment growth</small></a></li>
+        <li><a href="calc-zakat.html">Zakat Calculator <small>2.5% on net assets</small></a></li>
+        <li><a href="calc-dividend.html">Dividend Yield <small>Yield &amp; income</small></a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <a href="calculators.html" class="calc-back">← All calculators</a>
+  <div class="calc-hero">
+    <p class="s-label">06 · Income Investing</p>
+    <h1>Dividend Yield<br>Calculator</h1>
+    <p>From price and annual dividend per share — yield %, expected annual income for your shareholding, after-tax income, and the break-even payback period.</p>
+  </div>
+
+  <div class="calc-single">
+    <section class="calc-card" aria-labelledby="dvTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">Inputs</div>
+        <h2 id="dvTitle">Calculate dividend yield</h2>
+      </div>
+      <form class="calc-form" id="dvForm" autocomplete="off" novalidate>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="dvPrice">Stock price</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="dvPrice" type="number" inputmode="decimal" min="0" step="any" value="100" required></div>
+          </div>
+          <div class="calc-fg">
+            <label for="dvDps">Annual dividend per share</label>
+            <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+              <input id="dvDps" type="number" inputmode="decimal" min="0" step="any" value="8" required></div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="dvShares">Number of shares</label>
+            <div class="calc-input-wrap"><input id="dvShares" type="number" inputmode="numeric" min="0" step="1" value="1000"></div>
+          </div>
+          <div class="calc-fg">
+            <label for="dvTax">Dividend withholding tax</label>
+            <div class="calc-input-wrap has-suffix">
+              <select id="dvTax">
+                <option value="15" selected>Filer (15%)</option>
+                <option value="30">Non-filer (30%)</option>
+                <option value="0">Skip tax</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="dvResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Total invested</span><span class="calc-result-value" id="dvInvested">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Annual dividend income (gross)</span><span class="calc-result-value" id="dvIncome">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Withholding tax on dividends</span><span class="calc-result-value" id="dvTaxAmt">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">After-tax annual income</span><span class="calc-result-value" id="dvAfter">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Break-even payback (price ÷ DPS)</span><span class="calc-result-value" id="dvPayback">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Dividend yield</span>
+          <span class="calc-result-value" id="dvYield">—</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="calc-disclaimer">
+    Dividend yield = annual DPS ÷ price. Withholding tax in Pakistan is typically 15% for filers and 30% for non-filers, deducted at source by the company. Yield is a snapshot — companies can cut, suspend, or grow dividends.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR = (n) => 'PKR ' + (Math.round(n * 100) / 100).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num = (id) => parseFloat(document.getElementById(id).value);
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  function calc() {
+    const price = num('dvPrice'), dps = num('dvDps'), sh = num('dvShares') || 0;
+    const taxPct = parseFloat(document.getElementById('dvTax').value);
+    if (![price, dps, taxPct].every(Number.isFinite) || price <= 0 || dps < 0) {
+      ['dvInvested','dvIncome','dvTaxAmt','dvAfter','dvPayback','dvYield'].forEach(id => setText(id, '—'));
+      return;
+    }
+    const yieldPct = (dps / price) * 100;
+    const invested = price * sh;
+    const incomeGross = dps * sh;
+    const tax = incomeGross * (taxPct / 100);
+    const incomeNet = incomeGross - tax;
+    const payback = dps > 0 ? price / dps : Infinity;
+
+    setText('dvInvested', PKR(invested));
+    setText('dvIncome',   PKR(incomeGross));
+    setText('dvTaxAmt',   PKR(tax));
+    setText('dvAfter',    PKR(incomeNet));
+    setText('dvPayback',  Number.isFinite(payback) ? payback.toFixed(1) + ' years' : '—');
+    setText('dvYield',    yieldPct.toFixed(2) + '%');
+  }
+  document.getElementById('dvForm').addEventListener('input', calc);
+  document.getElementById('dvForm').addEventListener('change', calc);
+  calc();
+})();
+</script>
+
+</body>
+</html>

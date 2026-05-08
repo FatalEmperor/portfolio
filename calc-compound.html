@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compound Growth Calculator | Haseeb Zahid</title>
+  <meta name="description" content="Project lump-sum investment growth at a chosen annual return, with year-by-year breakdown and inflation adjustment. Free tool for Pakistani investors.">
+  <link rel="canonical" href="https://haseebzahid.com/calc-compound.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calc.css">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li class="has-dropdown">
+      <a href="calculators.html">Calculators</a>
+      <ul class="nav-dropdown">
+        <li><a href="calc-position-size.html">Position Size <small>Risk-based share count</small></a></li>
+        <li><a href="calc-pnl.html">P&amp;L with Charges <small>After brokerage, FED, CGT</small></a></li>
+        <li><a href="calc-compound.html">Compound Growth <small>Lump-sum projection</small></a></li>
+        <li><a href="calc-sip.html">SIP Calculator <small>Monthly investment growth</small></a></li>
+        <li><a href="calc-zakat.html">Zakat Calculator <small>2.5% on net assets</small></a></li>
+        <li><a href="calc-dividend.html">Dividend Yield <small>Yield &amp; income</small></a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <a href="calculators.html" class="calc-back">← All calculators</a>
+  <div class="calc-hero">
+    <p class="s-label">03 · Long-Term Investing</p>
+    <h1>Compound Growth<br>Calculator</h1>
+    <p>Project the future value of a lump-sum investment at a chosen annual return. See the year-by-year breakdown, and the inflation-adjusted "real" value of your money.</p>
+  </div>
+
+  <div class="calc-single">
+    <section class="calc-card" aria-labelledby="cgTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">Inputs</div>
+        <h2 id="cgTitle">Project your investment</h2>
+      </div>
+      <form class="calc-form" id="cgForm" autocomplete="off" novalidate>
+        <div class="calc-fg">
+          <label for="cgPrincipal">Initial investment <span class="calc-hint">— lump sum (PKR)</span></label>
+          <div class="calc-input-wrap has-prefix"><span class="calc-prefix">PKR</span>
+            <input id="cgPrincipal" type="number" inputmode="decimal" min="0" step="any" value="500000" required></div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="cgRate">Expected annual return</label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="cgRate" type="number" inputmode="decimal" min="-50" max="200" step="0.1" value="18" required>
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="cgYears">Investment period</label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="cgYears" type="number" inputmode="numeric" min="1" max="60" step="1" value="10" required>
+              <span class="calc-suffix">yrs</span>
+            </div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="cgFreq">Compounding frequency</label>
+            <div class="calc-input-wrap">
+              <select id="cgFreq">
+                <option value="1">Annually</option>
+                <option value="2">Semi-annually</option>
+                <option value="4">Quarterly</option>
+                <option value="12" selected>Monthly</option>
+                <option value="365">Daily</option>
+              </select>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="cgInflation">Inflation rate <span class="calc-hint">— for real value</span></label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="cgInflation" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="12">
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="cgResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Total invested</span><span class="calc-result-value" id="cgInvested">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Total interest earned</span><span class="calc-result-value" id="cgInterest">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Real value (after inflation)</span><span class="calc-result-value" id="cgReal">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Future value</span>
+          <span class="calc-result-value" id="cgFuture">—</span>
+        </div>
+      </div>
+
+      <div class="calc-table-wrap" id="cgTableWrap" hidden>
+        <table class="calc-table" id="cgTable">
+          <thead><tr><th>Year</th><th>Start</th><th>Interest</th><th>End</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <p class="calc-disclaimer">
+    Future value = P × (1 + r/n)<sup>n·t</sup>. Real (inflation-adjusted) value divides by (1 + inflation)<sup>years</sup>. Returns shown are nominal — your purchasing power is the real value.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR0 = (n) => 'PKR ' + Math.round(n).toLocaleString('en-PK');
+  const num  = (id) => parseFloat(document.getElementById(id).value);
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  function calc() {
+    const P = num('cgPrincipal');
+    const r = num('cgRate') / 100;
+    const t = num('cgYears');
+    const n = parseFloat(document.getElementById('cgFreq').value);
+    const inf = (num('cgInflation') || 0) / 100;
+
+    if (![P, r, t, n].every(Number.isFinite) || P < 0 || t <= 0 || n <= 0) {
+      ['cgInvested','cgInterest','cgReal','cgFuture'].forEach(id => setText(id, '—'));
+      document.querySelector('#cgTable tbody').innerHTML = '';
+      document.getElementById('cgTableWrap').hidden = true;
+      return;
+    }
+
+    const FV = P * Math.pow(1 + r / n, n * t);
+    const interest = FV - P;
+    const real = inf > 0 ? FV / Math.pow(1 + inf, t) : FV;
+
+    setText('cgInvested', PKR0(P));
+    setText('cgInterest', PKR0(interest));
+    setText('cgReal', PKR0(real));
+    setText('cgFuture', PKR0(FV));
+
+    // Year-by-year table
+    const tbody = document.querySelector('#cgTable tbody');
+    let rows = '';
+    let bal = P;
+    const years = Math.min(Math.floor(t), 50);
+    for (let y = 1; y <= years; y++) {
+      const start = bal;
+      const end = P * Math.pow(1 + r / n, n * y);
+      const yearInterest = end - start;
+      rows += `<tr><td>${y}</td><td>${PKR0(start)}</td><td>${PKR0(yearInterest)}</td><td>${PKR0(end)}</td></tr>`;
+      bal = end;
+    }
+    tbody.innerHTML = rows;
+    document.getElementById('cgTableWrap').hidden = years < 1;
+  }
+  document.getElementById('cgForm').addEventListener('input', calc);
+  calc();
+})();
+</script>
+
+</body>
+</html>

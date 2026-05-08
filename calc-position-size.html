@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Position Size Calculator — PSX Risk Management | Haseeb Zahid</title>
+  <meta name="description" content="Calculate exactly how many PSX shares to buy based on your account size, risk per trade, entry price, and stop-loss. Free position-size calculator for Pakistan Stock Exchange traders.">
+  <link rel="canonical" href="https://haseebzahid.com/calc-position-size.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="calc.css">
+  <meta name="color-scheme" content="dark">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li class="has-dropdown">
+      <a href="calculators.html">Calculators</a>
+      <ul class="nav-dropdown">
+        <li><a href="calc-position-size.html">Position Size <small>Risk-based share count</small></a></li>
+        <li><a href="calc-pnl.html">P&amp;L with Charges <small>After brokerage, FED, CGT</small></a></li>
+        <li><a href="calc-compound.html">Compound Growth <small>Lump-sum projection</small></a></li>
+        <li><a href="calc-sip.html">SIP Calculator <small>Monthly investment growth</small></a></li>
+        <li><a href="calc-zakat.html">Zakat Calculator <small>2.5% on net assets</small></a></li>
+        <li><a href="calc-dividend.html">Dividend Yield <small>Yield &amp; income</small></a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <a href="calculators.html" class="calc-back">← All calculators</a>
+  <div class="calc-hero">
+    <p class="s-label">01 · Risk Management</p>
+    <h1>Position Size<br>Calculator</h1>
+    <p>Decide exactly how many shares to buy based on your account size and the risk you're willing to take on a single trade — the most important habit in PSX trading.</p>
+  </div>
+
+  <div class="calc-single">
+    <section class="calc-card" aria-labelledby="psTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">Inputs</div>
+        <h2 id="psTitle">Calculate your share count</h2>
+      </div>
+      <form class="calc-form" id="psForm" autocomplete="off" novalidate>
+        <div class="calc-fg">
+          <label for="psAccount">Account size <span class="calc-hint">— total trading capital (PKR)</span></label>
+          <div class="calc-input-wrap has-prefix">
+            <span class="calc-prefix">PKR</span>
+            <input id="psAccount" type="number" inputmode="decimal" min="0" step="any" value="1000000" required>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="psRisk">Risk per trade</label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="psRisk" type="number" inputmode="decimal" min="0.1" max="100" step="0.1" value="1" required>
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="psEntry">Entry price</label>
+            <div class="calc-input-wrap has-prefix">
+              <span class="calc-prefix">PKR</span>
+              <input id="psEntry" type="number" inputmode="decimal" min="0" step="any" value="100" required>
+            </div>
+          </div>
+        </div>
+        <div class="calc-fg">
+          <label for="psStop">Stop-loss price <span class="calc-hint">— must differ from entry</span></label>
+          <div class="calc-input-wrap has-prefix">
+            <span class="calc-prefix">PKR</span>
+            <input id="psStop" type="number" inputmode="decimal" min="0" step="any" value="95" required>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="psResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Risk amount (PKR)</span><span class="calc-result-value" id="psRiskAmt">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Risk per share</span><span class="calc-result-value" id="psRiskPerShare">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Total position value</span><span class="calc-result-value" id="psPositionVal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Position as % of account</span><span class="calc-result-value" id="psPositionPct">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Shares to buy</span>
+          <span class="calc-result-value" id="psShares">—</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="calc-disclaimer">
+    Risk amount = account × risk %. Shares = floor(risk amount ÷ |entry − stop|). The calculator rounds down so you never exceed your declared risk.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR = (n) => 'PKR ' + (Math.round(n * 100) / 100).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num = (id) => parseFloat(document.getElementById(id).value);
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  function calc() {
+    const account = num('psAccount');
+    const riskPct = num('psRisk');
+    const entry   = num('psEntry');
+    const stop    = num('psStop');
+    if (![account, riskPct, entry, stop].every(Number.isFinite) || account <= 0 || riskPct <= 0 || entry <= 0 || stop <= 0 || entry === stop) {
+      ['psRiskAmt','psRiskPerShare','psPositionVal','psPositionPct','psShares'].forEach(id => setText(id, '—'));
+      return;
+    }
+    const riskAmt = account * (riskPct / 100);
+    const riskPer = Math.abs(entry - stop);
+    const shares  = Math.floor(riskAmt / riskPer);
+    const posVal  = shares * entry;
+    const posPct  = (posVal / account) * 100;
+    setText('psRiskAmt', PKR(riskAmt));
+    setText('psRiskPerShare', PKR(riskPer));
+    setText('psPositionVal', PKR(posVal));
+    setText('psPositionPct', posPct.toFixed(2) + '%');
+    setText('psShares', shares.toLocaleString('en-PK'));
+  }
+  document.getElementById('psForm').addEventListener('input', calc);
+  calc();
+})();
+</script>
+
+</body>
+</html>
