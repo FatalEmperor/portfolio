@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /reset-password.html
+Disallow: /assets/index-emerald.html
+Disallow: /assets/index-gold.html
+
+Sitemap: https://fatalemperor.github.io/portfolio/sitemap.xml

@@ -409,65 +409,11 @@ if (hamburger) {
   });
 }
 
-/* ── PSX TICKER FETCH ── */
-
-async function fetchTickerData() {
-  const track = document.getElementById('ticker-track');
-  if (!track) return;
-
-  const symbols = ['KSE100', 'OGDC', 'PPL', 'ENGRO', 'HBL', 'HUBC', 'SYS', 'MEBL', 'LUCK'];
-
-  function buildTickerHtml(items) {
-    return [...items, ...items].map(([sym, price, pct]) => {
-      const isPos = pct.startsWith('+');
-      return `<div class="kt-item"><span class="kt-sym">${sym}</span><span class="kt-val">${price}</span><span class="kt-val ${isPos ? 'kt-pos' : 'kt-neg'}">${pct}</span><span class="kt-sep">|</span></div>`;
-    }).join('');
-  }
-
-  const renderMock = () => {
-    const mock = [
-      ['KSE100', '162,994', '+1.12%'], ['OGDC', '299.63', '+0.45%'], ['PPL', '218.70', '-0.12%'],
-      ['ENGRO', '342.10', '+0.85%'], ['HBL', '112.45', '+2.10%'], ['SYS', '450.00', '-0.50%'],
-      ['MEBL', '189.30', '+0.33%'], ['HUBC', '90.50', '-0.20%'], ['LUCK', '520.00', '+1.50%']
-    ];
-    track.innerHTML = buildTickerHtml(mock);
-  };
-
-  function parsePsxTimeseries(sym, json) {
-    const data = json.data;
-    if (!data || data.length < 2) return null;
-    const latest = data[0][1];
-    const open   = data[data.length - 1][1];
-    const pct    = open !== 0 ? ((latest - open) / open) * 100 : 0;
-    const price  = latest > 1000
-      ? latest.toLocaleString('en-US', { maximumFractionDigits: 0 })
-      : latest.toFixed(2);
-    return [sym, price, (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%'];
-  }
-
-  // Try proxies in order: Node server → PHP host → mock
-  const proxies = ['/api/ticker', 'assets/ticker.php'];
-  for (const endpoint of proxies) {
-    try {
-      const res = await fetch(endpoint);
-      if (!res.ok) continue;
-      const result = await res.json();
-      if (result.data && Object.keys(result.data).length > 0) {
-        const items = Object.entries(result.data).map(([sym, [price, change]]) => {
-          const isPos = parseFloat(change) >= 0;
-          return [sym, price, (isPos && !change.startsWith('+') ? '+' : '') + change];
-        });
-        track.innerHTML = buildTickerHtml(items);
-        return;
-      }
-    } catch (_) {}
-  }
-
-  renderMock();
-}
-
-fetchTickerData();
-setInterval(fetchTickerData, 60000); // Refresh every minute
+/* ── PSX TICKER FETCH ──
+   Ticker is rendered by the inline script in index.html which reads
+   ticker.json (refreshed by a GitHub Action every 15 min during PSX hours).
+   No client-side fetch loop here — it would race with the inline render
+   and overwrite real values with stale fallback data. */
 
 /* ── STUDENT AUTH ──
    Primary: backend API (/api/auth/*) — PBKDF2 hashing, HMAC-signed tokens.
