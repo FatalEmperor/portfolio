@@ -5,6 +5,6 @@
 // protects your data).
 // ─────────────────────────────────────────────────────────────────
 window.SUPABASE_CONFIG = {
-  url:     'https://YOUR-PROJECT-REF.supabase.co',
-  anonKey: 'YOUR_PUBLIC_ANON_KEY',
+  url:     'https://tutdcwfmhewrpgpfbibw.supabase.co',
+  anonKey: 'sb_publishable_wjtZWmtUQNWx1TMoO1lySw_9FEkP2Uu',
 };
