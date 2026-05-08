@@ -491,8 +491,6 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
   const navAccount= $('#navAccount');
   const navAccountName = $('#navAccountName');
   const navLogout = $('#navLogoutBtn');
-  const googleSignin = $('#authGoogleSignin');
-  const googleSignup = $('#authGoogleSignup');
   const forgotLink   = $('#authForgot');
 
   function showInfo(el, msg) {
@@ -580,21 +578,6 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     e.preventDefault();
     if (auth?.ready) await auth.signout();
     refreshNav(null);
-  });
-
-  googleSignin?.addEventListener('click', async () => {
-    if (!requireAuth(errSignin)) return;
-    googleSignin.disabled = true;
-    try { await auth.signinGoogle(); }
-    catch (err) { errSignin.textContent = err?.message || 'Google sign-in failed.'; }
-    finally { googleSignin.disabled = false; }
-  });
-  googleSignup?.addEventListener('click', async () => {
-    if (!requireAuth(errSignup)) return;
-    googleSignup.disabled = true;
-    try { await auth.signinGoogle(); }
-    catch (err) { errSignup.textContent = err?.message || 'Google sign-up failed.'; }
-    finally { googleSignup.disabled = false; }
   });
 
   forgotLink?.addEventListener('click', async e => {
