@@ -9,6 +9,22 @@
   <meta name="author" content="Haseeb Zahid">
   <meta name="robots" content="index, follow">
 
+  <!-- Content Security Policy — restricts external sources to known CDNs only.
+       'unsafe-inline' kept for legacy inline handlers (FAQ accordion, popup);
+       remove once those are migrated to addEventListener. -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net;
+    style-src  'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src   'self' https://fonts.gstatic.com data:;
+    img-src    'self' data: https://floretcapitals.com https://*.supabase.co;
+    connect-src 'self' https://*.supabase.co https://formsubmit.co;
+    form-action 'self' https://formsubmit.co;
+    frame-ancestors 'self';
+    base-uri 'self';
+    object-src 'none';
+  ">
+
   <!-- Open Graph (WhatsApp / LinkedIn / Facebook previews) -->
   <meta property="og:title" content="Haseeb Zahid — PSX Equity Trader & Market Analyst">
   <meta property="og:description" content="Learn Technical & Fundamental Analysis of the Pakistan Stock Exchange. Verified +32% trading return. 64.5% win rate. Now accepting founding students.">
@@ -158,7 +174,7 @@
 
 <!-- HERO -->
 <section id="hero">
-  <canvas id="hero-canvas"></canvas>
+  <canvas id="hero-canvas" width="1920" height="1080" aria-hidden="true"></canvas>
   <div class="hero-glow"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
@@ -183,7 +199,7 @@
 </section>
 
 <!-- PSX LIVE TICKER -->
-<div id="kse-ticker-wrap" role="marquee" aria-label="Live PSX market ticker">
+<div id="kse-ticker-wrap" role="region" aria-label="Live PSX market ticker">
   <div class="kse-ticker-label"><div class="kse-dot"></div> LIVE PSX</div>
   <div class="kse-ticker-scroll">
     <div class="kse-ticker-track" id="ticker-track">
@@ -1155,9 +1171,9 @@
     <div class="footer-bottom-in">
       <div class="f-copy">© 2026 Haseeb Zahid. All rights reserved.</div>
       <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;justify-content:center;">
-        <a href="assets/privacy.html" style="font-size:0.72rem;color:var(--muted);text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='var(--silver)'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a>
+        <a href="assets/privacy.html" class="f-legal-link">Privacy Policy</a>
         <span style="color:var(--border-h)">·</span>
-        <a href="assets/terms.html" style="font-size:0.72rem;color:var(--muted);text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='var(--silver)'" onmouseout="this.style.color='var(--muted)'">Terms &amp; Conditions</a>
+        <a href="assets/terms.html" class="f-legal-link">Terms &amp; Conditions</a>
         <span style="color:var(--border-h)">·</span>
         <div class="f-copy">PSX Education &amp; Market Analysis</div>
       </div>
@@ -1229,10 +1245,18 @@
   </div>
 </div>
 
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" onerror="window.gsap={to:()=>{},set:()=>{},from:()=>{}};window.ScrollTrigger={create:()=>{},refresh:()=>{}};console.warn('GSAP failed to load — animations disabled')"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" onerror="window.ScrollTrigger=window.ScrollTrigger||{create:()=>{},refresh:()=>{}}"></script>
-<script defer src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
+        integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"
+        integrity="sha384-li4UtcFCH6QeUqR4JyV58/VgTprMuz9aauj+oWtew7V4Y7ZVjnvz5px9Y3UCG0Ea"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"
+        integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script defer src="auth-config.js"></script>
 <script defer src="auth.js"></script>
 <script defer src="script.js"></script>

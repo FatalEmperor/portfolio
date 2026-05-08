@@ -1644,6 +1644,10 @@ html.lenis, html.lenis body {
   .nav-signin, .nav-account { display: none; }
 }
 
+/* Footer legal links — replaces inline onmouseover handlers */
+.f-legal-link { font-size: 0.72rem; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+.f-legal-link:hover, .f-legal-link:focus-visible { color: var(--silver); }
+
 /* ── MOBILE / TOUCH PERFORMANCE ──
    backdrop-filter is GPU-expensive on Android (Chrome on mid-range devices
    stutters badly). Replace with solid backgrounds on touch pointers. */
