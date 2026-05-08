@@ -9,12 +9,12 @@
   <meta name="author" content="Haseeb Zahid">
   <meta name="robots" content="index, follow">
 
-  <!-- Content Security Policy — restricts external sources to known CDNs only.
-       'unsafe-inline' kept for legacy inline handlers (FAQ accordion, popup);
-       remove once those are migrated to addEventListener. -->
+  <!-- Content Security Policy — strict script-src: no 'unsafe-inline'.
+       Only approved CDNs + the SHA-256 of the JSON-LD block can run.
+       If you edit the JSON-LD below by even one byte, recompute its hash. -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net;
+    script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net 'sha256-G7kOeQhrWqrEIlAT6lxdsDVv2XB83JUDguEaz0zuqq4=';
     style-src  'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src   'self' https://fonts.gstatic.com data:;
     img-src    'self' data: https://floretcapitals.com https://*.supabase.co;
@@ -207,26 +207,7 @@
     </div>
   </div>
 </div>
-<script>
-(function () {
-  const track = document.getElementById('ticker-track');
-  if (!track) return;
-  const escape = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  fetch('ticker.json', { cache: 'no-store' })
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(payload => {
-      const items = Array.isArray(payload?.items) ? payload.items : [];
-      if (items.length === 0) return;
-      const renderItem = (it) => {
-        const cls = it.dir === 'neg' ? 'kt-neg' : 'kt-pos';
-        return `<div class="kt-item"><span class="kt-sym">${escape(it.sym)}</span> <span class="kt-val">${escape(it.val)}</span> <span class="kt-val ${cls}">${escape(it.chg)}</span> <span class="kt-sep">|</span></div>`;
-      };
-      // Duplicate for seamless marquee loop
-      track.innerHTML = items.map(renderItem).join('') + items.map(renderItem).join('');
-    })
-    .catch(() => { /* keep placeholder */ });
-})();
-</script>
+<!-- Ticker rendering + FAQ/popup handlers live in script.js -->
 
 <!-- SERVICES -->
 <section id="services">
@@ -702,7 +683,7 @@
     <div class="faq-grid" id="faqGrid" style="margin-top:2.5rem">
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-1">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-1">
           Do I need prior knowledge to enroll?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -710,7 +691,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-2">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-2">
           How are sessions conducted?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -718,7 +699,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-3">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-3">
           How long is each course?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -726,7 +707,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-4">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-4">
           Is there a refund policy?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -734,7 +715,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-5">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-5">
           What payment methods are accepted?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -742,7 +723,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-6">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-6">
           Can I pay in instalments?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -750,7 +731,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-7">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-7">
           Will I get support between sessions?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -758,7 +739,7 @@
       </div>
 
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-a-8">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-8">
           Is this specific to the Pakistan Stock Exchange?
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
@@ -800,7 +781,7 @@
 <!-- LEAD MAGNET POPUP -->
 <div class="popup-overlay" id="leadPopup">
   <div class="popup-box">
-    <button class="popup-close" onclick="closePopup()">✕</button>
+    <button class="popup-close">✕</button>
     <div class="popup-gift">🎁</div>
     <div class="popup-tag">Free Resource — Limited Time</div>
     <h3 class="popup-title">Get My Free PSX<br>Starter Guide</h3>
@@ -813,9 +794,9 @@
     </div>
     <div class="popup-input-row">
       <input type="tel" class="popup-input" placeholder="Your WhatsApp number (03XX XXXXXXX)" id="popupPhone">
-      <button class="popup-submit" onclick="submitPopup()">Send Me →</button>
+      <button class="popup-submit">Send Me →</button>
     </div>
-    <span class="popup-skip" onclick="closePopup()">No thanks, I'll figure it out myself</span>
+    <span class="popup-skip">No thanks, I'll figure it out myself</span>
   </div>
 </div>
 

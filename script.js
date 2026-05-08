@@ -1,3 +1,76 @@
+/* ── PSX TICKER (renders ticker.json into the hero ticker bar) ── */
+(function () {
+  const track = document.getElementById('ticker-track');
+  if (!track) return;
+  const escape = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  fetch('ticker.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(payload => {
+      const items = Array.isArray(payload && payload.items) ? payload.items : [];
+      if (items.length === 0) return;
+      const renderItem = (it) => {
+        const cls = it.dir === 'neg' ? 'kt-neg' : 'kt-pos';
+        return '<div class="kt-item"><span class="kt-sym">' + escape(it.sym) + '</span> <span class="kt-val">' + escape(it.val) + '</span> <span class="kt-val ' + cls + '">' + escape(it.chg) + '</span> <span class="kt-sep">|</span></div>';
+      };
+      track.innerHTML = items.map(renderItem).join('') + items.map(renderItem).join('');
+    })
+    .catch(() => { /* keep placeholder */ });
+})();
+
+/* ── FAQ ACCORDION (delegated handler, no inline onclick) ── */
+(function () {
+  const grid = document.getElementById('faqGrid');
+  if (!grid) return;
+  grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.faq-q');
+    if (!btn) return;
+    const item = btn.closest('.faq-item');
+    if (!item) return;
+    const open = item.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    const icon = btn.querySelector('.faq-icon');
+    if (icon) icon.textContent = open ? '−' : '+';
+  });
+})();
+
+/* ── LEAD-MAGNET POPUP ──
+   Auto-opens once per session after 25 s. Closes via backdrop click, the
+   ✕ button, the "No thanks" link, or Escape. Submit hands off to WhatsApp
+   with the entered phone prefilled. */
+(function () {
+  const overlay = document.getElementById('leadPopup');
+  if (!overlay) return;
+  const closeBtn = overlay.querySelector('.popup-close');
+  const skipBtn  = overlay.querySelector('.popup-skip');
+  const submit   = overlay.querySelector('.popup-submit');
+  const phoneIn  = overlay.querySelector('#popupPhone');
+
+  const close = () => overlay.classList.remove('open');
+  const open  = () => overlay.classList.add('open');
+
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  if (skipBtn)  skipBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
+
+  if (submit) submit.addEventListener('click', () => {
+    const phone = (phoneIn && phoneIn.value || '').trim();
+    const msg = encodeURIComponent('Hi Haseeb! Please send me the free PSX Starter Guide.' + (phone ? ' My WhatsApp: ' + phone : ''));
+    window.open('https://wa.me/923158674401?text=' + msg, '_blank', 'noopener,noreferrer');
+    close();
+  });
+
+  // One-time auto-open (skip on touch to avoid blocking initial scroll, and
+  // skip if reduced-motion users don't want surprises).
+  try {
+    const seen = sessionStorage.getItem('leadPopupSeen');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!seen && !reduceMotion) {
+      setTimeout(() => { open(); sessionStorage.setItem('leadPopupSeen', '1'); }, 25000);
+    }
+  } catch (_) { /* sessionStorage blocked — skip auto-open */ }
+})();
+
 /* ── PARTICLES ──
    Mobile/touch perf: fewer particles, no O(n²) line connections, and the
    loop pauses entirely when the hero leaves the viewport. */
