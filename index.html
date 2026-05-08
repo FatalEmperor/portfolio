@@ -182,19 +182,30 @@
   <div class="kse-ticker-label"><div class="kse-dot"></div> LIVE PSX</div>
   <div class="kse-ticker-scroll">
     <div class="kse-ticker-track" id="ticker-track">
-      <div class="kt-item"><span class="kt-sym">KSE100</span> <span class="kt-val">162,994</span> <span class="kt-val kt-pos">+1.12%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">OGDC</span> <span class="kt-val">299.63</span> <span class="kt-val kt-pos">+0.45%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">PPL</span> <span class="kt-val">218.70</span> <span class="kt-val kt-neg">-0.12%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">ENGRO</span> <span class="kt-val">342.10</span> <span class="kt-val kt-pos">+0.85%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">HBL</span> <span class="kt-val">112.45</span> <span class="kt-val kt-pos">+2.10%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">KSE100</span> <span class="kt-val">162,994</span> <span class="kt-val kt-pos">+1.12%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">OGDC</span> <span class="kt-val">299.63</span> <span class="kt-val kt-pos">+0.45%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">PPL</span> <span class="kt-val">218.70</span> <span class="kt-val kt-neg">-0.12%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">ENGRO</span> <span class="kt-val">342.10</span> <span class="kt-val kt-pos">+0.85%</span> <span class="kt-sep">|</span></div>
-      <div class="kt-item"><span class="kt-sym">HBL</span> <span class="kt-val">112.45</span> <span class="kt-val kt-pos">+2.10%</span> <span class="kt-sep">|</span></div>
+      <div class="kt-item"><span class="kt-sym">KSE100</span> <span class="kt-val">—</span> <span class="kt-val">—</span> <span class="kt-sep">|</span></div>
     </div>
   </div>
 </div>
+<script>
+(function () {
+  const track = document.getElementById('ticker-track');
+  if (!track) return;
+  const escape = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  fetch('ticker.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(payload => {
+      const items = Array.isArray(payload?.items) ? payload.items : [];
+      if (items.length === 0) return;
+      const renderItem = (it) => {
+        const cls = it.dir === 'neg' ? 'kt-neg' : 'kt-pos';
+        return `<div class="kt-item"><span class="kt-sym">${escape(it.sym)}</span> <span class="kt-val">${escape(it.val)}</span> <span class="kt-val ${cls}">${escape(it.chg)}</span> <span class="kt-sep">|</span></div>`;
+      };
+      // Duplicate for seamless marquee loop
+      track.innerHTML = items.map(renderItem).join('') + items.map(renderItem).join('');
+    })
+    .catch(() => { /* keep placeholder */ });
+})();
+</script>
 
 <!-- SERVICES -->
 <section id="services">

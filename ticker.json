@@ -1,0 +1,36 @@
+{
+  "updated": "2026-05-08T03:15:30.728Z",
+  "source": "dps.psx.com.pk",
+  "items": [
+    {
+      "sym": "KSE100",
+      "val": "172,894",
+      "chg": "+0.69%",
+      "dir": "pos"
+    },
+    {
+      "sym": "OGDC",
+      "val": "333.72",
+      "chg": "+1.56%",
+      "dir": "pos"
+    },
+    {
+      "sym": "PPL",
+      "val": "234.88",
+      "chg": "+0.59%",
+      "dir": "pos"
+    },
+    {
+      "sym": "ENGRO",
+      "val": "485.38",
+      "chg": "+0.70%",
+      "dir": "pos"
+    },
+    {
+      "sym": "HBL",
+      "val": "296.35",
+      "chg": "-0.72%",
+      "dir": "neg"
+    }
+  ]
+}
