@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSX Calculators — Position Size & P&amp;L | Haseeb Zahid</title>
+  <meta name="description" content="Free PSX calculators: position size with risk management, and profit/loss after brokerage, FED, and CGT. Built for Pakistan Stock Exchange traders.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://haseebzahid.com/calculators.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <meta name="color-scheme" content="dark">
+
+  <style>
+    .calc-page { padding: 8rem 1.5rem 5rem; max-width: 1180px; margin: 0 auto; }
+    .calc-hero { text-align: center; margin-bottom: 3.5rem; }
+    .calc-hero .s-label { margin-bottom: 0.6rem; }
+    .calc-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      color: var(--silver-bright);
+      line-height: 1.15; margin-bottom: 1rem;
+    }
+    .calc-hero p { color: var(--muted); max-width: 620px; margin: 0 auto; line-height: 1.75; font-size: 0.95rem; }
+
+    .calc-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    }
+    @media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
+
+    .calc-card {
+      background: linear-gradient(140deg, rgba(13,31,60,0.6), rgba(6,13,24,0.85));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      position: relative; overflow: hidden;
+    }
+    .calc-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(249,115,22,0.5), transparent);
+    }
+    .calc-card-head { margin-bottom: 1.5rem; }
+    .calc-card-eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--blue-light); font-weight: 600; margin-bottom: 0.4rem;
+    }
+    .calc-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem; color: var(--silver-bright);
+      font-weight: 700; line-height: 1.25;
+    }
+    .calc-card-sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; line-height: 1.7; }
+
+    .calc-form { display: grid; gap: 0.9rem; margin-top: 1rem; }
+    .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media (max-width: 520px) { .calc-row { grid-template-columns: 1fr; } }
+
+    .calc-fg { display: flex; flex-direction: column; gap: 0.35rem; }
+    .calc-fg label {
+      font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--silver); font-weight: 600;
+    }
+    .calc-fg label .calc-hint { color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .calc-input-wrap { position: relative; }
+    .calc-input-wrap .calc-prefix, .calc-input-wrap .calc-suffix {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      color: var(--muted); font-size: 0.78rem; pointer-events: none;
+    }
+    .calc-input-wrap .calc-prefix { left: 0.85rem; }
+    .calc-input-wrap .calc-suffix { right: 0.9rem; }
+    .calc-input-wrap input, .calc-input-wrap select {
+      width: 100%;
+      background: rgba(6,13,24,0.5);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      color: var(--silver-bright);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .calc-input-wrap input:focus, .calc-input-wrap select:focus {
+      outline: none; border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(249,115,22,0.12);
+    }
+    .calc-input-wrap.has-prefix input { padding-left: 2.7rem; }
+    .calc-input-wrap.has-suffix input { padding-right: 2.6rem; }
+
+    .calc-toggle {
+      display: flex; gap: 0.4rem; padding: 0.25rem;
+      background: rgba(6,13,24,0.5);
+      border: 1px solid var(--border-h);
+      border-radius: 8px;
+    }
+    .calc-toggle button {
+      flex: 1; padding: 0.55rem; cursor: pointer;
+      background: transparent; border: 0;
+      font-family: 'Sora', sans-serif; font-size: 0.78rem;
+      color: var(--muted); border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .calc-toggle button.active {
+      background: var(--blue); color: #fff; font-weight: 600;
+    }
+
+    .calc-results {
+      margin-top: 1.6rem;
+      padding-top: 1.4rem;
+      border-top: 1px dashed var(--border-h);
+      display: grid; gap: 0.7rem;
+    }
+    .calc-result-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 1rem;
+      font-size: 0.85rem; color: var(--silver-light);
+    }
+    .calc-result-row .calc-result-label {
+      color: var(--muted); letter-spacing: 0.04em;
+    }
+    .calc-result-row .calc-result-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600; color: var(--silver-bright);
+    }
+    .calc-result-row.calc-result-primary {
+      padding: 0.85rem 1rem;
+      margin-top: 0.4rem;
+      background: linear-gradient(140deg, rgba(249,115,22,0.1), rgba(249,115,22,0.04));
+      border: 1px solid rgba(249,115,22,0.25);
+      border-radius: 10px;
+    }
+    .calc-result-row.calc-result-primary .calc-result-label {
+      color: var(--silver-bright); font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; font-size: 0.78rem;
+    }
+    .calc-result-row.calc-result-primary .calc-result-value {
+      font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
+      color: var(--blue-light);
+    }
+    .calc-pos { color: #5fd39a !important; }
+    .calc-neg { color: #f87171 !important; }
+
+    .calc-fee-toggle {
+      margin-top: 1.4rem; cursor: pointer;
+      font-size: 0.78rem; color: var(--blue-light);
+      background: none; border: 0; padding: 0;
+      font-family: 'Sora', sans-serif;
+    }
+    .calc-fee-toggle:hover { text-decoration: underline; }
+    .calc-fees {
+      display: none; margin-top: 1rem; padding: 1rem;
+      background: rgba(6,13,24,0.4); border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .calc-fees.show { display: block; }
+    .calc-fees .calc-row { gap: 0.6rem; }
+
+    .calc-disclaimer {
+      max-width: 800px; margin: 3rem auto 0; text-align: center;
+      font-size: 0.78rem; color: var(--muted); line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">Haseeb<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#curriculum">Curriculum</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="calculators.html">Calculators</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<main id="main" class="calc-page">
+  <div class="calc-hero">
+    <p class="s-label">Free PSX Tools</p>
+    <h1>Trade Smarter on the<br>Pakistan Stock Exchange.</h1>
+    <p>Two essential calculators every PSX trader should use — for sizing your trades by risk, and for understanding what you actually take home after brokerage, FED, and CGT.</p>
+  </div>
+
+  <div class="calc-grid">
+
+    <!-- POSITION SIZE CALCULATOR -->
+    <section class="calc-card" aria-labelledby="psTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">01 · Risk Management</div>
+        <h2 id="psTitle">Position Size Calculator</h2>
+        <p class="calc-card-sub">Decide exactly how many shares to buy based on your account size and the risk you're willing to take on a single trade.</p>
+      </div>
+
+      <form class="calc-form" id="psForm" autocomplete="off" novalidate>
+        <div class="calc-fg">
+          <label for="psAccount">Account size <span class="calc-hint">— total trading capital (PKR)</span></label>
+          <div class="calc-input-wrap has-prefix">
+            <span class="calc-prefix">PKR</span>
+            <input id="psAccount" type="number" inputmode="decimal" min="0" step="any" value="1000000" required>
+          </div>
+        </div>
+
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="psRisk">Risk per trade</label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="psRisk" type="number" inputmode="decimal" min="0.1" max="100" step="0.1" value="1" required>
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="psEntry">Entry price</label>
+            <div class="calc-input-wrap has-prefix">
+              <span class="calc-prefix">PKR</span>
+              <input id="psEntry" type="number" inputmode="decimal" min="0" step="any" value="100" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-fg">
+          <label for="psStop">Stop-loss price <span class="calc-hint">— must be different from entry</span></label>
+          <div class="calc-input-wrap has-prefix">
+            <span class="calc-prefix">PKR</span>
+            <input id="psStop" type="number" inputmode="decimal" min="0" step="any" value="95" required>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="psResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Risk amount (PKR)</span><span class="calc-result-value" id="psRiskAmt">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Risk per share</span><span class="calc-result-value" id="psRiskPerShare">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Total position value</span><span class="calc-result-value" id="psPositionVal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Position as % of account</span><span class="calc-result-value" id="psPositionPct">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Shares to buy</span>
+          <span class="calc-result-value" id="psShares">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- P&L WITH PSX CHARGES -->
+    <section class="calc-card" aria-labelledby="plTitle">
+      <div class="calc-card-head">
+        <div class="calc-card-eyebrow">02 · After-Cost P&amp;L</div>
+        <h2 id="plTitle">P&amp;L with PSX Charges</h2>
+        <p class="calc-card-sub">Your real take-home after brokerage, FED, and CGT — the way honest trade reviews should look.</p>
+      </div>
+
+      <form class="calc-form" id="plForm" autocomplete="off" novalidate>
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="plBuy">Buy price</label>
+            <div class="calc-input-wrap has-prefix">
+              <span class="calc-prefix">PKR</span>
+              <input id="plBuy" type="number" inputmode="decimal" min="0" step="any" value="100" required>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="plSell">Sell price</label>
+            <div class="calc-input-wrap has-prefix">
+              <span class="calc-prefix">PKR</span>
+              <input id="plSell" type="number" inputmode="decimal" min="0" step="any" value="115" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-row">
+          <div class="calc-fg">
+            <label for="plShares">Number of shares</label>
+            <div class="calc-input-wrap">
+              <input id="plShares" type="number" inputmode="numeric" min="1" step="1" value="500" required>
+            </div>
+          </div>
+          <div class="calc-fg">
+            <label for="plFiler">Tax status (CGT)</label>
+            <div class="calc-input-wrap">
+              <select id="plFiler">
+                <option value="15">Filer (15%)</option>
+                <option value="30">Non-filer (30%)</option>
+                <option value="0">Skip CGT</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="calc-fee-toggle" id="plFeeToggle">▸ Adjust brokerage &amp; fees</button>
+        <div class="calc-fees" id="plFees">
+          <div class="calc-row">
+            <div class="calc-fg">
+              <label for="plBrok">Brokerage per side</label>
+              <div class="calc-input-wrap has-suffix">
+                <input id="plBrok" type="number" inputmode="decimal" min="0" max="5" step="0.01" value="0.15">
+                <span class="calc-suffix">%</span>
+              </div>
+            </div>
+            <div class="calc-fg">
+              <label for="plFed">FED on brokerage</label>
+              <div class="calc-input-wrap has-suffix">
+                <input id="plFed" type="number" inputmode="decimal" min="0" max="100" step="1" value="16">
+                <span class="calc-suffix">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="calc-fg" style="margin-top:0.6rem">
+            <label for="plSecp">SECP / CDC charges per side <span class="calc-hint">— typically negligible</span></label>
+            <div class="calc-input-wrap has-suffix">
+              <input id="plSecp" type="number" inputmode="decimal" min="0" max="1" step="0.0001" value="0.0001">
+              <span class="calc-suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc-results" id="plResults" aria-live="polite">
+        <div class="calc-result-row"><span class="calc-result-label">Gross P&amp;L</span><span class="calc-result-value" id="plGross">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Total brokerage + FED</span><span class="calc-result-value" id="plBrokTotal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">SECP / CDC fees</span><span class="calc-result-value" id="plSecpTotal">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Capital Gains Tax</span><span class="calc-result-value" id="plCgt">—</span></div>
+        <div class="calc-result-row"><span class="calc-result-label">Effective return on capital</span><span class="calc-result-value" id="plReturn">—</span></div>
+        <div class="calc-result-row calc-result-primary">
+          <span class="calc-result-label">Net P&amp;L</span>
+          <span class="calc-result-value" id="plNet">—</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="calc-disclaimer">
+    Calculations are estimates. PSX brokerage and tax rates change over time and vary by broker, asset type, and holding period. Always confirm with your broker statement and consult a tax advisor for filing.
+  </p>
+</main>
+
+<script>
+(function () {
+  const PKR = (n) => 'PKR ' + (Math.round(n * 100) / 100).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num = (id) => parseFloat(document.getElementById(id).value);
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const setVal = (id, v, opts = {}) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = v;
+    el.classList.toggle('calc-pos', !!opts.pos);
+    el.classList.toggle('calc-neg', !!opts.neg);
+  };
+
+  // ─── Position Size ───
+  function calcPosition() {
+    const account = num('psAccount');
+    const riskPct = num('psRisk');
+    const entry   = num('psEntry');
+    const stop    = num('psStop');
+
+    if (![account, riskPct, entry, stop].every(Number.isFinite) || account <= 0 || riskPct <= 0 || entry <= 0 || stop <= 0 || entry === stop) {
+      ['psRiskAmt','psRiskPerShare','psPositionVal','psPositionPct','psShares'].forEach(id => setText(id, '—'));
+      return;
+    }
+
+    const riskAmt    = account * (riskPct / 100);
+    const riskPer    = Math.abs(entry - stop);
+    const shares     = Math.floor(riskAmt / riskPer);
+    const posValue   = shares * entry;
+    const posPct     = (posValue / account) * 100;
+
+    setText('psRiskAmt', PKR(riskAmt));
+    setText('psRiskPerShare', PKR(riskPer));
+    setText('psPositionVal', PKR(posValue));
+    setText('psPositionPct', posPct.toFixed(2) + '%');
+    setText('psShares', shares.toLocaleString('en-PK'));
+  }
+  document.getElementById('psForm').addEventListener('input', calcPosition);
+  calcPosition();
+
+  // ─── P&L with charges ───
+  document.getElementById('plFeeToggle').addEventListener('click', () => {
+    const fees = document.getElementById('plFees');
+    const btn  = document.getElementById('plFeeToggle');
+    const open = fees.classList.toggle('show');
+    btn.textContent = (open ? '▾' : '▸') + ' Adjust brokerage & fees';
+  });
+
+  function calcPL() {
+    const buy    = num('plBuy');
+    const sell   = num('plSell');
+    const sh     = num('plShares');
+    const cgtPct = parseFloat(document.getElementById('plFiler').value);
+    const brok   = num('plBrok');
+    const fedPct = num('plFed');
+    const secp   = num('plSecp');
+
+    if (![buy, sell, sh, cgtPct, brok, fedPct, secp].every(Number.isFinite) || buy <= 0 || sell <= 0 || sh <= 0) {
+      ['plGross','plBrokTotal','plSecpTotal','plCgt','plReturn','plNet'].forEach(id => setText(id, '—'));
+      return;
+    }
+
+    const buyValue   = buy  * sh;
+    const sellValue  = sell * sh;
+    const gross      = sellValue - buyValue;
+
+    // Brokerage applies on each side (% of trade value), FED applies on top of brokerage.
+    const brokBuy    = buyValue  * (brok / 100);
+    const brokSell   = sellValue * (brok / 100);
+    const brokTotal  = brokBuy + brokSell;
+    const fedTotal   = brokTotal * (fedPct / 100);
+    const secpTotal  = (buyValue + sellValue) * (secp / 100);
+
+    // CGT applies on net gain only (after brokerage, FED, SECP). No CGT on losses.
+    const taxableGain = gross - brokTotal - fedTotal - secpTotal;
+    const cgt = taxableGain > 0 ? taxableGain * (cgtPct / 100) : 0;
+
+    const net = gross - brokTotal - fedTotal - secpTotal - cgt;
+    const ret = (net / buyValue) * 100;
+
+    setVal('plGross',     PKR(gross),               { pos: gross > 0, neg: gross < 0 });
+    setText('plBrokTotal', PKR(brokTotal + fedTotal));
+    setText('plSecpTotal', PKR(secpTotal));
+    setText('plCgt',       PKR(cgt));
+    setVal('plReturn',     ret.toFixed(2) + '%',    { pos: ret > 0, neg: ret < 0 });
+    setVal('plNet',        PKR(net),                { pos: net > 0, neg: net < 0 });
+  }
+  document.getElementById('plForm').addEventListener('input', calcPL);
+  calcPL();
+})();
+</script>
+
+</body>
+</html>
