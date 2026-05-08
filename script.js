@@ -473,14 +473,11 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
    Primary: backend API (/api/auth/*) — PBKDF2 hashing, HMAC-signed tokens.
    Fallback: localStorage (used when backend unreachable, e.g. static hosting). */
 (function authModule() {
-  const TOKEN_KEY    = 'hz_token';
-  const SESSION_KEY  = 'hz_session';
-  const USERS_KEY    = 'hz_users';     // localStorage fallback only
-  const API_BASE     = '/api/auth';
-
   const $ = (s, r=document) => r.querySelector(s);
   const overlay   = $('#authOverlay');
   if (!overlay) return;
+
+  const auth = window.haseebAuth;
 
   const tabSignin = $('#authTabSignin');
   const tabSignup = $('#authTabSignup');
@@ -488,81 +485,26 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
   const formSignup= $('#authFormSignup');
   const errSignin = $('#authErrSignin');
   const errSignup = $('#authErrSignup');
+  const infoSignin= $('#authInfoSignin');
+  const infoSignup= $('#authInfoSignup');
   const navSignin = $('#navSigninBtn');
   const navAccount= $('#navAccount');
   const navAccountName = $('#navAccountName');
   const navLogout = $('#navLogoutBtn');
+  const googleSignin = $('#authGoogleSignin');
+  const googleSignup = $('#authGoogleSignup');
+  const forgotLink   = $('#authForgot');
 
-  let backendAvailable = null; // unknown; probed lazily
-
-  async function probeBackend() {
-    if (backendAvailable !== null) return backendAvailable;
-    try {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 1500);
-      const res = await fetch(API_BASE + '/me', {
-        method: 'GET',
-        signal: ctrl.signal,
-        headers: { 'Authorization': 'Bearer probe' }
-      });
-      clearTimeout(timer);
-      // Any HTTP response (even 401) means backend is up
-      backendAvailable = res.status >= 200 && res.status < 600;
-    } catch { backendAvailable = false; }
-    return backendAvailable;
+  function showInfo(el, msg) {
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle('show', !!msg);
   }
-
-  /* localStorage fallback helpers */
-  function readUsers() {
-    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
-    catch { return {}; }
-  }
-  function writeUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-  async function shaHash(str) {
-    if (window.crypto && crypto.subtle) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-    let h = 0; for (let i=0;i<str.length;i++) { h = ((h<<5)-h) + str.charCodeAt(i); h |= 0; }
-    return String(h);
-  }
-  function readSession() {
-    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
-    catch { return null; }
-  }
-  function writeSession(s) { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
-  function clearSession() {
-    localStorage.removeItem(SESSION_KEY);
-    localStorage.removeItem(TOKEN_KEY);
-  }
-
-  /* API calls */
-  async function apiSignup(payload) {
-    const res = await fetch(API_BASE + '/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Signup failed.');
-    return data;
-  }
-  async function apiSignin(payload) {
-    const res = await fetch(API_BASE + '/signin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Sign-in failed.');
-    return data;
-  }
-  async function apiMe(token) {
-    const res = await fetch(API_BASE + '/me', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if (!res.ok) return null;
-    return res.json();
+  function clearMessages() {
+    if (errSignin)  errSignin.textContent = '';
+    if (errSignup)  errSignup.textContent = '';
+    showInfo(infoSignin, '');
+    showInfo(infoSignup, '');
   }
 
   function showOverlay(tab='signin') {
@@ -574,7 +516,7 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
   function hideOverlay() {
     overlay.classList.remove('open');
     document.body.style.overflow = '';
-    errSignin.textContent = ''; errSignup.textContent = '';
+    clearMessages();
     formSignin.reset(); formSignup.reset();
   }
   function setTab(tab) {
@@ -585,33 +527,19 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     formSignup.classList.toggle('hidden', !isSignup);
   }
 
-  function refreshNav() {
-    const sess = readSession();
-    if (sess && sess.email) {
+  function refreshNav(user) {
+    if (user && user.email) {
       navSignin?.classList.add('hidden');
       navAccount?.classList.remove('hidden');
-      navAccountName.textContent = sess.name || sess.email.split('@')[0];
+      const name = auth?.nameOf?.(user) || user.email.split('@')[0];
+      if (navAccountName) navAccountName.textContent = name;
     } else {
       navSignin?.classList.remove('hidden');
       navAccount?.classList.add('hidden');
     }
   }
 
-  // On load: if we have a backend token, validate it
-  async function rehydrate() {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) return;
-    if (!(await probeBackend())) return; // backend down — keep localStorage session as-is
-    const me = await apiMe(token);
-    if (me && me.user) {
-      writeSession({ email: me.user.email, name: me.user.name, loginAt: Date.now() });
-    } else {
-      clearSession();
-    }
-    refreshNav();
-  }
-
-  // Event wiring
+  // Event wiring (UI-only — works even if Supabase is unconfigured)
   navSignin?.addEventListener('click', e => { e.preventDefault(); showOverlay('signin'); });
   document.getElementById('mobileSignin')?.addEventListener('click', e => {
     e.preventDefault();
@@ -619,18 +547,13 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     document.getElementById('navLinks')?.classList.remove('active');
     showOverlay('signin');
   });
-  navLogout?.addEventListener('click', e => {
-    e.preventDefault();
-    clearSession();
-    refreshNav();
-  });
   $('#authClose')?.addEventListener('click', hideOverlay);
   overlay.addEventListener('click', e => { if (e.target === overlay) hideOverlay(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) hideOverlay(); });
-  tabSignin.addEventListener('click', () => setTab('signin'));
-  tabSignup.addEventListener('click', () => setTab('signup'));
-  $('#authToSignup')?.addEventListener('click', e => { e.preventDefault(); setTab('signup'); });
-  $('#authToSignin')?.addEventListener('click', e => { e.preventDefault(); setTab('signin'); });
+  tabSignin.addEventListener('click', () => { clearMessages(); setTab('signin'); });
+  tabSignup.addEventListener('click', () => { clearMessages(); setTab('signup'); });
+  $('#authToSignup')?.addEventListener('click', e => { e.preventDefault(); clearMessages(); setTab('signup'); });
+  $('#authToSignin')?.addEventListener('click', e => { e.preventDefault(); clearMessages(); setTab('signin'); });
 
   function setBusy(form, busy) {
     const btn = form.querySelector('.auth-submit');
@@ -645,9 +568,55 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     }
   }
 
+  function requireAuth(errEl) {
+    if (!auth?.ready) {
+      if (errEl) errEl.textContent = 'Sign-in is not configured yet. Please try again later.';
+      return false;
+    }
+    return true;
+  }
+
+  navLogout?.addEventListener('click', async e => {
+    e.preventDefault();
+    if (auth?.ready) await auth.signout();
+    refreshNav(null);
+  });
+
+  googleSignin?.addEventListener('click', async () => {
+    if (!requireAuth(errSignin)) return;
+    googleSignin.disabled = true;
+    try { await auth.signinGoogle(); }
+    catch (err) { errSignin.textContent = err?.message || 'Google sign-in failed.'; }
+    finally { googleSignin.disabled = false; }
+  });
+  googleSignup?.addEventListener('click', async () => {
+    if (!requireAuth(errSignup)) return;
+    googleSignup.disabled = true;
+    try { await auth.signinGoogle(); }
+    catch (err) { errSignup.textContent = err?.message || 'Google sign-up failed.'; }
+    finally { googleSignup.disabled = false; }
+  });
+
+  forgotLink?.addEventListener('click', async e => {
+    e.preventDefault();
+    clearMessages();
+    if (!requireAuth(errSignin)) return;
+    const email = ($('#siEmail')?.value || '').trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errSignin.textContent = 'Enter your email above first, then click "Forgot password?".';
+      return;
+    }
+    try {
+      await auth.resetPassword(email);
+      showInfo(infoSignin, `If an account exists for ${email}, a reset link has been sent.`);
+    } catch (err) {
+      errSignin.textContent = err?.message || 'Could not send reset email.';
+    }
+  });
+
   formSignup.addEventListener('submit', async e => {
     e.preventDefault();
-    errSignup.textContent = '';
+    clearMessages();
     const fd = new FormData(formSignup);
     const name  = (fd.get('name')||'').toString().trim();
     const email = (fd.get('email')||'').toString().trim().toLowerCase();
@@ -662,26 +631,19 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
     if (pw !== pw2)                                return errSignup.textContent = 'Passwords do not match.';
     const termsBox = formSignup.querySelector('.auth-check input[type="checkbox"]');
     if (termsBox && !termsBox.checked)             return errSignup.textContent = 'Please accept Terms & Privacy.';
+    if (!requireAuth(errSignup)) return;
 
     setBusy(formSignup, true);
     try {
-      if (await probeBackend()) {
-        const data = await apiSignup({ name, email, phone, password: pw });
-        localStorage.setItem(TOKEN_KEY, data.token);
-        writeSession({ email: data.user.email, name: data.user.name, loginAt: Date.now() });
+      const { needsVerification } = await auth.signup({ name, email, phone, password: pw });
+      if (needsVerification) {
+        formSignup.reset();
+        showInfo(infoSignup, `Check ${email} to confirm your address. Once verified, sign in to continue.`);
       } else {
-        // localStorage fallback
-        const users = readUsers();
-        if (users[email]) throw new Error('An account with this email already exists.');
-        const ph = await shaHash(pw);
-        users[email] = { name, email, phone, ph, createdAt: Date.now() };
-        writeUsers(users);
-        writeSession({ email, name, loginAt: Date.now() });
+        hideOverlay();
       }
-      refreshNav();
-      hideOverlay();
     } catch (err) {
-      errSignup.textContent = err.message || 'Signup failed.';
+      errSignup.textContent = err?.message || 'Signup failed.';
     } finally {
       setBusy(formSignup, false);
     }
@@ -689,36 +651,30 @@ setInterval(fetchTickerData, 60000); // Refresh every minute
 
   formSignin.addEventListener('submit', async e => {
     e.preventDefault();
-    errSignin.textContent = '';
+    clearMessages();
     const fd = new FormData(formSignin);
     const email = (fd.get('email')||'').toString().trim().toLowerCase();
     const pw    = (fd.get('password')||'').toString();
     if (!email || !pw) return errSignin.textContent = 'Email and password required.';
+    if (!requireAuth(errSignin)) return;
 
     setBusy(formSignin, true);
     try {
-      if (await probeBackend()) {
-        const data = await apiSignin({ email, password: pw });
-        localStorage.setItem(TOKEN_KEY, data.token);
-        writeSession({ email: data.user.email, name: data.user.name, loginAt: Date.now() });
-      } else {
-        const users = readUsers();
-        const user = users[email];
-        if (!user) throw new Error('No account with that email.');
-        const ph = await shaHash(pw);
-        if (ph !== user.ph) throw new Error('Incorrect password.');
-        writeSession({ email, name: user.name, loginAt: Date.now() });
-      }
-      refreshNav();
+      await auth.signin({ email, password: pw });
       hideOverlay();
     } catch (err) {
-      errSignin.textContent = err.message || 'Sign-in failed.';
+      errSignin.textContent = err?.message || 'Sign-in failed.';
     } finally {
       setBusy(formSignin, false);
     }
   });
 
-  refreshNav();
-  rehydrate();
+  // Subscribe to auth state and rehydrate
+  if (auth?.ready) {
+    auth.onChange(refreshNav);
+    auth.getUser().then(refreshNav);
+  } else {
+    refreshNav(null);
+  }
   window.HZAuth = { showOverlay, hideOverlay, refreshNav, readSession };
 })();

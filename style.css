@@ -1516,6 +1516,50 @@ html.lenis, html.lenis body {
 .auth-switch a { color: var(--blue-light); text-decoration: none; font-weight: 600; }
 .auth-switch a:hover { text-decoration: underline; }
 
+.auth-google {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  color: #1f2937;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.85rem; font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+.auth-google:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+.auth-google:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.auth-divider {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin: 1rem 0;
+  color: var(--muted); font-size: 0.7rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border);
+}
+.auth-forgot {
+  text-align: right;
+  margin: -0.4rem 0 0.6rem;
+  font-size: 0.78rem;
+}
+.auth-forgot a { color: var(--blue-light); text-decoration: none; }
+.auth-forgot a:hover { text-decoration: underline; }
+.auth-info {
+  font-size: 0.78rem;
+  color: #5fd39a;
+  background: rgba(95,211,154,0.08);
+  border: 1px solid rgba(95,211,154,0.25);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.6rem;
+  display: none;
+}
+.auth-info.show { display: block; }
+
 @media (max-width: 540px) {
   .auth-box { padding: 1.8rem 1.3rem 1.5rem; }
   .auth-form .form-row { grid-template-columns: 1fr; }
