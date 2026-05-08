@@ -1182,6 +1182,19 @@
     .company-link:hover { color: var(--blue-light); }
     .company-arrow { color: var(--muted); font-size: 0.9rem; transition: all 0.3s; flex-shrink: 0; }
     .company-badge:hover .company-arrow { color: var(--blue-light); transform: translate(2px, -2px); }
+    .company-badge--past { opacity: 0.85; }
+    .company-badge--past::before {
+      background: linear-gradient(90deg, transparent, rgba(160,180,210,0.25), transparent);
+    }
+    .company-badge--past:hover { border-color: rgba(160,180,210,0.25); box-shadow: none; }
+    .company-badge--past .company-role { color: var(--silver); }
+    .company-logo-wrap--initials {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem; font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--silver-bright);
+      background: linear-gradient(140deg, rgba(13,31,60,0.7), rgba(6,13,24,0.55));
+    }
 
     /* ── FOOTER COMPANY ── */
     .f-company {
