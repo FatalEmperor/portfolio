@@ -1643,3 +1643,29 @@ html.lenis, html.lenis body {
 @media (max-width: 768px) {
   .nav-signin, .nav-account { display: none; }
 }
+
+/* ── MOBILE / TOUCH PERFORMANCE ──
+   backdrop-filter is GPU-expensive on Android (Chrome on mid-range devices
+   stutters badly). Replace with solid backgrounds on touch pointers. */
+@media (pointer: coarse) {
+  #nav, #nav.scrolled,
+  .popup-overlay, .popup-box,
+  .lightbox, .auth-overlay, .auth-card,
+  .nav-dropdown, .wa-btn,
+  .calc-card, .pkg-card, .faq-item {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  /* Compensate for lost translucency with slightly more opaque backgrounds */
+  #nav { background: rgba(253,249,243,0.96); }
+  #nav.scrolled { background: rgba(253,249,243,0.99); }
+  .popup-overlay { background: rgba(40,28,16,0.85); }
+
+  /* Disable expensive cursor + parallax decorations on touch */
+  .cursor-dot, .cursor-ring { display: none !important; }
+
+  /* Pause all CSS animations when reduced-motion isn't set but device is touch
+     — keeps essential transitions but stops looping decorative animations. */
+  .orb { animation: none !important; }
+  body::before, body::after { animation: none !important; }
+}

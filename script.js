@@ -1,7 +1,16 @@
-/* ── PARTICLES ── */
+/* ── PARTICLES ──
+   Mobile/touch perf: fewer particles, no O(n²) line connections, and the
+   loop pauses entirely when the hero leaves the viewport. */
+const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
 const cvs = document.getElementById('hero-canvas');
 const cx  = cvs.getContext('2d');
 let pts = [];
+let heroVisible = true;
+let rafId = 0;
+
+const PARTICLE_COUNT = IS_TOUCH ? 35 : 110;
+const DRAW_LINES     = !IS_TOUCH;
+const LINE_DIST      = 95;
 
 function resizeCvs() { cvs.width = innerWidth; cvs.height = innerHeight; }
 resizeCvs();
@@ -30,18 +39,18 @@ class Pt {
     cx.fill();
   }
 }
-for (let i = 0; i < 110; i++) pts.push(new Pt());
+for (let i = 0; i < PARTICLE_COUNT; i++) pts.push(new Pt());
 
 function drawLines() {
   for (let i = 0; i < pts.length; i++) {
     for (let j = i + 1; j < pts.length; j++) {
       const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
       const d  = Math.sqrt(dx*dx + dy*dy);
-      if (d < 95) {
+      if (d < LINE_DIST) {
         cx.beginPath();
         cx.moveTo(pts[i].x, pts[i].y);
         cx.lineTo(pts[j].x, pts[j].y);
-        cx.strokeStyle = `rgba(194,65,12,${0.10*(1-d/95)})`;
+        cx.strokeStyle = `rgba(194,65,12,${0.10*(1-d/LINE_DIST)})`;
         cx.lineWidth = 0.5;
         cx.stroke();
       }
@@ -51,16 +60,34 @@ function drawLines() {
 
 function loop() {
   cx.clearRect(0, 0, cvs.width, cvs.height);
-  // radial gradient overlay
   const g = cx.createRadialGradient(cvs.width*.5, cvs.height*.4, 0, cvs.width*.5, cvs.height*.4, cvs.width*.7);
   g.addColorStop(0, 'rgba(249,115,22,0.08)');
   g.addColorStop(1, 'rgba(247,238,223,0)');
   cx.fillStyle = g; cx.fillRect(0,0,cvs.width,cvs.height);
   pts.forEach(p => { p.step(); p.draw(); });
-  drawLines();
-  requestAnimationFrame(loop);
+  if (DRAW_LINES) drawLines();
+  rafId = requestAnimationFrame(loop);
 }
-loop();
+
+function startLoop() { if (!rafId) rafId = requestAnimationFrame(loop); }
+function stopLoop()  { if (rafId)  { cancelAnimationFrame(rafId); rafId = 0; } }
+
+// Pause the particle loop when hero scrolls out of view (huge mobile battery + jank win)
+if ('IntersectionObserver' in window) {
+  const heroEl = document.getElementById('hero');
+  if (heroEl) {
+    new IntersectionObserver(([entry]) => {
+      heroVisible = entry.isIntersecting;
+      heroVisible ? startLoop() : stopLoop();
+    }, { threshold: 0 }).observe(heroEl);
+  }
+}
+// Also pause when the tab is backgrounded
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopLoop(); else if (heroVisible) startLoop();
+});
+
+startLoop();
 
 /* ── SMOOTH SCROLL (LENIS) ── */
 const lenis = new Lenis({
@@ -209,9 +236,15 @@ gsap.to('.wa-btn', { opacity:1, y:0, scale:1, duration:0.7, delay:1.8, ease:'bac
 
 
 /* ── NAV SCROLL ── */
+let navTicking = false;
 window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
-});
+  if (navTicking) return;
+  navTicking = true;
+  requestAnimationFrame(() => {
+    document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
+    navTicking = false;
+  });
+}, { passive: true });
 
 function openLightbox(src, caption) {
   document.getElementById('lbImg').src = src;
@@ -225,16 +258,18 @@ function closeLightbox() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-// 3-D tilt on service cards
-document.querySelectorAll('.card-main').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r  = card.getBoundingClientRect();
-    const rx = ((e.clientY - r.top)  / r.height - 0.5) * -7;
-    const ry = ((e.clientX - r.left) / r.width  - 0.5) *  7;
-    card.style.transform = `translateY(-5px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+// 3-D tilt on service cards (desktop only — pointless on touch and causes jank)
+if (!IS_TOUCH) {
+  document.querySelectorAll('.card-main').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r  = card.getBoundingClientRect();
+      const rx = ((e.clientY - r.top)  / r.height - 0.5) * -7;
+      const ry = ((e.clientX - r.left) / r.width  - 0.5) *  7;
+      card.style.transform = `translateY(-5px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
   });
-  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-});
+}
 
 
 // Smooth anchor scroll
@@ -266,38 +301,44 @@ if (hamburger && navLinks) {
   });
 }
 
-/* ── CUSTOM CURSOR ── */
+/* ── CUSTOM CURSOR ──
+   Skipped entirely on touch devices — cursor is hidden via CSS there, and
+   running mousemove + a permanent rAF loop on Android wastes frames. */
 const cDot  = document.getElementById('cDot');
 const cRing = document.getElementById('cRing');
 let mx = innerWidth/2, my = innerHeight/2;
 let rx = mx, ry = my;
 
-window.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cDot.style.left = mx + 'px';
-  cDot.style.top  = my + 'px';
-});
-
-(function ringLoop() {
-  rx += (mx - rx) * 0.11;
-  ry += (my - ry) * 0.11;
-  cRing.style.left = rx + 'px';
-  cRing.style.top  = ry + 'px';
-  requestAnimationFrame(ringLoop);
-})();
-
-document.querySelectorAll('a, button, .card-main, .card-sub, .c-enroll').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cRing.style.transform = 'translate(-50%,-50%) scale(2)';
-    cRing.style.borderColor = 'rgba(96,165,250,0.75)';
-    cDot.style.opacity = '0.4';
+if (!IS_TOUCH && cDot && cRing) {
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cDot.style.left = mx + 'px';
+    cDot.style.top  = my + 'px';
   });
-  el.addEventListener('mouseleave', () => {
-    cRing.style.transform = 'translate(-50%,-50%) scale(1)';
-    cRing.style.borderColor = 'rgba(96,165,250,0.45)';
-    cDot.style.opacity = '1';
+
+  (function ringLoop() {
+    rx += (mx - rx) * 0.11;
+    ry += (my - ry) * 0.11;
+    cRing.style.left = rx + 'px';
+    cRing.style.top  = ry + 'px';
+    requestAnimationFrame(ringLoop);
+  })();
+}
+
+if (!IS_TOUCH && cDot && cRing) {
+  document.querySelectorAll('a, button, .card-main, .card-sub, .c-enroll').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cRing.style.transform = 'translate(-50%,-50%) scale(2)';
+      cRing.style.borderColor = 'rgba(96,165,250,0.75)';
+      cDot.style.opacity = '0.4';
+    });
+    el.addEventListener('mouseleave', () => {
+      cRing.style.transform = 'translate(-50%,-50%) scale(1)';
+      cRing.style.borderColor = 'rgba(96,165,250,0.45)';
+      cDot.style.opacity = '1';
+    });
   });
-});
+}
 
 /* ── HERO ORB FADE-IN ── */
 gsap.to('.orb', { opacity: 0.1, duration: 2.5, stagger: 0.4, delay: 0.5, ease: 'power2.out' });
@@ -306,16 +347,18 @@ gsap.to('.orb', { opacity: 0.1, duration: 2.5, stagger: 0.4, delay: 0.5, ease: '
 gsap.set('.hero-badge', { opacity: 0, y: 16 });
 gsap.to('.hero-badge', { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ease: 'power3.out' });
 
-/* ── HERO MOUSE PARALLAX ── */
+/* ── HERO MOUSE PARALLAX (desktop only) ── */
 const heroEl = document.getElementById('hero');
 const heroContent = document.querySelector('.hero-content');
-heroEl.addEventListener('mousemove', e => {
-  const px = (e.clientX / innerWidth  - 0.5) * 22;
-  const py = (e.clientY / innerHeight - 0.5) * 12;
-  gsap.to(heroContent,   { x: px * 0.35, y: py * 0.35, duration: 0.9, ease: 'power2.out' });
-  gsap.to('.orb-1', { x: px * 0.5,  y: py * 0.5,  duration: 1.2, ease: 'power2.out' });
-  gsap.to('.orb-2', { x: px * -0.4, y: py * -0.3, duration: 1.4, ease: 'power2.out' });
-});
+if (!IS_TOUCH && heroEl) {
+  heroEl.addEventListener('mousemove', e => {
+    const px = (e.clientX / innerWidth  - 0.5) * 22;
+    const py = (e.clientY / innerHeight - 0.5) * 12;
+    gsap.to(heroContent,   { x: px * 0.35, y: py * 0.35, duration: 0.9, ease: 'power2.out' });
+    gsap.to('.orb-1', { x: px * 0.5,  y: py * 0.5,  duration: 1.2, ease: 'power2.out' });
+    gsap.to('.orb-2', { x: px * -0.4, y: py * -0.3, duration: 1.4, ease: 'power2.out' });
+  });
+}
 heroEl.addEventListener('mouseleave', () => {
   gsap.to([heroContent, '.orb-1', '.orb-2'], { x: 0, y: 0, duration: 1, ease: 'power2.out' });
 });
