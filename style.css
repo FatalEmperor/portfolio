@@ -320,7 +320,7 @@ input, select, textarea, button { font-family: inherit; }
     /* ── BEFORE/AFTER ── */
     #before-after { background: var(--bg); }
     .ba-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items: start; margin-top: 3rem; }
-    .ba-col { background: rgba(8,16,30,0.7); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+    .ba-col { background: rgba(60,40,20,0.05); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
     .ba-col.after { border-color: rgba(249,115,22,0.25); background: rgba(255,250,240,0.7); }
     .ba-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.5rem; }
     .ba-badge { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.8rem; border-radius: 20px; }
@@ -370,7 +370,7 @@ input, select, textarea, button { font-family: inherit; }
     /* ── REFERRAL ── */
     #referral { background: var(--bg); }
     .ref-box {
-      background: rgba(8,16,30,0.7); border: 1px solid rgba(249,115,22,0.2);
+      background: rgba(237,225,203,0.6); border: 1px solid rgba(249,115,22,0.2);
       border-radius: 20px; padding: 3.5rem; text-align: center; position: relative; overflow: hidden;
       margin-top: 3rem;
     }
@@ -493,10 +493,10 @@ input, select, textarea, button { font-family: inherit; }
 
     .svc-sub { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.4rem; }
     .card-sub {
-      background: rgba(8,18,34,0.6); border: 1px solid var(--border);
+      background: rgba(60,40,20,0.05); border: 1px solid var(--border);
       border-radius: 10px; padding: 1.6rem 1.4rem; transition: all 0.3s;
     }
-    .card-sub:hover { border-color: var(--border-h); transform: translateY(-3px); background: rgba(13,27,42,0.8); }
+    .card-sub:hover { border-color: var(--border-h); transform: translateY(-3px); background: rgba(60,40,20,0.09); }
     .sub-icon { font-size: 1.5rem; margin-bottom: 0.9rem; }
     .sub-title { font-size: 0.88rem; font-weight: 600; color: var(--silver-light); margin-bottom: 0.4rem; }
     .sub-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
@@ -807,7 +807,7 @@ input, select, textarea, button { font-family: inherit; }
 
     .pkg-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-bottom: 2rem; }
     .pkg-card {
-      background: rgba(8,16,30,0.7); border: 1px solid var(--border);
+      background: rgba(255,250,240,0.75); border: 1px solid var(--border);
       border-radius: 16px; overflow: hidden; position: relative;
       transition: all 0.4s ease; display: flex; flex-direction: column;
     }
@@ -908,7 +908,7 @@ input, select, textarea, button { font-family: inherit; }
     #faq { background: var(--bg); }
     .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .faq-item {
-      background: rgba(8,16,30,0.6); border: 1px solid var(--border);
+      background: rgba(255,250,240,0.75); border: 1px solid var(--border);
       border-radius: 12px; overflow: hidden; transition: border-color 0.3s;
     }
     .faq-item.open { border-color: rgba(249,115,22,0.3); }
@@ -919,7 +919,7 @@ input, select, textarea, button { font-family: inherit; }
       font-family: 'Sora', sans-serif; font-size: 0.88rem; font-weight: 600;
       transition: color 0.3s;
     }
-    .faq-q:hover { color: #fff; }
+    .faq-q:hover { color: var(--silver-bright); }
     .faq-icon {
       width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
       background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2);
