@@ -19,36 +19,30 @@ function fmtPct(pct) {
 
 async function fetchOne(sym) {
   const isIndex = sym === 'KSE100';
-  const tryEndpoints = [
-    `https://dps.psx.com.pk/timeseries/int/${sym}`,
-    `https://dps.psx.com.pk/timeseries/eod/${sym}`,
-  ];
-  for (const url of tryEndpoints) {
-    try {
-      const res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10_000) });
-      if (!res.ok) continue;
-      const json = await res.json();
-      const data = json?.data;
-      if (!Array.isArray(data) || data.length < 2) continue;
+  // Always use EOD: gives consistent "latest session close vs previous session close"
+  // for every symbol. PSX updates the most recent EOD row intraday during trading hours.
+  const url = `https://dps.psx.com.pk/timeseries/eod/${sym}`;
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10_000) });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const data = json?.data;
+    if (!Array.isArray(data) || data.length < 2) return null;
 
-      const latest = Number(data[0][1]);
-      // For intraday: open is the last (oldest) entry of the day.
-      // For eod: previous close is data[1][1].
-      const baseline = url.includes('/int/') ? Number(data[data.length - 1][1]) : Number(data[1][1]);
-      if (!Number.isFinite(latest) || !Number.isFinite(baseline) || baseline === 0) continue;
+    const latest = Number(data[0][1]);
+    const prevClose = Number(data[1][1]);
+    if (!Number.isFinite(latest) || !Number.isFinite(prevClose) || prevClose === 0) return null;
 
-      const pct = ((latest - baseline) / baseline) * 100;
-      return {
-        sym,
-        val: fmt(latest, isIndex),
-        chg: fmtPct(pct),
-        dir: pct >= 0 ? 'pos' : 'neg',
-      };
-    } catch {
-      // try next endpoint
-    }
+    const pct = ((latest - prevClose) / prevClose) * 100;
+    return {
+      sym,
+      val: fmt(latest, isIndex),
+      chg: fmtPct(pct),
+      dir: pct >= 0 ? 'pos' : 'neg',
+    };
+  } catch {
+    return null;
   }
-  return null;
 }
 
 async function main() {
