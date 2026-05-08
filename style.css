@@ -1,5 +1,14 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+img, svg, video { max-width: 100%; height: auto; }
+input, select, textarea, button { font-family: inherit; }
+
+/* Prevent iOS Safari zooming inputs on focus when font-size < 16px */
+@media (max-width: 599px) {
+  .auth-form input, .auth-form textarea, .auth-form select,
+  .calc-input-wrap input, .calc-input-wrap select { font-size: 16px; }
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;

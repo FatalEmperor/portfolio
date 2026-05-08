@@ -139,8 +139,11 @@
 /* ─── Calculator landing page (calculators.html) ─── */
 .calc-index-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.4rem;
+}
+@media (max-width: 380px) {
+  .calc-index-grid { grid-template-columns: 1fr; }
 }
 .calc-index-card {
   display: flex; flex-direction: column;
@@ -188,7 +191,8 @@
 .calc-index-card:hover .calc-index-arrow { gap: 0.7rem; }
 
 /* Year-by-year breakdown table (used by Compound / SIP) */
-.calc-table-wrap { margin-top: 1.5rem; max-height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; }
+.calc-table-wrap { margin-top: 1.5rem; max-height: 320px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+.calc-table { min-width: 460px; }
 .calc-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 .calc-table thead th {
   position: sticky; top: 0;
