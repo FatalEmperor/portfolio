@@ -109,17 +109,23 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="dns-prefetch" href="https://floretcapitals.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <meta name="color-scheme" content="dark">
 </head>
 <body>
 
+<a href="#hero" class="skip-link">Skip to main content</a>
+
 <!-- CURSOR -->
-<div class="cursor-dot" id="cDot"></div>
-<div class="cursor-ring" id="cRing"></div>
+<div class="cursor-dot" id="cDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cRing" aria-hidden="true"></div>
 
 <!-- NAV -->
-<nav id="nav">
+<nav id="nav" aria-label="Primary">
   <a href="#hero" class="nav-logo">Haseeb<span>.</span></a>
   <ul class="nav-links" id="navLinks">
     <li><a href="#services">Services</a></li>
@@ -172,7 +178,7 @@
 </section>
 
 <!-- PSX LIVE TICKER -->
-<div id="kse-ticker-wrap">
+<div id="kse-ticker-wrap" role="marquee" aria-label="Live PSX market ticker">
   <div class="kse-ticker-label"><div class="kse-dot"></div> LIVE PSX</div>
   <div class="kse-ticker-scroll">
     <div class="kse-ticker-track" id="ticker-track">
@@ -277,7 +283,7 @@
     <div class="about-grid">
       <div class="about-img-wrap" id="aImg">
         <div class="about-img-frame">
-          <img src="assets/Gemini_Generated_Image_ah4fesah4fesah4f.webp" alt="Haseeb Zahid — Equity Trader" loading="lazy">
+          <img src="assets/Gemini_Generated_Image_ah4fesah4fesah4f.webp" alt="Portrait of Haseeb Zahid, equity trader and PSX market analyst" loading="lazy" decoding="async" width="800" height="800">
         </div>
         <div class="about-deco"></div>
       </div>
@@ -309,7 +315,7 @@
         </div>
         <a href="https://floretcapitals.com" target="_blank" rel="noopener noreferrer" class="company-badge">
           <div class="company-logo-wrap">
-            <img src="https://floretcapitals.com/wp-content/uploads/2024/10/cropped-cropped-Floret-Icon.png" alt="Floret Capitals Logo" loading="lazy">
+            <img src="https://floretcapitals.com/wp-content/uploads/2024/10/cropped-cropped-Floret-Icon.png" alt="Floret Capitals logo" loading="lazy" decoding="async" width="64" height="64">
           </div>
           <div class="company-info">
             <div class="company-role">Equity Trader</div>
@@ -869,7 +875,7 @@
     <div class="cert-wrap" id="certWrap">
       <div class="cert-frame">
         <div class="cert-logo-row">
-          <div class="cert-logo-icon"><img loading="lazy" src="https://floretcapitals.com/wp-content/uploads/2024/10/cropped-cropped-Floret-Icon.png" alt="Floret"></div>
+          <div class="cert-logo-icon"><img loading="lazy" decoding="async" width="48" height="48" src="https://floretcapitals.com/wp-content/uploads/2024/10/cropped-cropped-Floret-Icon.png" alt="Floret Capitals logo"></div>
           <div class="cert-logo-name">Haseeb Zahid · PSX Academy</div>
         </div>
         <div class="cert-divider"></div>
@@ -1143,9 +1149,9 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" onerror="window.gsap={to:()=>{},set:()=>{},from:()=>{}};window.ScrollTrigger={create:()=>{},refresh:()=>{}};console.warn('GSAP failed to load — animations disabled')"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" onerror="window.ScrollTrigger=window.ScrollTrigger||{create:()=>{},refresh:()=>{}}"></script>
-<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js" defer></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" onerror="window.gsap={to:()=>{},set:()=>{},from:()=>{}};window.ScrollTrigger={create:()=>{},refresh:()=>{}};console.warn('GSAP failed to load — animations disabled')"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" onerror="window.ScrollTrigger=window.ScrollTrigger||{create:()=>{},refresh:()=>{}}"></script>
+<script defer src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script defer src="script.js"></script>
 </body>
 </html>
