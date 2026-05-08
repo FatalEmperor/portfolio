@@ -15,8 +15,8 @@ class Pt {
     this.r  = Math.random() * 1.4 + 0.3;
     this.vx = (Math.random() - 0.5) * 0.28;
     this.vy = (Math.random() - 0.5) * 0.28;
-    this.a  = Math.random() * 0.45 + 0.08;
-    this.c  = Math.random() > 0.55 ? '96,165,250' : '148,163,184';
+    this.a  = Math.random() * 0.4 + 0.12;
+    this.c  = Math.random() > 0.55 ? '249,115,22' : '107,99,88';
   }
   step() {
     this.x += this.vx; this.y += this.vy;
@@ -41,7 +41,7 @@ function drawLines() {
         cx.beginPath();
         cx.moveTo(pts[i].x, pts[i].y);
         cx.lineTo(pts[j].x, pts[j].y);
-        cx.strokeStyle = `rgba(96,165,250,${0.07*(1-d/95)})`;
+        cx.strokeStyle = `rgba(194,65,12,${0.10*(1-d/95)})`;
         cx.lineWidth = 0.5;
         cx.stroke();
       }
@@ -53,8 +53,8 @@ function loop() {
   cx.clearRect(0, 0, cvs.width, cvs.height);
   // radial gradient overlay
   const g = cx.createRadialGradient(cvs.width*.5, cvs.height*.4, 0, cvs.width*.5, cvs.height*.4, cvs.width*.7);
-  g.addColorStop(0, 'rgba(13,31,60,0.25)');
-  g.addColorStop(1, 'rgba(6,13,24,0)');
+  g.addColorStop(0, 'rgba(249,115,22,0.08)');
+  g.addColorStop(1, 'rgba(247,238,223,0)');
   cx.fillStyle = g; cx.fillRect(0,0,cvs.width,cvs.height);
   pts.forEach(p => { p.step(); p.draw(); });
   drawLines();
