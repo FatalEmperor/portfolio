@@ -84,25 +84,59 @@ requestAnimationFrame(raf)
 /* ── GSAP ── */
 gsap.registerPlugin(ScrollTrigger);
 
-// Sync Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update)
-gsap.ticker.add((time)=>{
-  lenis.raf(time * 1000)
-})
-gsap.ticker.lagSmoothing(0)
+const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Sync Lenis with GSAP ScrollTrigger via scrollerProxy (prevents stuck-invisible elements)
+ScrollTrigger.scrollerProxy(document.body, {
+  scrollTop(value) {
+    return arguments.length ? lenis.scrollTo(value, { immediate: true }) : window.scrollY;
+  },
+  getBoundingClientRect() {
+    return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+  },
+  pinType: document.body.style.transform ? "transform" : "fixed"
+});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time)=>{ lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// Refresh ScrollTrigger after layout settles (prevents misfires on slow connections)
+window.addEventListener('load', () => { ScrollTrigger.refresh(); });
+setTimeout(() => ScrollTrigger.refresh(), 600);
+
+// Safety net: any element targeted by an animation that ends up stuck invisible after 3s gets forced visible
+function safetyShow(selector) {
+  setTimeout(() => {
+    document.querySelectorAll(selector).forEach(el => {
+      const cs = getComputedStyle(el);
+      if (parseFloat(cs.opacity) < 0.05 && el.offsetParent !== null) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      }
+    });
+  }, 3000);
+}
 
 // Initial states for scrub animations
 gsap.set('.hero-eyebrow,.hero-sub,.hero-desc,.hero-btns,.scroll-hint', { opacity:0, y:30 });
 gsap.set('.hero-name .word', { opacity:0, y:50 });
 
-// Hero timeline (Entrance)
-const htl = gsap.timeline({ defaults:{ ease:'power4.out' } });
-htl.to('.hero-eyebrow',     { opacity:1, y:0, duration:1, delay:0.2 })
-   .to('.hero-name .word',  { opacity:1, y:0, duration:1.2, stagger:0.15 }, '-=0.6')
-   .to('.hero-sub',         { opacity:1, y:0, duration:1 }, '-=0.8')
-   .to('.hero-desc',        { opacity:1, y:0, duration:1 }, '-=0.8')
-   .to('.hero-btns',        { opacity:1, y:0, duration:1 }, '-=0.8')
-   .to('.scroll-hint',      { opacity:1, y:0, duration:1 }, '-=0.5');
+if (REDUCE_MOTION) {
+  // Skip all entrance/scrub animations — show everything immediately
+  gsap.set('.hero-eyebrow,.hero-sub,.hero-desc,.hero-btns,.scroll-hint,.hero-name .word,.hero-badge,.orb,.wa-btn',
+    { opacity:1, y:0, scale:1, clearProps: 'transform' });
+}
+
+// Hero timeline (Entrance) — skipped if reduced motion
+if (!REDUCE_MOTION) {
+  const htl = gsap.timeline({ defaults:{ ease:'power4.out' } });
+  htl.to('.hero-eyebrow',     { opacity:1, y:0, duration:1, delay:0.2 })
+     .to('.hero-name .word',  { opacity:1, y:0, duration:1.2, stagger:0.15 }, '-=0.6')
+     .to('.hero-sub',         { opacity:1, y:0, duration:1 }, '-=0.8')
+     .to('.hero-desc',        { opacity:1, y:0, duration:1 }, '-=0.8')
+     .to('.hero-btns',        { opacity:1, y:0, duration:1 }, '-=0.8')
+     .to('.scroll-hint',      { opacity:1, y:0, duration:1 }, '-=0.5');
+}
 
 // Hero Scrub (Parallax Out)
 gsap.to('.hero-content', {
@@ -128,34 +162,8 @@ gsap.to('#hero-canvas', {
   }
 });
 
-// Services Scrub Parallax
-gsap.from('.card-main', {
-  y: 100,
-  opacity: 0,
-  stagger: 0.2,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: '#services',
-    start: 'top 85%',
-    end: 'top 20%',
-    scrub: 1
-  }
-});
-gsap.from('.card-sub', {
-  y: 50,
-  opacity: 0,
-  stagger: 0.1,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: '.svc-sub',
-    start: 'top 90%',
-    end: 'top 50%',
-    scrub: 1
-  }
-});
-
 // About Image Scrub Scale
-gsap.fromTo('#aImg img', 
+gsap.fromTo('#aImg img',
   { scale: 1.3, filter: 'brightness(0.6)' },
   { scale: 1, filter: 'brightness(1)', ease: 'none',
     scrollTrigger: {
@@ -166,82 +174,39 @@ gsap.fromTo('#aImg img',
     }
   }
 );
-gsap.from('.about-txt', {
-  x: 50,
-  opacity: 0,
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '#about',
-    start: 'top 80%',
-    end: 'center center',
-    scrub: 1
-  }
+
+/* ── CARD REVEALS (CSS-driven via IntersectionObserver — never gets stuck) ── */
+const REVEAL_SELECTORS = [
+  '.card-main', '.card-sub', '.about-txt',
+  '#curTA', '#curFA', '.pkg-card', '.founding-badge'
+];
+const revealEls = document.querySelectorAll(REVEAL_SELECTORS.join(','));
+revealEls.forEach((el, i) => {
+  el.classList.add('reveal');
+  // Stagger via inline delay (cap at 6 to avoid huge waits)
+  el.style.transitionDelay = Math.min(i % 4, 5) * 90 + 'ms';
 });
 
-// Track Record Pin & Scrub
-const trTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: '#track-record',
-    start: 'top top',
-    end: '+=800', // Pin for 800px of scrolling
-    pin: true,
-    scrub: 1
-  }
-});
-trTl.from('.tr-header', { opacity: 0, y: 50, duration: 1 })
-    .from('.tr-stat-card', { opacity: 0, y: 100, scale: 0.8, stagger: 0.2, duration: 2 }, '-=0.5')
-    .from('.tr-charts', { opacity: 0, y: 50, duration: 2 }, '-=1');
-
-// Animated counters on normal enter
-ScrollTrigger.create({
-  trigger:'#track-record', start:'top 80%', once:true,
-  onEnter() {
-    document.querySelectorAll('.tr-cnt').forEach(el => {
-      const target  = parseFloat(el.dataset.t);
-      const dec     = parseInt(el.dataset.dec);
-      const prefix  = el.dataset.prefix || '';
-      const suffix  = el.dataset.suffix || '';
-      el.textContent = prefix + (0).toFixed(dec) + suffix;
-      let current   = 0;
-      const steps   = 60;
-      const inc     = target / steps;
-      const id = setInterval(() => {
-        current += inc;
-        if (current >= target) {
-          el.textContent = prefix + target.toFixed(dec) + suffix;
-          clearInterval(id); return;
-        }
-        el.textContent = prefix + current.toFixed(dec) + suffix;
-      }, 20);
+if (REDUCE_MOTION || !('IntersectionObserver' in window)) {
+  revealEls.forEach(el => el.classList.add('in'));
+} else {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
     });
-  }
-});
-
-// Curriculum Scrub Overlap
-gsap.from('#curTA', {
-  y: 100, opacity: 0, rotation: -2, ease: 'none',
-  scrollTrigger: { trigger: '#curriculum', start: 'top 80%', end: 'top 30%', scrub: 1 }
-});
-gsap.from('#curFA', {
-  y: 150, opacity: 0, rotation: 2, ease: 'none',
-  scrollTrigger: { trigger: '#curriculum', start: 'top 70%', end: 'top 20%', scrub: 1 }
-});
-
-// Pricing Scrub
-gsap.from('.pkg-card', {
-  y: 100, opacity: 0, stagger: 0.15, ease: 'none',
-  scrollTrigger: { trigger: '#pricing', start: 'top 85%', end: 'top 30%', scrub: 1 }
-});
-
-// Testimonials Scrub
-gsap.from('.founding-badge', {
-  scale: 0.8, opacity: 0, y: 50, ease: 'none',
-  scrollTrigger: { trigger: '#testimonials', start: 'top 90%', end: 'top 40%', scrub: 1 }
-});
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+  revealEls.forEach(el => io.observe(el));
+  // Hard fallback: anything still hidden after 4s gets shown
+  setTimeout(() => revealEls.forEach(el => el.classList.add('in')), 4000);
+}
 
 // WhatsApp button entrance
 gsap.set('.wa-btn', { opacity:0, y:20, scale:0.85 });
 gsap.to('.wa-btn', { opacity:1, y:0, scale:1, duration:0.7, delay:1.8, ease:'back.out(1.5)' });
+
 
 /* ── NAV SCROLL ── */
 window.addEventListener('scroll', () => {
@@ -275,9 +240,13 @@ document.querySelectorAll('.card-main').forEach(card => {
 // Smooth anchor scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (!href || href === '#' || href.length < 2) return; // ignore bare # (used by buttons)
+    let t = null;
+    try { t = document.querySelector(href); } catch { return; }
+    if (!t) return;
     e.preventDefault();
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 76, behavior:'smooth' });
+    window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 76, behavior:'smooth' });
   });
 });
 
@@ -401,7 +370,7 @@ document.querySelectorAll('.s-title').forEach(el => {
 /* -- BACK TO TOP -- */
 const backToTop = document.createElement('button');
 backToTop.id = 'backToTop';
-backToTop.innerHTML = '?';
+backToTop.innerHTML = '↑';
 backToTop.setAttribute('aria-label', 'Back to top');
 document.body.appendChild(backToTop);
 
@@ -439,6 +408,82 @@ if (hamburger) {
     hamburger.setAttribute('aria-expanded', !isExpanded);
   });
 }
+
+/* ── LEAD MAGNET POPUP ── */
+(function popupModule() {
+  const popup = document.getElementById('leadPopup');
+  if (!popup) return;
+
+  const DISMISSED_KEY = 'hz_popup_dismissed';
+
+  // Open the popup
+  window.openPopup = function() {
+    popup.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Close the popup
+  window.closePopup = function() {
+    popup.classList.remove('open');
+    document.body.style.overflow = '';
+    try { sessionStorage.setItem(DISMISSED_KEY, '1'); } catch {}
+  };
+
+  // Submit → open WhatsApp with pre-filled message
+  window.submitPopup = function() {
+    const phoneInput = document.getElementById('popupPhone');
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+
+    // Basic validation
+    if (!phone || phone.length < 7) {
+      phoneInput.style.borderColor = '#ef4444';
+      phoneInput.setAttribute('placeholder', 'Please enter a valid number');
+      phoneInput.focus();
+      setTimeout(() => {
+        phoneInput.style.borderColor = '';
+        phoneInput.setAttribute('placeholder', 'Your WhatsApp number (03XX XXXXXXX)');
+      }, 2500);
+      return;
+    }
+
+    // Pre-filled WhatsApp message
+    const message = encodeURIComponent(
+      `Hi Haseeb! 👋\n\n` +
+      `I'd like to receive the *Free PSX Starter Guide* you're offering on your website.\n\n` +
+      `Here's what I'm interested in:\n` +
+      `✅ 5 high-probability PSX chart patterns\n` +
+      `✅ Your personal PSX trade checklist\n` +
+      `✅ The macro indicator most traders ignore\n\n` +
+      `My WhatsApp number: ${phone}\n\n` +
+      `Please send it to me. Thank you!`
+    );
+
+    const waUrl = `https://wa.me/923158674401?text=${message}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+    // Close popup after redirect
+    closePopup();
+  };
+
+  // Close on clicking the overlay background
+  popup.addEventListener('click', function(e) {
+    if (e.target === popup) closePopup();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && popup.classList.contains('open')) closePopup();
+  });
+
+  // Auto-show after 12 seconds (if not dismissed this session)
+  try {
+    if (!sessionStorage.getItem(DISMISSED_KEY)) {
+      setTimeout(openPopup, 12000);
+    }
+  } catch {
+    setTimeout(openPopup, 12000);
+  }
+})();
 
 /* ── PSX TICKER FETCH ── */
 
@@ -499,3 +544,257 @@ async function fetchTickerData() {
 
 fetchTickerData();
 setInterval(fetchTickerData, 60000); // Refresh every minute
+
+/* ── STUDENT AUTH ──
+   Primary: backend API (/api/auth/*) — PBKDF2 hashing, HMAC-signed tokens.
+   Fallback: localStorage (used when backend unreachable, e.g. static hosting). */
+(function authModule() {
+  const TOKEN_KEY    = 'hz_token';
+  const SESSION_KEY  = 'hz_session';
+  const USERS_KEY    = 'hz_users';     // localStorage fallback only
+  const API_BASE     = '/api/auth';
+
+  const $ = (s, r=document) => r.querySelector(s);
+  const overlay   = $('#authOverlay');
+  if (!overlay) return;
+
+  const tabSignin = $('#authTabSignin');
+  const tabSignup = $('#authTabSignup');
+  const formSignin= $('#authFormSignin');
+  const formSignup= $('#authFormSignup');
+  const errSignin = $('#authErrSignin');
+  const errSignup = $('#authErrSignup');
+  const navSignin = $('#navSigninBtn');
+  const navAccount= $('#navAccount');
+  const navAccountName = $('#navAccountName');
+  const navLogout = $('#navLogoutBtn');
+
+  let backendAvailable = null; // unknown; probed lazily
+
+  async function probeBackend() {
+    if (backendAvailable !== null) return backendAvailable;
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 1500);
+      const res = await fetch(API_BASE + '/me', {
+        method: 'GET',
+        signal: ctrl.signal,
+        headers: { 'Authorization': 'Bearer probe' }
+      });
+      clearTimeout(timer);
+      // Any HTTP response (even 401) means backend is up
+      backendAvailable = res.status >= 200 && res.status < 600;
+    } catch { backendAvailable = false; }
+    return backendAvailable;
+  }
+
+  /* localStorage fallback helpers */
+  function readUsers() {
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function writeUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+  async function shaHash(str) {
+    if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+    let h = 0; for (let i=0;i<str.length;i++) { h = ((h<<5)-h) + str.charCodeAt(i); h |= 0; }
+    return String(h);
+  }
+  function readSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+    catch { return null; }
+  }
+  function writeSession(s) { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+  }
+
+  /* API calls */
+  async function apiSignup(payload) {
+    const res = await fetch(API_BASE + '/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Signup failed.');
+    return data;
+  }
+  async function apiSignin(payload) {
+    const res = await fetch(API_BASE + '/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Sign-in failed.');
+    return data;
+  }
+  async function apiMe(token) {
+    const res = await fetch(API_BASE + '/me', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return null;
+    return res.json();
+  }
+
+  function showOverlay(tab='signin') {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTab(tab);
+    setTimeout(() => $('#'+(tab==='signup'?'suEmail':'siEmail'))?.focus(), 80);
+  }
+  function hideOverlay() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    errSignin.textContent = ''; errSignup.textContent = '';
+    formSignin.reset(); formSignup.reset();
+  }
+  function setTab(tab) {
+    const isSignup = tab === 'signup';
+    tabSignin.classList.toggle('active', !isSignup);
+    tabSignup.classList.toggle('active',  isSignup);
+    formSignin.classList.toggle('hidden',  isSignup);
+    formSignup.classList.toggle('hidden', !isSignup);
+  }
+
+  function refreshNav() {
+    const sess = readSession();
+    if (sess && sess.email) {
+      navSignin?.classList.add('hidden');
+      navAccount?.classList.remove('hidden');
+      navAccountName.textContent = sess.name || sess.email.split('@')[0];
+    } else {
+      navSignin?.classList.remove('hidden');
+      navAccount?.classList.add('hidden');
+    }
+  }
+
+  // On load: if we have a backend token, validate it
+  async function rehydrate() {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return;
+    if (!(await probeBackend())) return; // backend down — keep localStorage session as-is
+    const me = await apiMe(token);
+    if (me && me.user) {
+      writeSession({ email: me.user.email, name: me.user.name, loginAt: Date.now() });
+    } else {
+      clearSession();
+    }
+    refreshNav();
+  }
+
+  // Event wiring
+  navSignin?.addEventListener('click', e => { e.preventDefault(); showOverlay('signin'); });
+  document.getElementById('mobileSignin')?.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('hamburger')?.classList.remove('active');
+    document.getElementById('navLinks')?.classList.remove('active');
+    showOverlay('signin');
+  });
+  navLogout?.addEventListener('click', e => {
+    e.preventDefault();
+    clearSession();
+    refreshNav();
+  });
+  $('#authClose')?.addEventListener('click', hideOverlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) hideOverlay(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) hideOverlay(); });
+  tabSignin.addEventListener('click', () => setTab('signin'));
+  tabSignup.addEventListener('click', () => setTab('signup'));
+  $('#authToSignup')?.addEventListener('click', e => { e.preventDefault(); setTab('signup'); });
+  $('#authToSignin')?.addEventListener('click', e => { e.preventDefault(); setTab('signin'); });
+
+  function setBusy(form, busy) {
+    const btn = form.querySelector('.auth-submit');
+    if (!btn) return;
+    if (busy) {
+      btn.dataset.label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Please wait…';
+    } else {
+      btn.disabled = false;
+      btn.textContent = btn.dataset.label || btn.textContent;
+    }
+  }
+
+  formSignup.addEventListener('submit', async e => {
+    e.preventDefault();
+    errSignup.textContent = '';
+    const fd = new FormData(formSignup);
+    const name  = (fd.get('name')||'').toString().trim();
+    const email = (fd.get('email')||'').toString().trim().toLowerCase();
+    const phone = (fd.get('phone')||'').toString().trim();
+    const pw    = (fd.get('password')||'').toString();
+    const pw2   = (fd.get('password2')||'').toString();
+
+    if (name.length < 2)                          return errSignup.textContent = 'Enter your full name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return errSignup.textContent = 'Enter a valid email.';
+    if (phone && !/^[\d\s+()-]{7,}$/.test(phone)) return errSignup.textContent = 'Enter a valid phone number.';
+    if (pw.length < 8)                             return errSignup.textContent = 'Password must be 8+ characters.';
+    if (pw !== pw2)                                return errSignup.textContent = 'Passwords do not match.';
+    const termsBox = formSignup.querySelector('.auth-check input[type="checkbox"]');
+    if (termsBox && !termsBox.checked)             return errSignup.textContent = 'Please accept Terms & Privacy.';
+
+    setBusy(formSignup, true);
+    try {
+      if (await probeBackend()) {
+        const data = await apiSignup({ name, email, phone, password: pw });
+        localStorage.setItem(TOKEN_KEY, data.token);
+        writeSession({ email: data.user.email, name: data.user.name, loginAt: Date.now() });
+      } else {
+        // localStorage fallback
+        const users = readUsers();
+        if (users[email]) throw new Error('An account with this email already exists.');
+        const ph = await shaHash(pw);
+        users[email] = { name, email, phone, ph, createdAt: Date.now() };
+        writeUsers(users);
+        writeSession({ email, name, loginAt: Date.now() });
+      }
+      refreshNav();
+      hideOverlay();
+    } catch (err) {
+      errSignup.textContent = err.message || 'Signup failed.';
+    } finally {
+      setBusy(formSignup, false);
+    }
+  });
+
+  formSignin.addEventListener('submit', async e => {
+    e.preventDefault();
+    errSignin.textContent = '';
+    const fd = new FormData(formSignin);
+    const email = (fd.get('email')||'').toString().trim().toLowerCase();
+    const pw    = (fd.get('password')||'').toString();
+    if (!email || !pw) return errSignin.textContent = 'Email and password required.';
+
+    setBusy(formSignin, true);
+    try {
+      if (await probeBackend()) {
+        const data = await apiSignin({ email, password: pw });
+        localStorage.setItem(TOKEN_KEY, data.token);
+        writeSession({ email: data.user.email, name: data.user.name, loginAt: Date.now() });
+      } else {
+        const users = readUsers();
+        const user = users[email];
+        if (!user) throw new Error('No account with that email.');
+        const ph = await shaHash(pw);
+        if (ph !== user.ph) throw new Error('Incorrect password.');
+        writeSession({ email, name: user.name, loginAt: Date.now() });
+      }
+      refreshNav();
+      hideOverlay();
+    } catch (err) {
+      errSignin.textContent = err.message || 'Sign-in failed.';
+    } finally {
+      setBusy(formSignin, false);
+    }
+  });
+
+  refreshNav();
+  rehydrate();
+  window.HZAuth = { showOverlay, hideOverlay, refreshNav, readSession };
+})();
