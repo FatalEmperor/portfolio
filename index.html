@@ -125,12 +125,17 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#curriculum">Curriculum</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#track-record">Track Record</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li class="mobile-only-cta"><a href="#" id="mobileSignin" class="btn-ghost" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Sign In / Sign Up</a></li>
     <li class="mobile-only-cta"><a href="#contact" class="btn-primary" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Hire Me</a></li>
   </ul>
   <div class="nav-right">
+    <a href="#" class="nav-cta nav-signin" id="navSigninBtn">Sign In</a>
+    <div class="nav-account hidden" id="navAccount">
+      <span class="nav-account-name" id="navAccountName">Student</span>
+      <a href="#" class="nav-logout" id="navLogoutBtn" title="Log out">Logout</a>
+    </div>
     <a href="#contact" class="nav-cta">Hire Me</a>
     <div class="hamburger" id="hamburger">
       <div class="bar"></div>
@@ -319,83 +324,6 @@
   </div>
 </section>
 
-<!-- TRACK RECORD -->
-<section id="track-record">
-  <div class="s-inner">
-    <div class="tr-header">
-      <p class="s-label">Verified Performance</p>
-      <h2 class="s-title" id="tr-title">My PSX Track Record</h2>
-      <p class="s-sub">Real trades. Real results. Feb 2025 – Feb 2026 across 87 symbols on the Pakistan Stock Exchange — 518 FIFO-matched round-trips.</p>
-    </div>
-
-    <!-- STATS ROW -->
-    <div class="tr-stats" id="trStats">
-      <div class="tr-stat-card positive">
-        <div class="tr-stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg></div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="32" data-dec="1" data-prefix="+" data-suffix="%">+32.0%</span></div>
-        <div class="tr-stat-lbl">Trading Return</div>
-        <div class="tr-stat-sub">Feb 2025 – Feb 2026</div>
-      </div>
-      <div class="tr-stat-card positive">
-        <div class="tr-stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="34" data-dec="1" data-prefix="+" data-suffix="%">+34.0%</span></div>
-        <div class="tr-stat-lbl">Return incl. Dividend</div>
-        <div class="tr-stat-sub">Total portfolio gain</div>
-      </div>
-      <div class="tr-stat-card neutral">
-        <div class="tr-stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="64" data-dec="1" data-prefix="" data-suffix="%">64.0%</span></div>
-        <div class="tr-stat-lbl">Win Rate</div>
-        <div class="tr-stat-sub">334 wins / 184 losses</div>
-      </div>
-      <div class="tr-stat-card neutral">
-        <div class="tr-stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="518" data-dec="0" data-prefix="" data-suffix="">518</span></div>
-        <div class="tr-stat-lbl">Total Trades</div>
-        <div class="tr-stat-sub">87 symbols traded</div>
-      </div>
-      <div class="tr-stat-card positive">
-        <div class="tr-stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="7" data-dec="1" data-prefix="+" data-suffix="%">+7.0%</span></div>
-        <div class="tr-stat-lbl">Avg Win / Trade</div>
-        <div class="tr-stat-sub">Per winning position</div>
-      </div>
-      <div class="tr-stat-card negative">
-        <div class="tr-stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-        <div class="tr-stat-num"><span class="tr-cnt" data-t="3" data-dec="1" data-prefix="-" data-suffix="%">-3.0%</span></div>
-        <div class="tr-stat-lbl">Max Drawdown</div>
-        <div class="tr-stat-sub">Capital protection</div>
-      </div>
-    </div>
-
-    <!-- CHARTS -->
-    <div class="tr-charts" id="trCharts">
-      <div class="tr-chart-card" id="chartWinners">
-        <div class="tr-chart-label">
-          <span class="tr-chart-dot winners"></span>
-          Top Winners &amp; Losers — Return on Trade Capital
-        </div>
-      </div>
-      <div class="tr-chart-card" id="chartEquity">
-        <div class="tr-chart-label">
-          <span class="tr-chart-dot equity"></span>
-          PSX Equity Curve — Feb 2025 – Feb 2026
-        </div>
-      </div>
-    </div>
-
-    <p class="tr-disclaimer">* All results are based on real trades executed on the Pakistan Stock Exchange. Past performance does not guarantee future results.</p>
-  </div>
-</section>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <div class="lb-inner" onclick="event.stopPropagation()">
-    <button class="lb-close" onclick="closeLightbox()">✕</button>
-    <div class="lb-caption" id="lbCaption"></div>
-    <img loading="lazy" id="lbImg" src="" alt="">
-  </div>
-</div>
 
 <!-- CURRICULUM -->
 <section id="curriculum">
@@ -851,7 +779,7 @@
     <h2 class="s-title">Free PSX Analysis &<br>Educational Articles</h2>
     <p class="s-sub">Practical, no-fluff insights on the Pakistan Stock Exchange — the same kind of thinking you'll learn in the courses.</p>
     <div class="blog-grid" id="blogGrid">
-      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
+      <a href="article.html?slug=chart-patterns-psx" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 22 2 22 2 2 22 22z"></path><path d="M16 16 14 18"></path><path d="M12 12 10 14"></path><path d="M8 8 6 10"></path></svg></div>
         <div class="blog-body">
           <div class="blog-cat">Technical Analysis</div>
@@ -860,7 +788,7 @@
           <div class="blog-footer"><span class="blog-date">April 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
+      <a href="article.html?slug=pkr-usd-psx" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><circle cx="12" cy="12" r="10"></circle></svg></div>
         <div class="blog-body">
           <div class="blog-cat">Fundamental Analysis</div>
@@ -869,7 +797,7 @@
           <div class="blog-footer"><span class="blog-date">April 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
+      <a href="article.html?slug=sbp-interest-rates" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="20" width="20" height="2"></rect><rect x="2" y="2" width="20" height="4"></rect><rect x="4" y="6" width="2" height="14"></rect><rect x="10" y="6" width="2" height="14"></rect><rect x="18" y="6" width="2" height="14"></rect></svg></div>
         <div class="blog-body">
           <div class="blog-cat">Macro Economics</div>
@@ -878,7 +806,7 @@
           <div class="blog-footer"><span class="blog-date">March 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
+      <a href="article.html?slug=dow-theory-kse" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
         <div class="blog-body">
           <div class="blog-cat">Price Action</div>
@@ -887,7 +815,7 @@
           <div class="blog-footer"><span class="blog-date">March 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
+      <a href="article.html?slug=balance-of-trade" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M12 4h9l-1 5h-7"></path><path d="M12 4H3l1 5h7"></path><path d="M17 9v12"></path><path d="M7 9v12"></path><path d="M15 21h4"></path><path d="M5 21h4"></path></svg></div>
         <div class="blog-body">
           <div class="blog-cat">Fundamental Analysis</div>
@@ -896,7 +824,7 @@
           <div class="blog-footer"><span class="blog-date">February 2026</span><span class="blog-read">Read More →</span></div>
         </div>
       </a>
-      <a href="https://wa.me/923158674401?text=Hi%20Haseeb!%20Please%20notify%20me%20when%20you%20publish%20your%20next%20market%20analysis." target="_blank" class="blog-card">
+      <a href="article.html?slug=position-sizing" class="blog-card">
         <div class="blog-thumb"><div class="blog-thumb-bg"></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
         <div class="blog-body">
           <div class="blog-cat">Risk Management</div>
@@ -1115,7 +1043,6 @@
       <ul class="f-nav-links">
         <li><a href="#services">Services</a></li>
         <li><a href="#curriculum">Curriculum</a></li>
-        <li><a href="#track-record">Track Record</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -1154,6 +1081,67 @@
     </div>
   </div>
 </footer>
+
+<!-- AUTH MODAL (Sign In / Sign Up) -->
+<div class="auth-overlay" id="authOverlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-box">
+    <button class="auth-close" id="authClose" aria-label="Close">✕</button>
+    <div class="auth-brand">
+      <div class="auth-logo">Haseeb<span>.</span></div>
+      <p class="auth-sub" id="authTitle">Student Portal</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="authTabSignin" type="button">Sign In</button>
+      <button class="auth-tab" id="authTabSignup" type="button">Sign Up</button>
+    </div>
+
+    <form class="auth-form" id="authFormSignin" autocomplete="on" novalidate>
+      <div class="fg">
+        <label for="siEmail">Email</label>
+        <input id="siEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="fg">
+        <label for="siPassword">Password</label>
+        <input id="siPassword" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+      </div>
+      <div class="auth-err" id="authErrSignin" role="alert"></div>
+      <button type="submit" class="auth-submit">Sign In →</button>
+      <p class="auth-switch">New here? <a href="#" id="authToSignup">Create an account</a></p>
+    </form>
+
+    <form class="auth-form hidden" id="authFormSignup" autocomplete="on" novalidate>
+      <div class="fg">
+        <label for="suName">Full Name</label>
+        <input id="suName" name="name" type="text" autocomplete="name" placeholder="John Doe" required>
+      </div>
+      <div class="fg">
+        <label for="suEmail">Email</label>
+        <input id="suEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="fg">
+        <label for="suPhone">WhatsApp Number <span class="auth-opt">(optional)</span></label>
+        <input id="suPhone" name="phone" type="tel" autocomplete="tel" placeholder="03XX XXXXXXX">
+      </div>
+      <div class="form-row">
+        <div class="fg">
+          <label for="suPassword">Password</label>
+          <input id="suPassword" name="password" type="password" autocomplete="new-password" placeholder="Min 8 chars" required minlength="8">
+        </div>
+        <div class="fg">
+          <label for="suPassword2">Confirm</label>
+          <input id="suPassword2" name="password2" type="password" autocomplete="new-password" placeholder="Repeat password" required minlength="8">
+        </div>
+      </div>
+      <label class="auth-check">
+        <input type="checkbox" required>
+        <span>I agree to the <a href="assets/terms.html" target="_blank">Terms</a> &amp; <a href="assets/privacy.html" target="_blank">Privacy Policy</a>.</span>
+      </label>
+      <div class="auth-err" id="authErrSignup" role="alert"></div>
+      <button type="submit" class="auth-submit">Create Account →</button>
+      <p class="auth-switch">Already a student? <a href="#" id="authToSignin">Sign in</a></p>
+    </form>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" onerror="window.gsap={to:()=>{},set:()=>{},from:()=>{}};window.ScrollTrigger={create:()=>{},refresh:()=>{}};console.warn('GSAP failed to load — animations disabled')"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" onerror="window.ScrollTrigger=window.ScrollTrigger||{create:()=>{},refresh:()=>{}}"></script>
